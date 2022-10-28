@@ -11,7 +11,7 @@ import lombok.experimental.SuperBuilder;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public abstract class Animate extends AbstractEntity {
+public abstract class AbstractAnimate extends AbstractEntity {
     public void move(Direction direction) {
         int x = getPosition().getX();
         int y = getPosition().getY();

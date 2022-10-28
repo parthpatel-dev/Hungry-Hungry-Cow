@@ -2,7 +2,7 @@ package com.sfu.group6.hungrycow.model.animate;
 
 public class AnimateFactory {
 
-    public Animate makeAnimateEntity(Animate animateEntityType) {
+    public AbstractAnimate makeAnimateEntity(AbstractAnimate animateEntityType) {
 
         if(animateEntityType instanceof Player) {
 
