@@ -16,10 +16,10 @@ public abstract class Animate extends AbstractEntity {
         int x = getPosition().getX();
         int y = getPosition().getY();
         switch (direction) {
-            case UP -> getPosition().setX(x - 1);
-            case DOWN -> getPosition().setX(x + 1);
-            case LEFT -> getPosition().setY(y - 1);
-            case RIGHT -> getPosition().setY(y + 1);
+            case UP -> getPosition().setY(y - 1);
+            case DOWN -> getPosition().setY(y + 1);
+            case LEFT -> getPosition().setX(x - 1);
+            case RIGHT -> getPosition().setX(x + 1);
             case NEUTRAL -> {
             } // do nothing
             default -> throw new IllegalArgumentException("Error: Invalid direction input provided");

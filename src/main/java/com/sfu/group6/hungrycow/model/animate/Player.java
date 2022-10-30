@@ -21,4 +21,5 @@ public class Player extends Animate {
     public void rewardPlayer(AbstractInanimate reward) {
         setScore(getScore() + reward.getValue());
     }
+
 }
