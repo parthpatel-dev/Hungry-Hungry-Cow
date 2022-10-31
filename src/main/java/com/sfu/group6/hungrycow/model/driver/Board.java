@@ -7,11 +7,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 import com.sfu.group6.hungrycow.model.Space;
-import com.sfu.group6.hungrycow.model.animate.Enemy;
 import com.sfu.group6.hungrycow.model.animate.Player;
-import com.sfu.group6.hungrycow.model.inanimate.BonusReward;
-import com.sfu.group6.hungrycow.model.inanimate.Punishment;
-import com.sfu.group6.hungrycow.model.inanimate.RegularReward;
 
 public class Board {
 

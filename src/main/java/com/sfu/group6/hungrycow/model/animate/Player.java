@@ -11,7 +11,7 @@ import lombok.experimental.SuperBuilder;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class Player extends Animate {
+public class Player extends AbstractAnimate {
     private int score;
 
     public void punishPlayer(Punishment punishment) {
