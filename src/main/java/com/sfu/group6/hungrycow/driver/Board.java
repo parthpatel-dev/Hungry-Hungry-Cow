@@ -11,9 +11,13 @@ import com.sfu.group6.hungrycow.model.inanimate.Punishment;
 import com.sfu.group6.hungrycow.model.inanimate.RegularReward;
 import lombok.Builder;
 import lombok.Getter;
+import org.apache.commons.lang3.RandomUtils;
 
-import java.util.HashSet;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 @Builder
@@ -26,7 +30,7 @@ public class Board {
     private final Space startSpace;
     private final Space endSpace;
     private final Set<Position> barriers;
-    private final Player cow;
+    private final Player player;
     private final List<Enemy> enemies;
     private final List<RegularReward> objectives;
     private final List<Punishment> punishments;
@@ -37,6 +41,7 @@ public class Board {
         moveEnemies();
         if (isGameOver()) {
             this.gameOver = true;
+            return;
         }
         collectRewards();
         collectPunishments();
@@ -44,22 +49,94 @@ public class Board {
     }
 
     private void movePlayer(Direction input) {
-        if (validMove(this.cow,
+        if (validMove(this.player,
                       input)) {
-            this.cow.move(input);
+            this.player.move(input);
         } else {
-            this.cow.move(Direction.NEUTRAL);
+            this.player.move(Direction.NEUTRAL);
         }
     }
 
     private void moveEnemies() {
-        // TODO: Implement enemy movement
+        for (var enemy : enemies) {
+            Map<Integer, Direction> distances = generateManhattanDistances(enemy);
+            if (!distances.isEmpty()) {
+                enemy.move(distances.get(Collections.min(distances.keySet())));
+            }
+        }
+    }
+
+    private Map<Integer, Direction> generateManhattanDistances(Enemy enemy) {
+        Map<Integer, Direction> distances = new HashMap<>();
+
+        if (validMove(enemy,
+                      Direction.UP)) {
+            Position moveUpPosition = Position.builder()
+                                              .x(enemy.getPosition()
+                                                      .getX())
+                                              .y(enemy.getPosition()
+                                                      .getY() - 1)
+                                              .build();
+
+            distances.putIfAbsent(calculateManhattanDistance(this.player.getPosition(),
+                                                             moveUpPosition),
+                                  Direction.UP);
+        }
+
+        if (validMove(enemy,
+                      Direction.DOWN)) {
+            Position moveUpPosition = Position.builder()
+                                              .x(enemy.getPosition()
+                                                      .getX())
+                                              .y(enemy.getPosition()
+                                                      .getY() + 1)
+                                              .build();
+
+            distances.putIfAbsent(calculateManhattanDistance(this.player.getPosition(),
+                                                             moveUpPosition),
+                                  Direction.DOWN);
+        }
+
+        if (validMove(enemy,
+                      Direction.LEFT)) {
+            Position moveUpPosition = Position.builder()
+                                              .x(enemy.getPosition()
+                                                      .getX() - 1)
+                                              .y(enemy.getPosition()
+                                                      .getY())
+                                              .build();
+
+            distances.putIfAbsent(calculateManhattanDistance(this.player.getPosition(),
+                                                             moveUpPosition),
+                                  Direction.LEFT);
+        }
+
+        if (validMove(enemy,
+                      Direction.RIGHT)) {
+            Position moveUpPosition = Position.builder()
+                                              .x(enemy.getPosition()
+                                                      .getX() + 1)
+                                              .y(enemy.getPosition()
+                                                      .getY())
+                                              .build();
+
+            distances.putIfAbsent(calculateManhattanDistance(this.player.getPosition(),
+                                                             moveUpPosition),
+                                  Direction.RIGHT);
+        }
+        return distances;
+    }
+
+    private int calculateManhattanDistance(Position playerPosition,
+                                           Position enemyPosition) {
+        return Math.abs(playerPosition.getX() - enemyPosition.getX()) + Math.abs(playerPosition.getY() -
+                                                                                 enemyPosition.getY());
     }
 
     private boolean isGameOver() {
         for (var enemy : this.enemies) {
             if (enemy.getPosition()
-                     .equals(this.cow.getPosition())) {
+                     .equals(this.player.getPosition())) {
                 return true;
             }
         }
@@ -69,15 +146,15 @@ public class Board {
     private void collectRewards() {
         for (var reward : this.objectives) {
             if (reward.getPosition()
-                      .equals(this.cow.getPosition())) {
-                this.cow.rewardPlayer(reward);
+                      .equals(this.player.getPosition())) {
+                this.player.rewardPlayer(reward);
             }
         }
 
         for (var bonus : this.bonus) {
             if (bonus.getPosition()
-                     .equals(this.cow.getPosition())) {
-                this.cow.rewardPlayer(bonus);
+                     .equals(this.player.getPosition())) {
+                this.player.rewardPlayer(bonus);
             }
         }
     }
@@ -85,14 +162,33 @@ public class Board {
     private void collectPunishments() {
         for (var punishment : this.punishments) {
             if (punishment.getPosition()
-                          .equals(this.cow.getPosition())) {
-                this.cow.punishPlayer(punishment);
+                          .equals(this.player.getPosition())) {
+                this.player.punishPlayer(punishment);
             }
         }
     }
 
     private void randomizeBonusRewards() {
-        // TODO: Implement randomization of bonus rewards
+        for (var bonus : this.bonus) {
+            Position newPosition = generateNewBonusRewardPosition();
+            bonus.getPosition().setX(newPosition.getX());
+            bonus.getPosition().setY(newPosition.getY());
+        }
+    }
+
+    private Position generateNewBonusRewardPosition() {
+        Position newPosition = Position.builder()
+                                       .x(RandomUtils.nextInt(0,
+                                                              dimension + 1))
+                                       .y(RandomUtils.nextInt(0,
+                                                              dimension + 1))
+                                       .build();
+
+        while (this.barriers.contains(newPosition)) {
+            newPosition.setX(RandomUtils.nextInt(0, dimension + 1));
+            newPosition.setY(RandomUtils.nextInt(0, dimension + 1));
+        }
+        return newPosition;
     }
 
     private boolean validMove(AbstractAnimate animate,
