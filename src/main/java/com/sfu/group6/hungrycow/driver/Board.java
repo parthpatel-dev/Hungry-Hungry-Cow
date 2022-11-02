@@ -37,7 +37,7 @@ public class Board {
     public void tickBoardState(Direction input) {
         movePlayer(input);
         moveEnemies();
-        if (isGameOver()) {
+        if (isTheGameOver()) {
             this.gameOver = true;
             return;
         }
@@ -129,7 +129,7 @@ public class Board {
                                                                                  enemyPosition.getY());
     }
 
-    private boolean isGameOver() {
+    private boolean isTheGameOver() {
         for (var enemy : this.enemies) {
             if (enemy.getPosition()
                      .equals(this.player.getPosition())) {
