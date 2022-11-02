@@ -50,8 +50,6 @@ public class Board {
         if (validMove(this.player,
                       input)) {
             this.player.move(input);
-        } else {
-            this.player.move(Direction.NEUTRAL);
         }
     }
 
