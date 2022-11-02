@@ -2,7 +2,6 @@ package com.sfu.group6.hungrycow.driver;
 
 import com.sfu.group6.hungrycow.control.Direction;
 import com.sfu.group6.hungrycow.control.Position;
-import com.sfu.group6.hungrycow.model.Space;
 import com.sfu.group6.hungrycow.model.animate.AbstractAnimate;
 import com.sfu.group6.hungrycow.model.animate.Enemy;
 import com.sfu.group6.hungrycow.model.animate.Player;
@@ -17,7 +16,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Set;
 
 @Builder
@@ -27,8 +25,8 @@ public class Board {
     private boolean gameOver = false;
 
     private final int dimension;
-    private final Space startSpace;
-    private final Space endSpace;
+    private final Position startSpace;
+    private final Position endSpace;
     private final Set<Position> barriers;
     private final Player player;
     private final List<Enemy> enemies;
@@ -140,7 +138,9 @@ public class Board {
                 return true;
             }
         }
-        return false;
+
+        return this.player.getPosition()
+                          .equals(this.endSpace);
     }
 
     private void collectRewards() {
@@ -171,8 +171,10 @@ public class Board {
     private void randomizeBonusRewards() {
         for (var bonus : this.bonus) {
             Position newPosition = generateNewBonusRewardPosition();
-            bonus.getPosition().setX(newPosition.getX());
-            bonus.getPosition().setY(newPosition.getY());
+            bonus.getPosition()
+                 .setX(newPosition.getX());
+            bonus.getPosition()
+                 .setY(newPosition.getY());
         }
     }
 
@@ -185,8 +187,10 @@ public class Board {
                                        .build();
 
         while (this.barriers.contains(newPosition)) {
-            newPosition.setX(RandomUtils.nextInt(0, dimension + 1));
-            newPosition.setY(RandomUtils.nextInt(0, dimension + 1));
+            newPosition.setX(RandomUtils.nextInt(0,
+                                                 dimension + 1));
+            newPosition.setY(RandomUtils.nextInt(0,
+                                                 dimension + 1));
         }
         return newPosition;
     }
