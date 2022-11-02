@@ -27,7 +27,7 @@ public class BoardUI extends JPanel implements Runnable{
         gameThread.start();
     }
 
-    TileHandler tileH = new TileHandler(this);
+    TileHandler tileHandler = new TileHandler(this);
 
 
     @Override
@@ -48,7 +48,10 @@ public class BoardUI extends JPanel implements Runnable{
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g;
 
-        tileH.drawTile(g2);
+        g2.setColor(Color.white);
+        g2.fillRect(100, 100, tileSize, tileSize);
+
+        tileHandler.drawTile(g2);
 
         g2.dispose();
      }
