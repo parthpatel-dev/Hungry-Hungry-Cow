@@ -20,8 +20,6 @@ public abstract class AbstractAnimate extends AbstractEntity {
             case DOWN -> getPosition().setY(y + 1);
             case LEFT -> getPosition().setX(x - 1);
             case RIGHT -> getPosition().setX(x + 1);
-            case NEUTRAL -> {
-            } // do nothing
             default -> throw new IllegalArgumentException("Error: Invalid direction input provided");
         }
     }
