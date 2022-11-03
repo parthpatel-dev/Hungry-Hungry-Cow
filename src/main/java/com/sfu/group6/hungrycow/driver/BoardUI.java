@@ -7,19 +7,21 @@ import com.sfu.group6.hungrycow.driver.Board;
 import com.sfu.group6.hungrycow.control.*;
 
 import javax.swing.*;
-import java.awt.*;
 
+import java.awt.*;
 import java.awt.event.*;
+
+
 
 import java.io.IOException;
 
 
-public class BoardUI extends JPanel implements Runnable, KeyListener {
+public class BoardUI extends JPanel implements Runnable {
 
 	Board board;
     final int defaultTileSize = 16;
+    final int FPS =60;
     final int scale = 3;
-    public String direction;
     public int spriteCounter = 0;
     public int spriteNumber = 1;
     public boolean startButtonPress = true;
@@ -28,14 +30,18 @@ public class BoardUI extends JPanel implements Runnable, KeyListener {
     public final int numOfTilesVertical = 20;
     public final int screenWidth = numOfTilesHorizontal * tileSize;
     public final int screenHeight = numOfTilesVertical * tileSize;
+    
 
     public BoardUI() throws IOException {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.black);
+        //createBoard
+        this.addKeyListener(key);
         //Board = boardFactory.createBoard();
         board = Board.builder().build();
     }
 
+    KeyHandler key = new KeyHandler();
     Thread gameThread;
     public void startGameThread() {
         gameThread = new Thread(this);
@@ -46,26 +52,40 @@ public class BoardUI extends JPanel implements Runnable, KeyListener {
 
     AnimateHandler animateHandler = new AnimateHandler(this);
     
-
+    
 
     @Override
     public void run() {
-
+    	double drawInterval = 1000000000/FPS;
+    	double nextDrawTime = System.nanoTime() + drawInterval;
         while(gameThread != null) {
         	
             update();
             repaint();
+            try {
+            double remainingTime = nextDrawTime - System.nanoTime();
+            remainingTime = remainingTime/ 1000000;
+            if(remainingTime < 0) {
+            	remainingTime = 0;
+            }
+            
+				Thread.sleep((long) remainingTime);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+            nextDrawTime += drawInterval;
         }
     }
     
     public void update() {
-    	if(direction == "up") {
+    	if(key.upPressed == true) {
     		 board.tickBoardState(Direction.UP);
-    	} else if(direction == "down") {
+    	} else if(key.downPressed == true) {
     		board.tickBoardState(Direction.DOWN);
-    	} else if(direction == "left") {
+    	} else if(key.leftPressed == true) {
     		board.tickBoardState(Direction.LEFT);
-    	} else if(direction == "right") {
+    	} else if(key.rightPressed == true) {
     		board.tickBoardState(Direction.RIGHT);
     	}
     	spriteCounter++;
@@ -89,13 +109,14 @@ public class BoardUI extends JPanel implements Runnable, KeyListener {
 
         
 //        if (startButtonPress) {
+        	tileHandler.drawTile(g2);
             playGame(g2); //For drawing the entities
 //        } else {
 //            //showIntroScreen(g2); //set startButtonPress to true once user press gui button
 //        }
 
 
-        tileHandler.drawTile(g2);
+        //tileHandler.drawTile(g2);
 
 
         g2.dispose();
@@ -103,14 +124,13 @@ public class BoardUI extends JPanel implements Runnable, KeyListener {
 }
 
 private void playGame(Graphics2D g2) {
-	 tileHandler.drawTile(g2);
 	 //drawScore(g2);
     //if (board.isGameOver() == true) {
         //gameOverScreen(g2);
 //    } else if(board.isGameOver() == false){
 //    	victoryScreen(g2);
     //}else {
-        animateHandler.drawPlayer(g2);
+        //animateHandler.drawPlayer(g2);
         //animateHandler.drawEnemy(g2);
         /*
          * drawPunishment
@@ -126,31 +146,4 @@ private void playGame(Graphics2D g2) {
     //}
 }
 
-@Override
-public void keyTyped(KeyEvent e) {
-	// TODO Auto-generated method stub
-
-}
-
-@Override
-public void keyPressed(KeyEvent e) {
-	// TODO Auto-generated method stub
-	switch(e.getKeyCode()) {
-	case 37: direction = "left"; //For arrow key left
-	        break;
-	case 38: direction = "up"; //For arrow key up
-	        break;
-	case 39: direction = "down"; //For arrow key down
-	        break;
-	case 40: direction = "right"; //For arrow key right
-	        break;
-	}
-
-}
-
-@Override
-public void keyReleased(KeyEvent e) {
-	// TODO Auto-generated method stub
-
-}
 }
