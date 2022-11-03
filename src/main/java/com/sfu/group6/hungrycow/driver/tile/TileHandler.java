@@ -21,7 +21,7 @@ public class TileHandler {
 
     public TileHandler(BoardUI ui) throws IOException {
         this.ui = ui;
-        tiles = new Tile[5];
+        tiles = new Tile[20];
         boardData = new int[ui.numOfTilesHorizontal][ui.numOfTilesVertical];
         getTileImage();
         loadBoard(getRandomMapFilePath());
@@ -31,13 +31,13 @@ public class TileHandler {
 
         try {
             tiles[0] = new Tile();
-            tiles[0].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/grass.png")));
+            tiles[0].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/lighter_grass.png")));
 
             tiles[1] = new Tile();
             tiles[1].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/barrierTree.png")));
 
             tiles[2] = new Tile();
-            tiles[2].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/water.png")));
+            tiles[2].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/pond.png")));
 
             tiles[3] = new Tile();
             tiles[3].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/earth.png")));
@@ -91,9 +91,13 @@ public class TileHandler {
             for (int col = 0; col < ui.numOfTilesHorizontal; col++) {
 
                 int tileData = boardData[col][row];
+                int tileSize = ui.tileSize;
+                if(tileData == 2) {
+                    tileSize *= 3;
+                }
                 int tilePositionX = col * ui.tileSize;
                 int tilePositionY = row * ui.tileSize;
-                g.drawImage(tiles[tileData].image, tilePositionX, tilePositionY, ui.tileSize, ui.tileSize, null);
+                g.drawImage(tiles[tileData].image, tilePositionX, tilePositionY, tileSize, tileSize, null);
             }
         }
 

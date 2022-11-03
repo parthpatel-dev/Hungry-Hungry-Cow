@@ -9,7 +9,7 @@ import java.io.IOException;
 public class BoardUI extends JPanel implements Runnable{
 
     final int defaultTileSize = 16;
-    final int scale = 2;
+    final int scale = 3;
 
     public final int tileSize = defaultTileSize * scale;
     public final int numOfTilesHorizontal = 28;
