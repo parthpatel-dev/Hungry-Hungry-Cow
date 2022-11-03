@@ -8,9 +8,10 @@ import java.awt.*;
 
 public class BoardUI extends JPanel implements Runnable{
 
+	Board board;
     final int defaultTileSize = 16;
     final int scale = 3;
-
+    public boolean startButtonPress = true;
     public final int tileSize = defaultTileSize * scale;
     public final int numOfTilesHorizontal = 20;
     public final int numOfTilesVertical = 14;
@@ -20,6 +21,8 @@ public class BoardUI extends JPanel implements Runnable{
     public BoardUI() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.black);
+        Board = boardFactory.createBoard();
+        board = Board.builder().build();
     }
 
     Thread gameThread;
@@ -53,33 +56,33 @@ public class BoardUI extends JPanel implements Runnable{
         g2.fillRect(100, 100, tileSize, tileSize);
 
         
-        if (Board.inGame()) {
-            playGame(g2d); //For drawing the entities
+        if (startButtonPress) {
+            playGame(g2); //For drawing the entities
         } else {
-            showIntroScreen(g2d);
+            //showIntroScreen(g2); //set startButtonPress to true once user press gui button
         }
 
         g2.dispose();
      }
 }
 
-private void playGame(Graphics2D g2d) {
+private void playGame(Graphics2D g2) {
 	 tileHandler.drawTile(g2);
-    if (Board.status() == gameOver) {
-        gameOverScreen(g2d);
-    } else if(Board.status() == victory){
-    	victoryScreen(g2d);
+    if (Board.isGameOver() == true) {
+        gameOverScreen(g2);
+    } else if(Board.isGameOver() == true){
+    	victoryScreen(g2);
     }else {
-        drawPlayer(g2d);
-        drawEnemy(g2d);
-        drawPunishment(g2d);
-        drawRewards(g2d);
-        drawBonusReward(g2d);
-        drawBarriers(g2d);
+        drawPlayer(g2);
+        drawEnemy(g2);
+        drawPunishment(g2);
+        drawRewards(g2);
+        drawBonusReward(g2);
+        drawBarriers(g2);
         if(Board.reward() == true) {
-        	drawOpenedExit(g2d);
+        	drawOpenedExit(g2);
         } else {
-        	drawClosedExit(g2d);
+        	drawClosedExit(g2);
         }
     }
 }
