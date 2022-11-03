@@ -23,6 +23,8 @@ import java.util.Set;
 public class Board {
     @Builder.Default
     private boolean gameOver = false;
+    @Builder.Default
+    private boolean playerWin = false;
 
     private final int dimension;
     private final Position startSpace;
@@ -39,6 +41,10 @@ public class Board {
         moveEnemies();
         if (isTheGameOver()) {
             this.gameOver = true;
+            return;
+        }
+        if (checkIfPlayerWon()) {
+            this.playerWin = this.gameOver = true;
             return;
         }
         collectRewards();
@@ -136,9 +142,12 @@ public class Board {
                 return true;
             }
         }
+        return false;
+    }
 
-        return this.player.getPosition()
-                          .equals(this.endSpace);
+    private boolean checkIfPlayerWon() {
+        return this.objectives.isEmpty() && this.player.getPosition()
+                                                       .equals(this.endSpace);
     }
 
     private void collectRewards() {
@@ -146,6 +155,7 @@ public class Board {
             if (reward.getPosition()
                       .equals(this.player.getPosition())) {
                 this.player.rewardPlayer(reward);
+                this.objectives.remove(reward);
             }
         }
 
@@ -153,6 +163,7 @@ public class Board {
             if (bonus.getPosition()
                      .equals(this.player.getPosition())) {
                 this.player.rewardPlayer(bonus);
+                this.bonus.remove(bonus);
             }
         }
     }
