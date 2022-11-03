@@ -4,19 +4,20 @@ import com.sfu.group6.hungrycow.driver.tile.TileHandler;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 
 public class BoardUI extends JPanel implements Runnable{
 
     final int defaultTileSize = 16;
-    final int scale = 3;
+    final int scale = 2;
 
     public final int tileSize = defaultTileSize * scale;
-    public final int numOfTilesHorizontal = 20;
-    public final int numOfTilesVertical = 14;
-    final int screenWidth = numOfTilesHorizontal * tileSize;
-    final int screenHeight = numOfTilesVertical * tileSize;
+    public final int numOfTilesHorizontal = 28;
+    public final int numOfTilesVertical = 20;
+    public final int screenWidth = numOfTilesHorizontal * tileSize;
+    public final int screenHeight = numOfTilesVertical * tileSize;
 
-    public BoardUI() {
+    public BoardUI() throws IOException {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.black);
     }
@@ -28,7 +29,6 @@ public class BoardUI extends JPanel implements Runnable{
     }
 
     TileHandler tileHandler = new TileHandler(this);
-
 
     @Override
     public void run() {
@@ -47,9 +47,6 @@ public class BoardUI extends JPanel implements Runnable{
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g;
-
-        g2.setColor(Color.white);
-        g2.fillRect(100, 100, tileSize, tileSize);
 
         tileHandler.drawTile(g2);
 
