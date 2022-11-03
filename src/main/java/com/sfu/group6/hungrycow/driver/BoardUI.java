@@ -6,7 +6,11 @@ import com.sfu.group6.hungrycow.control.*;
 
 import javax.swing.*;
 import java.awt.*;
+
 import java.awt.event.*;
+
+import java.io.IOException;
+
 
 public class BoardUI extends JPanel implements Runnable, KeyListener {
 
@@ -16,12 +20,12 @@ public class BoardUI extends JPanel implements Runnable, KeyListener {
     public boolean upPressed, downPressed, leftPressed, rightPressed;
     public boolean startButtonPress = true;
     public final int tileSize = defaultTileSize * scale;
-    public final int numOfTilesHorizontal = 20;
-    public final int numOfTilesVertical = 14;
-    final int screenWidth = numOfTilesHorizontal * tileSize;
-    final int screenHeight = numOfTilesVertical * tileSize;
+    public final int numOfTilesHorizontal = 28;
+    public final int numOfTilesVertical = 20;
+    public final int screenWidth = numOfTilesHorizontal * tileSize;
+    public final int screenHeight = numOfTilesVertical * tileSize;
 
-    public BoardUI() {
+    public BoardUI() throws IOException {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.black);
         //Board = boardFactory.createBoard();
@@ -36,7 +40,7 @@ public class BoardUI extends JPanel implements Runnable, KeyListener {
     }
 
     TileHandler tileHandler = new TileHandler(this);
-    
+
 
     @Override
     public void run() {
@@ -64,6 +68,7 @@ public class BoardUI extends JPanel implements Runnable, KeyListener {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g;
+
         
         g2.setColor(Color.white);
         g2.fillRect(100, 100, tileSize, tileSize);
@@ -74,6 +79,10 @@ public class BoardUI extends JPanel implements Runnable, KeyListener {
         } else {
             //showIntroScreen(g2); //set startButtonPress to true once user press gui button
         }
+
+
+        tileHandler.drawTile(g2);
+
 
         g2.dispose();
      }
