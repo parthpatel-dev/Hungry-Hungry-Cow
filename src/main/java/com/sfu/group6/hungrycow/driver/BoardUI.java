@@ -1,6 +1,8 @@
 package com.sfu.group6.hungrycow.driver;
 
 import com.sfu.group6.hungrycow.driver.tile.TileHandler;
+import com.sfu.group6.hungrycow.driver.tile.AnimateHandler;
+
 import com.sfu.group6.hungrycow.driver.Board; 
 import com.sfu.group6.hungrycow.control.*;
 
@@ -17,7 +19,9 @@ public class BoardUI extends JPanel implements Runnable, KeyListener {
 	Board board;
     final int defaultTileSize = 16;
     final int scale = 3;
-    public boolean upPressed, downPressed, leftPressed, rightPressed;
+    public String direction;
+    public int spriteCounter = 0;
+    public int spriteNumber = 1;
     public boolean startButtonPress = true;
     public final int tileSize = defaultTileSize * scale;
     public final int numOfTilesHorizontal = 28;
@@ -30,7 +34,6 @@ public class BoardUI extends JPanel implements Runnable, KeyListener {
         this.setBackground(Color.black);
         //Board = boardFactory.createBoard();
         board = Board.builder().build();
-        //board.getPlayer().getPosition().getX();
     }
 
     Thread gameThread;
@@ -41,6 +44,9 @@ public class BoardUI extends JPanel implements Runnable, KeyListener {
 
     TileHandler tileHandler = new TileHandler(this);
 
+    AnimateHandler animateHandler = new AnimateHandler(this);
+    
+
 
     @Override
     public void run() {
@@ -49,19 +55,27 @@ public class BoardUI extends JPanel implements Runnable, KeyListener {
         	
             update();
             repaint();
-            
         }
     }
     
     public void update() {
-    	if(upPressed == true) {
+    	if(direction == "up") {
     		 board.tickBoardState(Direction.UP);
-    	} else if(downPressed == true) {
+    	} else if(direction == "down") {
     		board.tickBoardState(Direction.DOWN);
-    	} else if(leftPressed == true) {
+    	} else if(direction == "left") {
     		board.tickBoardState(Direction.LEFT);
-    	} else if(rightPressed == true) {
+    	} else if(direction == "right") {
     		board.tickBoardState(Direction.RIGHT);
+    	}
+    	spriteCounter++;
+    	if(spriteCounter > 10) {
+    		if(spriteNumber == 1) {
+    			spriteNumber = 2;
+    		} else if (spriteNumber == 2) {
+    			spriteNumber = 1;
+    		}
+    		spriteCounter = 0;
     	}
     }
 
@@ -74,42 +88,42 @@ public class BoardUI extends JPanel implements Runnable, KeyListener {
         g2.fillRect(100, 100, tileSize, tileSize);
 
         
-        if (startButtonPress) {
+//        if (startButtonPress) {
             playGame(g2); //For drawing the entities
-        } else {
-            //showIntroScreen(g2); //set startButtonPress to true once user press gui button
-        }
+//        } else {
+//            //showIntroScreen(g2); //set startButtonPress to true once user press gui button
+//        }
 
 
         tileHandler.drawTile(g2);
 
 
         g2.dispose();
-     }
+     //}
 }
 
 private void playGame(Graphics2D g2) {
 	 tileHandler.drawTile(g2);
-	 drawScore(g2);
-    if (board.isGameOver() == true) {
-        gameOverScreen(g2);
-    } else if(board.isGameOver() == false){
-    	victoryScreen(g2);
-    }else {
-        drawPlayer(g2);
-        drawEnemy(g2);
+	 //drawScore(g2);
+    //if (board.isGameOver() == true) {
+        //gameOverScreen(g2);
+//    } else if(board.isGameOver() == false){
+//    	victoryScreen(g2);
+    //}else {
+        animateHandler.drawPlayer(g2);
+        //animateHandler.drawEnemy(g2);
         /*
          * drawPunishment
          * drawBonusReward
          * drawReward
          * 
         */
-        if(Board.reward() == true) {
-        	drawOpenedExit(g2);
-        } else {
-        	drawClosedExit(g2);
-        }
-    }
+//        if(Board.reward() == true) {
+//        	drawOpenedExit(g2);
+//        } else {
+//        	drawClosedExit(g2);
+//        }
+    //}
 }
 
 @Override
@@ -122,13 +136,13 @@ public void keyTyped(KeyEvent e) {
 public void keyPressed(KeyEvent e) {
 	// TODO Auto-generated method stub
 	switch(e.getKeyCode()) {
-	case 37: leftPressed = true; //For arrow key left
+	case 37: direction = "left"; //For arrow key left
 	        break;
-	case 38: upPressed = true; //For arrow key up
+	case 38: direction = "up"; //For arrow key up
 	        break;
-	case 39: downPressed = true; //For arrow key down
+	case 39: direction = "down"; //For arrow key down
 	        break;
-	case 40: rightPressed = true; //For arrow key right
+	case 40: direction = "right"; //For arrow key right
 	        break;
 	}
 
