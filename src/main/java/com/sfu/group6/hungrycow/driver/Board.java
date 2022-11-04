@@ -25,6 +25,10 @@ public class Board {
     private boolean gameOver = false;
     @Builder.Default
     private boolean playerWin = false;
+    @Builder.Default
+    private boolean collectedObjective = false;
+    @Builder.Default
+    private boolean collectedBonus = false;
 
     private final int dimension;
     private final Position startSpace;
@@ -47,7 +51,8 @@ public class Board {
             this.playerWin = this.gameOver = true;
             return;
         }
-        collectRewards();
+        collectObjectives();
+        collectBonusRewards();
         collectPunishments();
         randomizeBonusRewards();
     }
@@ -150,22 +155,30 @@ public class Board {
                                                        .equals(this.endSpace);
     }
 
-    private void collectRewards() {
+    private void collectObjectives() {
         for (var reward : this.objectives) {
             if (reward.getPosition()
                       .equals(this.player.getPosition())) {
                 this.player.rewardPlayer(reward);
                 this.objectives.remove(reward);
+                this.collectedObjective = true;
+                return;
             }
         }
+        this.collectedObjective = false;
+    }
 
+    private void collectBonusRewards() {
         for (var bonus : this.bonus) {
             if (bonus.getPosition()
                      .equals(this.player.getPosition())) {
                 this.player.rewardPlayer(bonus);
                 this.bonus.remove(bonus);
+                this.collectedBonus = true;
+                return;
             }
         }
+        this.collectedBonus = false;
     }
 
     private void collectPunishments() {
