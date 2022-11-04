@@ -124,7 +124,7 @@ private void playGame(Graphics2D g2) {
 	 //drawScore(g2);
     //if (board.isGameOver() == true) {
         //gameOverScreen(g2);
-//    } else if(board.checkIfPlayerWon() == true){
+//    } else if(isPlayerWin() == true){
 //    	victoryScreen(g2);
     //}else {
         //animateHandler.drawPlayer(g2);
