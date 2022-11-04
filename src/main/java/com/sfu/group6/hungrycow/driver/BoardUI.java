@@ -115,8 +115,8 @@ public class BoardUI extends JPanel implements Runnable, KeyListener {
             // Board creation
             playGame(g2); //For drawing the entities
         } else {
-            DrawScreen.startScreen(g2, this.tileSize, this.numOfTilesHorizontal, this.numOfTilesVertical);//set startButtonPress to true once user press gui button
-            state = Screen.BOARD;
+            drawScreen.startScreen(g2, this.tileSize, this.numOfTilesHorizontal, this.numOfTilesVertical);//set startButtonPress to true once user press gui button
+            state = Screen.START;
             startButtonPress = false;
         }
 
@@ -125,19 +125,15 @@ public class BoardUI extends JPanel implements Runnable, KeyListener {
 
 private void playGame(Graphics2D g2) {
 	 tileHandler.drawTile(g2);
-	 drawScore(g2);
+	 drawScreen.score(g2,this.tileSize,this.numOfTilesHorizontal,this.numOfTilesVertical, board.getPlayer().getScore());
     if (board.isGameOver() == true) {
-        drawScreen.gameOverScreen(g2,this.tileSize,this.numOfTilesHorizontal,this.numOfTilesVertical, this.state);
+        drawScreen.gameOverScreen(g2,this.tileSize,this.numOfTilesHorizontal,this.numOfTilesVertical);
         //gameOverScreen(g2);
     } else if(board.isGameOver() == false){
         drawScreen.victoryScreen(g2,this.tileSize,this.numOfTilesHorizontal,this.numOfTilesVertical);
         //victoryScreen(g2)
     }else {
-        if (state == Screen.BOARD)
-        {
-            // make draw method for score. Assume top row is blank so draw screo top left, and title top right
-            // use board.getPlayer.getScore()
-        }
+
         drawPlayer(g2);
         drawEnemy(g2);
         /*
@@ -172,9 +168,9 @@ public void keyPressed(KeyEvent e) {
 	        break;
 	case 40: rightPressed = true; //For arrow key right
 	        break;
-    case 32: spacePressed = true;
+    case 32: spacePressed = true; // For space key
             break;
-    case 27: escPressed = true;
+    case 27: escPressed = true; // For escape key
             break;
 	}
 

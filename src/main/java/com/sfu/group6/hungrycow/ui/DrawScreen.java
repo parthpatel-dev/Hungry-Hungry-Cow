@@ -1,14 +1,11 @@
 package com.sfu.group6.hungrycow.ui;
 
-import com.sfu.group6.hungrycow.driver.BoardUI;
-
 import java.awt.*;
 
 public class DrawScreen {
 
 
-
-    public static void startScreen(Graphics2D g2d, int tileSize, int xNum, int yNum)
+    public void startScreen(Graphics2D g2d, int tileSize, int xNum, int yNum)
     {
         g2d.setBackground(Color.WHITE);
 
@@ -36,7 +33,7 @@ public class DrawScreen {
 
     }
 
-    public void gameOverScreen(Graphics2D g2d, int tileSize, int xNum, int yNum, Screen state)
+    public void gameOverScreen(Graphics2D g2d, int tileSize, int xNum, int yNum)
     {
 
         g2d.setBackground(Color.BLACK);
@@ -58,7 +55,7 @@ public class DrawScreen {
         g2d.drawString("Press Space to exit.", (xNum/2)*tileSize, (yNum/2 + yNum/4)*tileSize);
     }
 
-    public static void victoryScreen(Graphics2D g2d, int tileSize, int xNum, int yNum)
+    public void victoryScreen(Graphics2D g2d, int tileSize, int xNum, int yNum)
     {
 
         Font bold_Font = new Font("Bold", Font.BOLD, tileSize * 3);
@@ -75,7 +72,7 @@ public class DrawScreen {
         g2d.drawString("Press Space to exit.", (xNum/2)*tileSize, (yNum/2 + yNum/4)*tileSize);
     }
 
-    public static void pauseScreen(Graphics2D g2d, int tileSize, int xNum, int yNum)
+    public void pauseScreen(Graphics2D g2d, int tileSize, int xNum, int yNum)
     {
 
         g2d.setBackground(Color.GRAY);
@@ -93,4 +90,16 @@ public class DrawScreen {
 
         g2d.drawString("Press Esc to exit.", (xNum/2)*tileSize, (yNum/2 + yNum/4 + yNum/8)*tileSize);
     }
+
+    public void score(Graphics g2d,int tileSize, int xNum, int yNum, int score)
+    {
+        Font bold_Font = new Font("Bold", Font.BOLD, tileSize);
+
+        g2d.setFont(bold_Font);
+        g2d.setColor(Color.BLACK); // Assuming board background is white
+
+        String scoreStr = Integer.toString(score);
+        g2d.drawString("Score: " + scoreStr,0,0 );
+    }
+
 }
