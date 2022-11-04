@@ -12,6 +12,8 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public abstract class AbstractAnimate extends AbstractEntity {
+    private Direction facingDirection;
+
     public void move(Direction direction) {
         int x = getPosition().getX();
         int y = getPosition().getY();
@@ -20,9 +22,8 @@ public abstract class AbstractAnimate extends AbstractEntity {
             case DOWN -> getPosition().setY(y + 1);
             case LEFT -> getPosition().setX(x - 1);
             case RIGHT -> getPosition().setX(x + 1);
-            case NEUTRAL -> {
-            } // do nothing
             default -> throw new IllegalArgumentException("Error: Invalid direction input provided");
         }
+        setFacingDirection(direction);
     }
 }
