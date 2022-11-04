@@ -1,71 +1,95 @@
 package com.sfu.group6.hungrycow.driver;
 
 import com.sfu.group6.hungrycow.driver.tile.TileHandler;
+import com.sfu.group6.hungrycow.driver.tile.AnimateHandler;
+
 import com.sfu.group6.hungrycow.driver.Board; 
 import com.sfu.group6.hungrycow.control.*;
 import com.sfu.group6.hungrycow.ui.DrawScreen;
 import com.sfu.group6.hungrycow.ui.Screen;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.*;
 
-public class BoardUI extends JPanel implements Runnable, KeyListener {
+
+
+import java.io.IOException;
+
+
+public class BoardUI extends JPanel implements Runnable {
 
 	Board board;
     final int defaultTileSize = 16;
-    final int scale = 3;
-    public boolean upPressed, downPressed, leftPressed, rightPressed, spacePressed, escPressed;
+    final int FPS =60;
+    public int spriteCounter = 0;
+    public int spriteNumber = 1;
     public boolean startButtonPress = true;
+    final int scale = 2;
     public final int tileSize = defaultTileSize * scale;
-    public final int numOfTilesHorizontal = 20;
-    public final int numOfTilesVertical = 14;
-    final int screenWidth = numOfTilesHorizontal * tileSize;
-    final int screenHeight = numOfTilesVertical * tileSize;
-
+    public final int numOfTilesHorizontal = 24;
+    public final int numOfTilesVertical = 15;
+    public final int screenWidth = numOfTilesHorizontal * tileSize;
+    public final int screenHeight = numOfTilesVertical * tileSize;
     Screen state = Screen.START; // Assume it starts in Board state
+    
 
-
-    public BoardUI() {
+    public BoardUI() throws IOException {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.black);
-        //Board = boardFactory.createBoard();
         board = Board.builder().build();
         //board.getPlayer().getPosition().getX();
         board = Board.builder().build();
+        //createBoard
+        this.addKeyListener(key);
+        //Board = boardFactory.createBoard();
     }
-
+    KeyHandler key = new KeyHandler();
     Thread gameThread;
     public void startGameThread() {
         gameThread = new Thread(this);
         gameThread.start();
     }
-
     DrawScreen drawScreen = new DrawScreen();
     TileHandler tileHandler = new TileHandler(this);
-    
 
+    AnimateHandler animateHandler = new AnimateHandler(this);
+    
     @Override
     public void run() {
-
+    	double drawInterval = 1000000000/FPS;
+    	double nextDrawTime = System.nanoTime() + drawInterval;
         while(gameThread != null) {
         	
             update();
             repaint();
+            try {
+            double remainingTime = nextDrawTime - System.nanoTime();
+            remainingTime = remainingTime/ 1000000;
+            if(remainingTime < 0) {
+            	remainingTime = 0;
+            }
             
+				Thread.sleep((long) remainingTime);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+            nextDrawTime += drawInterval;
         }
     }
     
     public void update() {
-    	if(upPressed == true) {
+    	if(key.upPressed == true) {
     		 board.tickBoardState(Direction.UP);
-    	} else if(downPressed == true) {
+    	} else if(key.downPressed == true) {
     		board.tickBoardState(Direction.DOWN);
-    	} else if(leftPressed == true) {
+    	} else if(key.leftPressed == true) {
     		board.tickBoardState(Direction.LEFT);
-    	} else if(rightPressed == true) {
+    	} else if(key.rightPressed == true) {
     		board.tickBoardState(Direction.RIGHT);
-    	} else if (spacePressed == true) {
+    	} else if (key.spacePressed == true) {
             if (state == Screen.START)
             {
                 // Start Board Game
@@ -85,7 +109,7 @@ public class BoardUI extends JPanel implements Runnable, KeyListener {
             {
                 System.exit(10); //exit the game
             }
-        } else if (escPressed == true)
+        } else if (key.escPressed == true)
         {
             if (state == Screen.START)
             {
@@ -101,18 +125,27 @@ public class BoardUI extends JPanel implements Runnable, KeyListener {
                 repaint();
             }
         }
+    	spriteCounter++;
+    	if(spriteCounter > 10) {
+    		if(spriteNumber == 1) {
+    			spriteNumber = 2;
+    		} else if (spriteNumber == 2) {
+    			spriteNumber = 1;
+    		}
+    		spriteCounter = 0;
+    	}
     }
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g;
+
         
         g2.setColor(Color.white);
         g2.fillRect(100, 100, tileSize, tileSize);
 
-        
         if (startButtonPress) {
-            // Board creation
+            tileHandler.drawTile(g2);
             playGame(g2); //For drawing the entities
         } else {
             drawScreen.startScreen(g2, this.tileSize, this.numOfTilesHorizontal, this.numOfTilesVertical);//set startButtonPress to true once user press gui button
@@ -120,65 +153,33 @@ public class BoardUI extends JPanel implements Runnable, KeyListener {
             startButtonPress = false;
         }
 
+        //tileHandler.drawTile(g2);
         g2.dispose();
      }
 
-private void playGame(Graphics2D g2) {
-	 tileHandler.drawTile(g2);
-	 drawScreen.score(g2,this.tileSize,this.numOfTilesHorizontal,this.numOfTilesVertical, board.getPlayer().getScore());
-    if (board.isGameOver() == true) {
-        drawScreen.gameOverScreen(g2,this.tileSize,this.numOfTilesHorizontal,this.numOfTilesVertical);
-        //gameOverScreen(g2);
-    } else if(board.isGameOver() == false){
-        drawScreen.victoryScreen(g2,this.tileSize,this.numOfTilesHorizontal,this.numOfTilesVertical);
-        //victoryScreen(g2)
-    }else {
 
-        drawPlayer(g2);
-        drawEnemy(g2);
-        /*
-         * drawPunishment
-         * drawBonusReward
-         * drawReward
-         * 
-        */
-        if(Board.reward() == true) {
-        	drawOpenedExit(g2);
-        } else {
-        	drawClosedExit(g2);
-        }
+
+    private void playGame(Graphics2D g2) {
+    //        drawScreen.score(g2,this.tileSize,this.numOfTilesHorizontal,this.numOfTilesVertical, board.getPlayer().getScore());
+        //if (board.isGameOver() == true) {
+    //        drawScreen.gameOverScreen(g2,this.tileSize,this.numOfTilesHorizontal,this.numOfTilesVertical);
+    //    } else if(isPlayerWin() == true){
+    //    	drawScreen.victoryScreen(g2,this.tileSize,this.numOfTilesHorizontal,this.numOfTilesVertical);
+        //}else {
+            //animateHandler.drawPlayer(g2);
+            //animateHandler.drawEnemy(g2);
+            /*
+             * drawPunishment
+             * drawBonusReward
+             * drawReward
+             *
+            */
+    //        if(Board.reward() == true) {
+    //        	drawOpenedExit(g2);
+    //        } else {
+    //        	drawClosedExit(g2);
+    //        }
+        //}
     }
-}
 
-@Override
-public void keyTyped(KeyEvent e) {
-	// TODO Auto-generated method stub
-
-}
-
-@Override
-public void keyPressed(KeyEvent e) {
-	// TODO Auto-generated method stub
-	switch(e.getKeyCode()) {
-	case 37: leftPressed = true; //For arrow key left
-	        break;
-	case 38: upPressed = true; //For arrow key up
-	        break;
-	case 39: downPressed = true; //For arrow key down
-	        break;
-	case 40: rightPressed = true; //For arrow key right
-	        break;
-    case 32: spacePressed = true; // For space key
-            break;
-    case 27: escPressed = true; // For escape key
-            break;
-	}
-
-}
-
-@Override
-public void keyReleased(KeyEvent e) {
-	// TODO Auto-generated method stub
-
-}
 }
