@@ -130,4 +130,11 @@ public class AnimateHandler {
     	}
     	
     }
+//    public void drawBonusReward() {
+//    	for(var BonusReward : board.getBonus()) {
+//    		if(board.) {
+//    			
+//    		} 
+//    	}
+//    }
 }

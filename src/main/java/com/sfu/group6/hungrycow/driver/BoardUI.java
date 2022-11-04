@@ -35,11 +35,10 @@ public class BoardUI extends JPanel implements Runnable {
     public BoardUI() throws IOException {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.black);
+        board = Board.builder().build();
         //createBoard
         this.addKeyListener(key);
         //Board = boardFactory.createBoard();
-        board = Board.builder().build();
-        board.get
     }
 
     KeyHandler key = new KeyHandler();
@@ -109,7 +108,7 @@ public class BoardUI extends JPanel implements Runnable {
         
 //        if (startButtonPress) {
         	tileHandler.drawTile(g2);
-            playGame(g2); //For drawing the entities
+            //playGame(g2); //For drawing the entities
 //        } else {
 //            //showIntroScreen(g2); //set startButtonPress to true once user press gui button
 //        }
@@ -125,7 +124,7 @@ private void playGame(Graphics2D g2) {
 	 //drawScore(g2);
     //if (board.isGameOver() == true) {
         //gameOverScreen(g2);
-//    } else if(board.isGameOver() == false){
+//    } else if(board.checkIfPlayerWon() == true){
 //    	victoryScreen(g2);
     //}else {
         //animateHandler.drawPlayer(g2);
