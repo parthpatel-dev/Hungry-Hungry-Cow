@@ -39,6 +39,7 @@ public class BoardUI extends JPanel implements Runnable {
         this.addKeyListener(key);
         //Board = boardFactory.createBoard();
         board = Board.builder().build();
+        board.get
     }
 
     KeyHandler key = new KeyHandler();
@@ -52,8 +53,6 @@ public class BoardUI extends JPanel implements Runnable {
 
     AnimateHandler animateHandler = new AnimateHandler(this);
     
-    
-
     @Override
     public void run() {
     	double drawInterval = 1000000000/FPS;
@@ -117,7 +116,6 @@ public class BoardUI extends JPanel implements Runnable {
 
 
         //tileHandler.drawTile(g2);
-
 
         g2.dispose();
      //}

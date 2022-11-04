@@ -3,6 +3,7 @@ package com.sfu.group6.hungrycow.driver.tile;
 import com.sfu.group6.hungrycow.driver.Board;
 import com.sfu.group6.hungrycow.driver.BoardUI;
 import com.sfu.group6.hungrycow.driver.KeyHandler;
+import com.sfu.group6.hungrycow.model.animate.AbstractAnimate;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -89,42 +90,44 @@ public class AnimateHandler {
     		break;
     	}
     }
-    
-//    public void drawEnemy(Graphics2D g2) {
-//    	switch(ui.direction) {
-//    	case "up":
-//    		if(ui.spriteNumber == 1) {
-//    			tileAnimate.imageHolder = tileAnimate.playerUp1;
-//    		}
-//    		if(ui.spriteNumber == 2) {
-//    			tileAnimate.imageHolder = tileAnimate.playerUp2;
-//    		}
-//    		break;
-//    	case "down":
-//    		if(ui.spriteNumber == 1) {
-//    			tileAnimate.imageHolder = tileAnimate.playerDown1;
-//    		}
-//    		if(ui.spriteNumber == 2) {
-//    			tileAnimate.imageHolder = tileAnimate.playerDown2;
-//    		}
-//    		break;
-//    	case "left":
-//    		if(ui.spriteNumber == 1) {
-//    			tileAnimate.imageHolder = tileAnimate.playerLeft1;
-//    		}
-//    		if(ui.spriteNumber == 2) {
-//    			tileAnimate.imageHolder = tileAnimate.playerLeft2;
-//    		}
-//    		break;
-//    	case "right":
-//    		if(ui.spriteNumber == 1) {
-//    			tileAnimate.imageHolder = tileAnimate.playerRight1;
-//    		}
-//    		if(ui.spriteNumber == 2) {
-//    			tileAnimate.imageHolder = tileAnimate.playerRight2;
-//    		}
-//    		break;
-//    	}
-//    	g2.drawImage(tileAnimate.imageHolder, board.getPlayer().getPosition().getX(), board.getPlayer().getPosition().getY(), ui.tileSize, ui.tileSize, null);
-//    }
+
+    public void drawEnemy(Graphics2D g2) {
+    	for (var enemy : board.getEnemies()) {
+    		switch(enemy.getFacingDirection()) {
+        	case UP:
+        		if(ui.spriteNumber == 1) {
+        			g2.drawImage(tileAnimate[0].playerUp1, board.getPlayer().getPosition().getX(), board.getPlayer().getPosition().getY(), ui.tileSize, ui.tileSize, null);
+        		}
+        		if(ui.spriteNumber == 2) {
+        			g2.drawImage(tileAnimate[1].playerUp2, board.getPlayer().getPosition().getX(), board.getPlayer().getPosition().getY(), ui.tileSize, ui.tileSize, null);
+        		}
+        		break;
+        	case DOWN:
+        		if(ui.spriteNumber == 1) {
+        			g2.drawImage(tileAnimate[2].playerDown1, board.getPlayer().getPosition().getX(), board.getPlayer().getPosition().getY(), ui.tileSize, ui.tileSize, null);
+        		}
+        		if(ui.spriteNumber == 2) {
+        			g2.drawImage(tileAnimate[3].playerDown2, board.getPlayer().getPosition().getX(), board.getPlayer().getPosition().getY(), ui.tileSize, ui.tileSize, null);
+        		}
+        		break;
+        	case LEFT:
+        		if(ui.spriteNumber == 1) {
+        			g2.drawImage(tileAnimate[4].playerLeft1, board.getPlayer().getPosition().getX(), board.getPlayer().getPosition().getY(), ui.tileSize, ui.tileSize, null);
+        		}
+        		if(ui.spriteNumber == 2) {
+        			g2.drawImage(tileAnimate[5].playerLeft2, board.getPlayer().getPosition().getX(), board.getPlayer().getPosition().getY(), ui.tileSize, ui.tileSize, null);
+        		}
+        		break;
+        	case RIGHT:
+        		if(ui.spriteNumber == 1) {
+        			g2.drawImage(tileAnimate[6].playerRight1, board.getPlayer().getPosition().getX(), board.getPlayer().getPosition().getY(), ui.tileSize, ui.tileSize, null);
+        		}
+        		if(ui.spriteNumber == 2) {
+        			g2.drawImage(tileAnimate[7].playerRight2, board.getPlayer().getPosition().getX(), board.getPlayer().getPosition().getY(), ui.tileSize, ui.tileSize, null);
+        		}
+        		break;
+        	}
+    	}
+    	
+    }
 }
