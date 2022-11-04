@@ -33,7 +33,7 @@ public class DrawScreen {
 
     }
 
-    public void gameOverScreen(Graphics2D g2d, int tileSize, int xNum, int yNum)
+    public void gameOverScreen(Graphics2D g2d, int tileSize, int xNum, int yNum, int score)
     {
 
         g2d.setBackground(Color.BLACK);
@@ -50,12 +50,14 @@ public class DrawScreen {
         g2d.drawString("You got caught by a Farmer", (xNum/2)*tileSize, (yNum/2)*tileSize);
 
         // draw score
+        String scoreStr = Integer.toString(score);
+        g2d.drawString("Score: " + scoreStr,(xNum/2)*tileSize,((yNum/4) + (yNum/8)) *tileSize );
 
         g2d.setColor(Color.YELLOW);
         g2d.drawString("Press Space to exit.", (xNum/2)*tileSize, (yNum/2 + yNum/4)*tileSize);
     }
 
-    public void victoryScreen(Graphics2D g2d, int tileSize, int xNum, int yNum)
+    public void victoryScreen(Graphics2D g2d, int tileSize, int xNum, int yNum, int score)
     {
 
         Font bold_Font = new Font("Bold", Font.BOLD, tileSize * 3);
@@ -66,6 +68,9 @@ public class DrawScreen {
         g2d.setFont(bold_Font);
         g2d.setColor(Color.GREEN);
         g2d.drawString("You Win!", (xNum/2)*tileSize, (yNum/4)*tileSize);
+
+        String scoreStr = Integer.toString(score);
+        g2d.drawString("Score: " + scoreStr,(xNum/2)*tileSize,((yNum/4) + (yNum/8)) * tileSize );
 
         g2d.setFont(regular_Font);
         g2d.setColor(Color.YELLOW);

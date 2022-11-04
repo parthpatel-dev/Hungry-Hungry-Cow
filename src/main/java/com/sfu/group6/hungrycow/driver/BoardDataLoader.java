@@ -73,16 +73,16 @@ public class BoardDataLoader {
 
     }
 
-    public boolean isBarrier(int tileData) {
-        if(tileData == 3 || tileData == 4 || tileData == 5
-                || tileData == 6 || tileData == 7 || tileData = 8
-                || tileData == 9 || tileData == 10 || tileData == 11
-                || tileData == 12) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+//    public boolean isBarrier(int tileData) {
+//        if(tileData == 3 || tileData == 4 || tileData == 5
+//                || tileData == 6 || tileData == 7 || tileData = 8
+//                || tileData == 9 || tileData == 10 || tileData == 11
+//                || tileData == 12) {
+//            return true;
+//        } else {
+//            return false;
+//        }
+//    }
 
     public boolean isPlayer(int tileData) {
         if(tileData == 1) {
