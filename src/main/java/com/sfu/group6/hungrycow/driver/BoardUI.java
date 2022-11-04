@@ -20,14 +20,15 @@ public class BoardUI extends JPanel implements Runnable {
 
 	Board board;
     final int defaultTileSize = 16;
+
     final int FPS =60;
-    final int scale = 3;
     public int spriteCounter = 0;
     public int spriteNumber = 1;
     public boolean startButtonPress = true;
+    final int scale = 2;
     public final int tileSize = defaultTileSize * scale;
-    public final int numOfTilesHorizontal = 28;
-    public final int numOfTilesVertical = 20;
+    public final int numOfTilesHorizontal = 24;
+    public final int numOfTilesVertical = 15;
     public final int screenWidth = numOfTilesHorizontal * tileSize;
     public final int screenHeight = numOfTilesVertical * tileSize;
     

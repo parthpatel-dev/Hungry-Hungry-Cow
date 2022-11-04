@@ -1,5 +1,6 @@
 package com.sfu.group6.hungrycow.driver.tile;
 
+import com.sfu.group6.hungrycow.driver.BoardDataLoader;
 import com.sfu.group6.hungrycow.driver.BoardUI;
 import org.apache.commons.lang3.RandomUtils;
 
@@ -17,24 +18,26 @@ public class TileHandler {
     BoardUI ui;
     Tile[] tiles;
 
-    int[][] boardData;
+    BoardDataLoader loader;
+
+
 
     public TileHandler(BoardUI ui) throws IOException {
         this.ui = ui;
         tiles = new Tile[20];
-        boardData = new int[ui.numOfTilesHorizontal][ui.numOfTilesVertical];
         getTileImage();
-        loadBoard(getRandomMapFilePath());
+//        loadBoard(getRandomMapFilePath());
     }
 
     public void getTileImage() {
 
         try {
             tiles[0] = new Tile();
-            tiles[0].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/light_grass.png")));
+            tiles[0].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/field.png")));
+
 
             tiles[1] = new Tile();
-            tiles[1].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/barrierTree.png")));
+            tiles[1].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/tall_tree.png")));
 
             tiles[2] = new Tile();
             tiles[2].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/pond.png")));
@@ -43,40 +46,11 @@ public class TileHandler {
             tiles[3].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/crop1.png")));
 
             tiles[4] = new Tile();
-            tiles[4].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/rock.png")));
+            tiles[4].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/heavy_grass.png")));
 
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public void loadBoard(String filePath) throws IOException {
-        InputStream stream = getClass().getResourceAsStream(filePath);
-        assert stream != null;
-        BufferedReader bufferReader = new BufferedReader(new InputStreamReader(stream));
-
-        for (int row = 0; row < ui.numOfTilesVertical; row++) {
-
-            String line = bufferReader.readLine();
-            String[] rowData = line.split(" ");
-
-            for (int col = 0; col < ui.numOfTilesHorizontal; col++) {
-
-                int tileData = Integer.parseInt(rowData[col]);
-                boardData[col][row] = tileData;
-
-            }
-        }
-        bufferReader.close();
-    }
-
-    public String getRandomMapFilePath() {
-        String filePath;
-//        int randNum = RandomUtils.nextInt(1, 6);
-        int randNum = 1;
-        return "/maps/map" +
-                randNum +
-                ".txt";
     }
 
     public void drawTile(Graphics2D g) {
@@ -106,12 +80,11 @@ public class TileHandler {
 
 
     public void drawGrass(Graphics2D g) {
-        int backgroundSize = 320;
-        for (int i = 0; i < 3; i++) {
-            int grassPositionX = i * backgroundSize;
-            for (int j = 0; j < 3; j++) {
-                int grassPositionY = j * backgroundSize;
-                g.drawImage(tiles[0].image, grassPositionX, grassPositionY, backgroundSize, backgroundSize, null);
+        for (int i = 0; i < ui.numOfTilesHorizontal; i++) {
+            int grassPositionX = i * ui.tileSize;
+            for (int j = 0; j < ui.numOfTilesVertical; j++) {
+                int grassPositionY = j * ui.tileSize;
+                g.drawImage(tiles[0].image, grassPositionX, grassPositionY, ui.tileSize, ui.tileSize, null);
             }
         }
     }
