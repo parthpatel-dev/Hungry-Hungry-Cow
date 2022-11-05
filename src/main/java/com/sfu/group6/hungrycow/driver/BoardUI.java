@@ -14,16 +14,13 @@ public class BoardUI extends JPanel implements Runnable{
     public final int numOfTilesVertical = 15;
     public final int screenWidth = numOfTilesHorizontal * tileSize;
     public final int screenHeight = numOfTilesVertical * tileSize;
-
-    MapLoader mapLoader = new MapLoader();
-    DrawBoard drawBoard = new DrawBoard(this);
-    int[][] boardData = mapLoader.loadBoard(drawBoard.getRandomMapFilePath(), numOfTilesHorizontal, numOfTilesVertical);
-    BoardFactory boardFactory = new BoardFactory();
+    DrawBoard drawBoard;
 
 
     public BoardUI() throws IOException {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.black);
+        drawBoard = new DrawBoard(this);
     }
 
     Thread gameThread;
@@ -49,6 +46,12 @@ public class BoardUI extends JPanel implements Runnable{
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g;
+
+        try {
+            drawBoard.drawTile(g2);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         g2.dispose();
      }

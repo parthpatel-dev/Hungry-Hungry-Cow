@@ -1,6 +1,8 @@
 package com.sfu.group6.hungrycow.driver;
 
 import com.sfu.group6.hungrycow.driver.tile.TileHandler;
+import com.sfu.group6.hungrycow.model.animate.HungryCowAnimateFactory;
+import com.sfu.group6.hungrycow.model.inanimate.HungryCowInanimateFactory;
 
 import java.awt.*;
 import java.io.IOException;
@@ -9,19 +11,30 @@ import java.io.IOException;
 public class DrawBoard {
     private static final int WIDTH = 0;
     private static final int HEIGHT = 0;
-    private MapLoader mapLoader;
+    private int[][] boardData;
     BoardUI ui;
+    Board board;
 
     TileHandler tileHandler;
 
+    BoardFactory boardFactory;
+
+    HungryCowAnimateFactory animateFactory;
+    HungryCowInanimateFactory inanimateFactory;
+
     public DrawBoard(BoardUI ui) throws IOException {
         this.ui = ui;
-        this.mapLoader = new MapLoader();
+        MapLoader mapLoader = new MapLoader();
+        boardData = mapLoader.loadBoard(getRandomMapFilePath(), WIDTH, HEIGHT);
+        animateFactory = new HungryCowAnimateFactory();
+        inanimateFactory = new HungryCowInanimateFactory();
+        boardFactory = new BoardFactory();
+        board = boardFactory.createBoard(boardData, animateFactory, inanimateFactory);
         tileHandler = new TileHandler(this.ui);
+//        animateHandler = new AnimateHandler(this.ui);
     }
 
     public void drawTile(Graphics2D g) throws IOException {
-        int[][] boardData = this.mapLoader.loadBoard(getRandomMapFilePath(), WIDTH, HEIGHT);
         drawGrass(g);
 
         for (int row = 0; row < ui.numOfTilesVertical; row++) {
