@@ -6,6 +6,7 @@ import com.sfu.group6.hungrycow.model.animate.HungryCowAnimateFactory;
 import com.sfu.group6.hungrycow.model.inanimate.HungryCowInanimateFactory;
 import com.sfu.group6.hungrycow.model.animate.Player;
 import com.sfu.group6.hungrycow.model.inanimate.BonusReward;
+import com.sfu.group6.hungrycow.model.inanimate.HungryCowInanimateFactory;
 import com.sfu.group6.hungrycow.model.inanimate.Punishment;
 import com.sfu.group6.hungrycow.model.inanimate.RegularReward;
 
@@ -35,8 +36,8 @@ public class BoardFactory {
     private static final int END_SPACE = 17;
 
     public Board createBoard(int[][] boardData,
-                                    HungryCowAnimateFactory animateFactory,
-                                    HungryCowInanimateFactory inanimateFactory) {
+                             HungryCowAnimateFactory animateFactory,
+                             HungryCowInanimateFactory inanimateFactory) {
 
         Position startSpace = null;
         Position endSpace = null;
@@ -53,15 +54,11 @@ public class BoardFactory {
 
                 switch (entityType) {
                     case PLAYER -> {
-                        player = Player.builder().position(
-                                Position.builder().x(x).y(y).build()
-                        ).build();
+                        player = animateFactory.makePlayer(x, y);
                     }
                     case ENEMY -> {
                         enemies.add(
-                                Enemy.builder().position(
-                                        Position.builder().x(x).y(y).build()
-                                ).build()
+                                animateFactory.makeEnemy(x, y)
                         );
                     }
                     case BARRIER_A, BARRIER_B, BARRIER_C,
@@ -72,23 +69,17 @@ public class BoardFactory {
                     }
                     case OBJECTIVES -> {
                         objectives.add(
-                                RegularReward.builder().position(
-                                        Position.builder().x(x).y(y).build()
-                                ).build()
+                                inanimateFactory.makeRegularReward(x, y)
                         );
                     }
                     case BONUS_REWARD -> {
                         bonusRewards.add(
-                                BonusReward.builder().position(
-                                        Position.builder().x(x).y(y).build()
-                                ).build()
+                                inanimateFactory.makeBonusReward(x, y)
                         );
                     }
                     case PUNISHMENT -> {
                         punishments.add(
-                                Punishment.builder().position(
-                                        Position.builder().x(x).y(y).build()
-                                ).build()
+                                inanimateFactory.makePunishment(x, y)
                         );
                     }
                     case START_SPACE -> {

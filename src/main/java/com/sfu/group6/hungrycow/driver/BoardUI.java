@@ -1,5 +1,6 @@
 package com.sfu.group6.hungrycow.driver;
 
+<<<<<<< HEAD
 import com.sfu.group6.hungrycow.driver.tile.TileHandler;
 import com.sfu.group6.hungrycow.driver.tile.AnimateHandler;
 import com.sfu.group6.hungrycow.model.animate.HungryCowAnimateFactory;
@@ -9,6 +10,11 @@ import com.sfu.group6.hungrycow.driver.Board;
 import com.sfu.group6.hungrycow.control.*;
 
 
+=======
+import com.sfu.group6.hungrycow.model.animate.HungryCowAnimateFactory;
+import com.sfu.group6.hungrycow.model.inanimate.HungryCowInanimateFactory;
+
+>>>>>>> 55f9dce8ba9ad3e8c2572cc1f118294ea5d9a67b
 import javax.swing.*;
 
 import java.awt.*;
@@ -40,7 +46,16 @@ public class BoardUI extends JPanel implements Runnable {
     public final int numOfTilesVertical = 15;
     public final int screenWidth = numOfTilesHorizontal * tileSize;
     public final int screenHeight = numOfTilesVertical * tileSize;
-   
+
+
+
+    MapLoader mapLoader;
+    Board board;
+    DrawBoard drawBoard;
+    BoardFactory boardFactory;
+    HungryCowAnimateFactory animateFactory;
+    HungryCowInanimateFactory inanimateFactory;
+
 
 
     public BoardUI() throws IOException {
@@ -52,7 +67,7 @@ public class BoardUI extends JPanel implements Runnable {
         animateFactory = new HungryCowAnimateFactory();
         inanimateFactory = new HungryCowInanimateFactory();
         board = boardFactory.createBoard(boardData, animateFactory, inanimateFactory);
-        drawBoard = new DrawBoard(this, board, getRandomMapFilePath());
+        drawBoard = new DrawBoard(this, board, boardData);
         this.addKeyListener(key);
     }
 
@@ -139,6 +154,12 @@ public class BoardUI extends JPanel implements Runnable {
 //            //showIntroScreen(g2); //set startButtonPress to true once user press gui button
        }
 
+        try {
+            drawBoard.drawTile(g2);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         g2.dispose();
 }
 
@@ -157,14 +178,13 @@ private void playGame(Graphics2D g2) {
     }
 }
 
-public String getRandomMapFilePath() {
-    String filePath;
-//    int randNum = RandomUtils.nextInt(1, 6);
-    int randNum = 1;
-    return "/maps/map" +
-            randNum +
-            ".txt";
-}
-
+    public String getRandomMapFilePath() {
+        String filePath;
+//        int randNum = RandomUtils.nextInt(1, 6);
+        int randNum = 1;
+        return "/maps/map" +
+                randNum +
+                ".txt";
+    }
 
 }

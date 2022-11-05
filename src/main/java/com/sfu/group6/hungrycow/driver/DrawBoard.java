@@ -3,6 +3,7 @@ package com.sfu.group6.hungrycow.driver;
 import com.sfu.group6.hungrycow.driver.tile.TileHandler;
 import com.sfu.group6.hungrycow.driver.tile.AnimateHandler;
 import com.sfu.group6.hungrycow.driver.tile.Tile;
+
 import com.sfu.group6.hungrycow.model.animate.HungryCowAnimateFactory;
 import com.sfu.group6.hungrycow.model.inanimate.HungryCowInanimateFactory;
 
@@ -14,17 +15,11 @@ public class DrawBoard {
     private int[][] boardData;
     BoardUI ui;
     Board board;
-  
     private static int WIDTH = 0;
     private static int HEIGHT = 0;
 
     TileHandler tileHandler;
     AnimateHandler animateHandler;
-
-    BoardFactory boardFactory;
-
-    HungryCowAnimateFactory animateFactory;
-    HungryCowInanimateFactory inanimateFactory;
 
     public DrawBoard(BoardUI ui, Board board, String filePath) throws IOException {
         this.ui = ui;
@@ -33,6 +28,7 @@ public class DrawBoard {
         MapLoader mapLoader = new MapLoader();
         boardData = mapLoader.loadBoard(filePath, WIDTH, HEIGHT);
         tileHandler = new TileHandler(this.ui);
+        animateHandler = new AnimateHandler(this.ui);
     }
 
     public void drawTile(Graphics2D g) throws IOException {
@@ -46,7 +42,7 @@ public class DrawBoard {
                 int tileSize = ui.tileSize;
                 int tilePositionX = col * ui.tileSize;
                 int tilePositionY = row * ui.tileSize;
-                if(tileData != 1 && tileData != 2 && tileData != 13
+                if(tileData != 2 && tileData != 13
                         && tileData != 14 && tileData != 15
                         && tileData != 16 && tileData != 17) {
                     g.drawImage(tileHandler.tiles[tileData].image, tilePositionX, tilePositionY, tileSize, tileSize, null);
@@ -165,4 +161,5 @@ public class DrawBoard {
         		g2.drawImage(animateHandler.tileAnimate[7].playerRight2, board.getEndSpace().getX(), board.getEndSpace().getY(), ui.tileSize, ui.tileSize, null);
         	}
     }
+
 }
