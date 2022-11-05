@@ -19,7 +19,6 @@ public class BoardUI extends JPanel implements Runnable{
     public final int screenHeight = numOfTilesVertical * tileSize;
 
 
-
     MapLoader mapLoader;
     Board board;
     DrawBoard drawBoard;
@@ -37,7 +36,7 @@ public class BoardUI extends JPanel implements Runnable{
         animateFactory = new HungryCowAnimateFactory();
         inanimateFactory = new HungryCowInanimateFactory();
         board = boardFactory.createBoard(boardData, animateFactory, inanimateFactory);
-        drawBoard = new DrawBoard(this, board, getRandomMapFilePath());
+        drawBoard = new DrawBoard(this, board, boardData);
     }
 
     Thread gameThread;

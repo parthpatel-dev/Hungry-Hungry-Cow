@@ -17,16 +17,11 @@ public class DrawBoard {
 
     TileHandler tileHandler;
 
-    BoardFactory boardFactory;
-
-
-
-    public DrawBoard(BoardUI ui, Board board, String filePath) throws IOException {
+    public DrawBoard(BoardUI ui, Board board, int[][] boardData) throws IOException {
         this.ui = ui;
         WIDTH = ui.numOfTilesHorizontal;
         HEIGHT = ui.numOfTilesVertical;
-        MapLoader mapLoader = new MapLoader();
-        boardData = mapLoader.loadBoard(filePath, WIDTH, HEIGHT);
+        this.boardData = boardData;
         tileHandler = new TileHandler(this.ui);
     }
 
