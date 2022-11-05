@@ -48,7 +48,7 @@ public class BoardUI extends JPanel implements Runnable{
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g;
 
-        tileHandler.drawTile(g2);
+
 
         g2.dispose();
      }
