@@ -1,38 +1,16 @@
 package com.sfu.group6.hungrycow.driver;
 
-<<<<<<< HEAD
-import com.sfu.group6.hungrycow.driver.tile.TileHandler;
-import com.sfu.group6.hungrycow.driver.tile.AnimateHandler;
+
+import com.sfu.group6.hungrycow.control.Direction;
 import com.sfu.group6.hungrycow.model.animate.HungryCowAnimateFactory;
 import com.sfu.group6.hungrycow.model.inanimate.HungryCowInanimateFactory;
 
-import com.sfu.group6.hungrycow.driver.Board; 
-import com.sfu.group6.hungrycow.control.*;
-
-
-=======
-import com.sfu.group6.hungrycow.model.animate.HungryCowAnimateFactory;
-import com.sfu.group6.hungrycow.model.inanimate.HungryCowInanimateFactory;
-
->>>>>>> 55f9dce8ba9ad3e8c2572cc1f118294ea5d9a67b
 import javax.swing.*;
-
 import java.awt.*;
-import java.awt.event.*;
 import java.io.IOException;
-
-
-import java.io.IOException;
-
 
 public class BoardUI extends JPanel implements Runnable {
 
-	MapLoader mapLoader;
-    BoardFactory boardFactory;
-    HungryCowAnimateFactory animateFactory;
-    HungryCowInanimateFactory inanimateFactory;
-    DrawBoard drawBoard;
-	Board board;
 	public boolean update = false;
     final int defaultTileSize = 16;
     private final int FPS =60;
@@ -47,16 +25,14 @@ public class BoardUI extends JPanel implements Runnable {
     public final int screenWidth = numOfTilesHorizontal * tileSize;
     public final int screenHeight = numOfTilesVertical * tileSize;
 
-
-
     MapLoader mapLoader;
     Board board;
     DrawBoard drawBoard;
     BoardFactory boardFactory;
     HungryCowAnimateFactory animateFactory;
     HungryCowInanimateFactory inanimateFactory;
-
-
+    KeyHandler key;
+    Thread gameThread;
 
     public BoardUI() throws IOException {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -68,11 +44,10 @@ public class BoardUI extends JPanel implements Runnable {
         inanimateFactory = new HungryCowInanimateFactory();
         board = boardFactory.createBoard(boardData, animateFactory, inanimateFactory);
         drawBoard = new DrawBoard(this, board, boardData);
+        key = new KeyHandler();
         this.addKeyListener(key);
     }
-
-    KeyHandler key = new KeyHandler();
-    Thread gameThread;
+    
     public void startGameThread() {
         gameThread = new Thread(this);
         gameThread.start();
@@ -83,7 +58,7 @@ public class BoardUI extends JPanel implements Runnable {
     	double interval = 1000000000/FPS;
     	time = interval +  System.nanoTime();
         while(gameThread != null) {
-   
+        	System.out.println("hereagain");
             update();
             if(update == true) {
             	repaint();
@@ -154,11 +129,6 @@ public class BoardUI extends JPanel implements Runnable {
 //            //showIntroScreen(g2); //set startButtonPress to true once user press gui button
        }
 
-        try {
-            drawBoard.drawTile(g2);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
 
         g2.dispose();
 }

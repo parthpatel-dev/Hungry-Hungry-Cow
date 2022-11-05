@@ -21,14 +21,14 @@ public class DrawBoard {
     TileHandler tileHandler;
     AnimateHandler animateHandler;
 
-    public DrawBoard(BoardUI ui, Board board, String filePath) throws IOException {
+    public DrawBoard(BoardUI ui, Board boardCreated, int[][] boardData) throws IOException {
         this.ui = ui;
         WIDTH = ui.numOfTilesHorizontal;
         HEIGHT = ui.numOfTilesVertical;
-        MapLoader mapLoader = new MapLoader();
-        boardData = mapLoader.loadBoard(filePath, WIDTH, HEIGHT);
+        this.boardData = boardData;
         tileHandler = new TileHandler(this.ui);
         animateHandler = new AnimateHandler(this.ui);
+        board = boardCreated;
     }
 
     public void drawTile(Graphics2D g) throws IOException {

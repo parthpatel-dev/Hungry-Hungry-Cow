@@ -24,10 +24,6 @@ public class MapLoader {
                 boardData[col][row] = tileData;
             }
         }
-<<<<<<< HEAD
-=======
-
->>>>>>> 55f9dce8ba9ad3e8c2572cc1f118294ea5d9a67b
         bufferReader.close();
         return boardData;
     }
