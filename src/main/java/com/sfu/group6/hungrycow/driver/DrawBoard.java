@@ -1,14 +1,12 @@
 package com.sfu.group6.hungrycow.driver;
 
-import com.sfu.group6.hungrycow.control.Position;
 import com.sfu.group6.hungrycow.driver.tile.TileHandler;
-import com.sfu.group6.hungrycow.model.animate.Player;
 
 import java.awt.*;
 import java.io.IOException;
 
 
-public class BoardDataLoader {
+public class DrawBoard {
     private static final int WIDTH = 0;
     private static final int HEIGHT = 0;
     private MapLoader mapLoader;
@@ -16,7 +14,7 @@ public class BoardDataLoader {
 
     TileHandler tileHandler;
 
-    public BoardDataLoader(BoardUI ui) throws IOException {
+    public DrawBoard(BoardUI ui) throws IOException {
         this.ui = ui;
         this.mapLoader = new MapLoader();
         tileHandler = new TileHandler(this.ui);
@@ -32,12 +30,11 @@ public class BoardDataLoader {
 
                 int tileData = boardData[col][row];
                 int tileSize = ui.tileSize;
-                if(tileData == 2) {
-                    tileSize *= 3;
-                }
                 int tilePositionX = col * ui.tileSize;
                 int tilePositionY = row * ui.tileSize;
-                if(tileData != 5 && tileData != 6 && tileData != 7 && tileData != 8) {
+                if(tileData != 1 && tileData != 2 && tileData != 13
+                        && tileData != 14 && tileData != 15
+                        && tileData != 16 && tileData != 17) {
                     g.drawImage(tileHandler.tiles[tileData].image, tilePositionX, tilePositionY, tileSize, tileSize, null);
                 }
             }
@@ -54,7 +51,7 @@ public class BoardDataLoader {
         }
     }
 
-    private static String getRandomMapFilePath() {
+    public String getRandomMapFilePath() {
         String filePath;
 //        int randNum = RandomUtils.nextInt(1, 6);
         int randNum = 1;

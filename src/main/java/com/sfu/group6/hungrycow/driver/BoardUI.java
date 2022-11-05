@@ -1,11 +1,14 @@
 package com.sfu.group6.hungrycow.driver;
 
+<<<<<<< HEAD
 import com.sfu.group6.hungrycow.driver.tile.TileHandler;
 import com.sfu.group6.hungrycow.driver.tile.AnimateHandler;
 
 import com.sfu.group6.hungrycow.driver.Board; 
 import com.sfu.group6.hungrycow.control.*;
 
+=======
+>>>>>>> 0e441a4e71cbb122166465031d0ff9927789fca6
 import javax.swing.*;
 
 import java.awt.*;
@@ -33,6 +36,12 @@ public class BoardUI extends JPanel implements Runnable {
     public final int screenHeight = numOfTilesVertical * tileSize;
     
 
+    MapLoader mapLoader = new MapLoader();
+    DrawBoard drawBoard = new DrawBoard(this);
+    int[][] boardData = mapLoader.loadBoard(drawBoard.getRandomMapFilePath(), numOfTilesHorizontal, numOfTilesVertical);
+    BoardFactory boardFactory = new BoardFactory();
+
+
     public BoardUI() throws IOException {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.black);
@@ -50,10 +59,12 @@ public class BoardUI extends JPanel implements Runnable {
         gameThread.start();
     }
 
+
     BoardDataLoader tileHandler = new BoardDataLoader(this);
 
     AnimateHandler animateHandler = new AnimateHandler(this);
     
+
     @Override
     public void run() {
     	double drawInterval = 1000000000/FPS;
@@ -103,6 +114,7 @@ public class BoardUI extends JPanel implements Runnable {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g;
 
+
         
         g2.setColor(Color.white);
         g2.fillRect(100, 100, tileSize, tileSize);
@@ -122,6 +134,7 @@ public class BoardUI extends JPanel implements Runnable {
 
 
         //tileHandler.drawTile(g2);
+
 
         g2.dispose();
      //}

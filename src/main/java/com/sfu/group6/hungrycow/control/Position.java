@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 @Builder
 public class Position {
-    private int x = 100;
-    private int y = 100;
+    private int x = 0;
+    private int y = 0;
 }

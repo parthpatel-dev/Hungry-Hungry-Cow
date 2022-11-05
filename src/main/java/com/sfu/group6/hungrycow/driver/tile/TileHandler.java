@@ -13,7 +13,7 @@ public class TileHandler {
 
     public TileHandler(BoardUI ui) throws IOException {
         this.ui = ui;
-        tiles = new Tile[50];
+        tiles = new Tile[30];
         getTileImage();
     }
 
