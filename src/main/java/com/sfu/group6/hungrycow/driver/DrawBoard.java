@@ -9,29 +9,25 @@ import java.io.IOException;
 
 
 public class DrawBoard {
-    private static final int WIDTH = 0;
-    private static final int HEIGHT = 0;
     private int[][] boardData;
     BoardUI ui;
     Board board;
+    private static int WIDTH = 0;
+    private static int HEIGHT = 0;
 
     TileHandler tileHandler;
 
     BoardFactory boardFactory;
 
-    HungryCowAnimateFactory animateFactory;
-    HungryCowInanimateFactory inanimateFactory;
 
-    public DrawBoard(BoardUI ui) throws IOException {
+
+    public DrawBoard(BoardUI ui, Board board, String filePath) throws IOException {
         this.ui = ui;
+        WIDTH = ui.numOfTilesHorizontal;
+        HEIGHT = ui.numOfTilesVertical;
         MapLoader mapLoader = new MapLoader();
-        boardData = mapLoader.loadBoard(getRandomMapFilePath(), WIDTH, HEIGHT);
-        animateFactory = new HungryCowAnimateFactory();
-        inanimateFactory = new HungryCowInanimateFactory();
-        boardFactory = new BoardFactory();
-        board = boardFactory.createBoard(boardData, animateFactory, inanimateFactory);
+        boardData = mapLoader.loadBoard(filePath, WIDTH, HEIGHT);
         tileHandler = new TileHandler(this.ui);
-//        animateHandler = new AnimateHandler(this.ui);
     }
 
     public void drawTile(Graphics2D g) throws IOException {
@@ -45,7 +41,7 @@ public class DrawBoard {
                 int tileSize = ui.tileSize;
                 int tilePositionX = col * ui.tileSize;
                 int tilePositionY = row * ui.tileSize;
-                if(tileData != 1 && tileData != 2 && tileData != 13
+                if(tileData != 2 && tileData != 13
                         && tileData != 14 && tileData != 15
                         && tileData != 16 && tileData != 17) {
                     g.drawImage(tileHandler.tiles[tileData].image, tilePositionX, tilePositionY, tileSize, tileSize, null);
@@ -64,12 +60,5 @@ public class DrawBoard {
         }
     }
 
-    public String getRandomMapFilePath() {
-        String filePath;
-//        int randNum = RandomUtils.nextInt(1, 6);
-        int randNum = 1;
-        return "/maps/map" +
-                randNum +
-                ".txt";
-    }
+
 }
