@@ -1,7 +1,5 @@
 package com.sfu.group6.hungrycow.driver;
 
-import com.sfu.group6.hungrycow.driver.tile.TileHandler;
-
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
@@ -17,6 +15,12 @@ public class BoardUI extends JPanel implements Runnable{
     public final int screenWidth = numOfTilesHorizontal * tileSize;
     public final int screenHeight = numOfTilesVertical * tileSize;
 
+    MapLoader mapLoader = new MapLoader();
+    DrawBoard drawBoard = new DrawBoard(this);
+    int[][] boardData = mapLoader.loadBoard(drawBoard.getRandomMapFilePath(), numOfTilesHorizontal, numOfTilesVertical);
+    BoardFactory boardFactory = new BoardFactory();
+
+
     public BoardUI() throws IOException {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.black);
@@ -27,8 +31,6 @@ public class BoardUI extends JPanel implements Runnable{
         gameThread = new Thread(this);
         gameThread.start();
     }
-
-    TileHandler tileHandler = new TileHandler(this);
 
     @Override
     public void run() {
@@ -47,8 +49,6 @@ public class BoardUI extends JPanel implements Runnable{
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g;
-
-
 
         g2.dispose();
      }

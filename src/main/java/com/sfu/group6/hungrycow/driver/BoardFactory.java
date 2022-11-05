@@ -33,7 +33,7 @@ public class BoardFactory {
     private static final int START_SPACE = 16;
     private static final int END_SPACE = 17;
 
-    public static Board createBoard(int[][] boardData,
+    public Board createBoard(int[][] boardData,
                                     HungryCowAnimateFactory animateFactory,
                                     HungryCowAnimateFactory inanimateFactory) {
 
