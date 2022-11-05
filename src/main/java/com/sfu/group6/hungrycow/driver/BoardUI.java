@@ -40,6 +40,7 @@ public class BoardUI extends JPanel implements Runnable {
         //createBoard
         this.addKeyListener(key);
         //Board = boardFactory.createBoard();
+        //isObjective.isEmpty
     }
 
     KeyHandler key = new KeyHandler();
@@ -122,14 +123,14 @@ public class BoardUI extends JPanel implements Runnable {
 }
 
 private void playGame(Graphics2D g2) {
-	 //drawScore(g2);
-    //if (board.isGameOver() == true) {
-        //gameOverScreen(g2);
-//    } else if(isPlayerWin() == true){
-//    	victoryScreen(g2);
-    //}else {
-        //animateHandler.drawPlayer(g2);
-        //animateHandler.drawEnemy(g2);
+	 drawScore(g2);
+    if (board.isGameOver() == true) {
+        gameOverScreen(g2);
+    } else if(board.isPlayerWin() == true){
+    	victoryScreen(g2);
+    }else {
+        animateHandler.drawPlayer(g2);
+        animateHandler.drawEnemy(g2);
         /*
          * drawPunishment
          * drawBonusReward
@@ -141,7 +142,7 @@ private void playGame(Graphics2D g2) {
 //        } else {
 //        	drawClosedExit(g2);
 //        }
-    //}
+    }
 }
 
 }

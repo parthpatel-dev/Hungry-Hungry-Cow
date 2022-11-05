@@ -130,11 +130,26 @@ public class AnimateHandler {
     	}
     	
     }
-//    public void drawBonusReward() {
-//    	for(var BonusReward : board.getBonus()) {
-//    		if(board.) {
-//    			
-//    		} 
-//    	}
-//    }
+    
+    public void drawBonusReward(Graphics2D g2) {
+    	for(var BonusReward : board.getBonus()) {
+    		if(board.isCollectedBonus() == true) {
+    			g2.drawImage(tileAnimate[7].playerRight2, BonusReward.getPosition().getX(), BonusReward.getPosition().getY(), ui.tileSize, ui.tileSize, null);
+    		} 
+    	}
+    }
+    
+    public void drawObjective(Graphics2D g2) {
+    	for(var objective : board.getObjectives()) {
+    		if(board.isCollectedObjective() == true) {
+    			g2.drawImage(tileAnimate[7].playerRight2, objective.getPosition().getX(), objective.getPosition().getY(), ui.tileSize, ui.tileSize, null);
+    		} 
+    	}
+    }
+    public void drawClosedGate(Graphics2D g2) {
+    	
+    }
+    public void drawOpenGate(Graphics2D g2) {
+    	
+    }
 }
