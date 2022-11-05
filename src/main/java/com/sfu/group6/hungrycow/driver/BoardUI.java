@@ -50,7 +50,7 @@ public class BoardUI extends JPanel implements Runnable {
         gameThread.start();
     }
 
-    TileHandler tileHandler = new TileHandler(this);
+    BoardDataLoader tileHandler = new BoardDataLoader(this);
 
     AnimateHandler animateHandler = new AnimateHandler(this);
     
@@ -109,7 +109,12 @@ public class BoardUI extends JPanel implements Runnable {
 
         
 //        if (startButtonPress) {
-        	tileHandler.drawTile(g2);
+        	try {
+				tileHandler.drawTile(g2);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
             //playGame(g2); //For drawing the entities
 //        } else {
 //            //showIntroScreen(g2); //set startButtonPress to true once user press gui button

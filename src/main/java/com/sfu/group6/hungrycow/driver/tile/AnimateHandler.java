@@ -140,16 +140,18 @@ public class AnimateHandler {
     }
     
     public void drawObjective(Graphics2D g2) {
-    	for(var objective : board.getObjectives()) {
+    	for(var RegularReward : board.getObjectives()) {
     		if(board.isCollectedObjective() == true) {
-    			g2.drawImage(tileAnimate[7].playerRight2, objective.getPosition().getX(), objective.getPosition().getY(), ui.tileSize, ui.tileSize, null);
+    			g2.drawImage(tileAnimate[7].playerRight2, RegularReward.getPosition().getX(), RegularReward.getPosition().getY(), ui.tileSize, ui.tileSize, null);
     		} 
     	}
     }
-    public void drawClosedGate(Graphics2D g2) {
-    	
-    }
-    public void drawOpenGate(Graphics2D g2) {
-    	
+    
+    public void drawGate(Graphics2D g2) {
+    		if(board.getObjectives().isEmpty()) {
+    			g2.drawImage(tileAnimate[7].playerRight2, board.getEndSpace().getX(), board.getEndSpace().getY(), ui.tileSize, ui.tileSize, null);
+        	} else {
+        		g2.drawImage(tileAnimate[7].playerRight2, board.getEndSpace().getX(), board.getEndSpace().getY(), ui.tileSize, ui.tileSize, null);
+        	}
     }
 }
