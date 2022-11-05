@@ -1,6 +1,7 @@
 package com.sfu.group6.hungrycow.driver.tile;
 
 import com.sfu.group6.hungrycow.driver.Board;
+import com.sfu.group6.hungrycow.driver.BoardFactory;
 import com.sfu.group6.hungrycow.driver.BoardUI;
 import com.sfu.group6.hungrycow.driver.KeyHandler;
 import com.sfu.group6.hungrycow.model.animate.AbstractAnimate;
@@ -18,18 +19,16 @@ public class AnimateHandler {
 
     BoardUI ui;
     Board board;
+    BoardFactory boardFactory;
 //    Tile[] tiles;
-    Tile[] tileAnimate;
+    public Tile[] tileAnimate;
 
     public AnimateHandler(BoardUI ui) {
         this.ui = ui;
-        //tiles = new Tile[10];
         tileAnimate = new Tile[10];
         getAnimateImage();
-        board = Board.builder().build();
-        //board.getPlayer().getPosition().getX();
     }
-
+ 
     public void getAnimateImage() {
 
         try {
@@ -54,104 +53,5 @@ public class AnimateHandler {
         }
     }
 
-    public void drawPlayer(Graphics2D g2) {
-    	switch(board.getPlayer().getFacingDirection()) {
-    	case UP:
-    		if(ui.spriteNumber == 1) {
-    			g2.drawImage(tileAnimate[0].playerUp1, board.getPlayer().getPosition().getX(), board.getPlayer().getPosition().getY(), ui.tileSize, ui.tileSize, null);
-    		}
-    		if(ui.spriteNumber == 2) {
-    			g2.drawImage(tileAnimate[1].playerUp2, board.getPlayer().getPosition().getX(), board.getPlayer().getPosition().getY(), ui.tileSize, ui.tileSize, null);
-    		}
-    		break;
-    	case DOWN:
-    		if(ui.spriteNumber == 1) {
-    			g2.drawImage(tileAnimate[2].playerDown1, board.getPlayer().getPosition().getX(), board.getPlayer().getPosition().getY(), ui.tileSize, ui.tileSize, null);
-    		}
-    		if(ui.spriteNumber == 2) {
-    			g2.drawImage(tileAnimate[3].playerDown2, board.getPlayer().getPosition().getX(), board.getPlayer().getPosition().getY(), ui.tileSize, ui.tileSize, null);
-    		}
-    		break;
-    	case LEFT:
-    		if(ui.spriteNumber == 1) {
-    			g2.drawImage(tileAnimate[4].playerLeft1, board.getPlayer().getPosition().getX(), board.getPlayer().getPosition().getY(), ui.tileSize, ui.tileSize, null);
-    		}
-    		if(ui.spriteNumber == 2) {
-    			g2.drawImage(tileAnimate[5].playerLeft2, board.getPlayer().getPosition().getX(), board.getPlayer().getPosition().getY(), ui.tileSize, ui.tileSize, null);
-    		}
-    		break;
-    	case RIGHT:
-    		if(ui.spriteNumber == 1) {
-    			g2.drawImage(tileAnimate[6].playerRight1, board.getPlayer().getPosition().getX(), board.getPlayer().getPosition().getY(), ui.tileSize, ui.tileSize, null);
-    		}
-    		if(ui.spriteNumber == 2) {
-    			g2.drawImage(tileAnimate[7].playerRight2, board.getPlayer().getPosition().getX(), board.getPlayer().getPosition().getY(), ui.tileSize, ui.tileSize, null);
-    		}
-    		break;
-    	}
-    }
-
-    public void drawEnemy(Graphics2D g2) {
-    	for (var enemy : board.getEnemies()) {
-    		switch(enemy.getFacingDirection()) {
-        	case UP:
-        		if(ui.spriteNumber == 1) {
-        			g2.drawImage(tileAnimate[0].playerUp1, board.getPlayer().getPosition().getX(), board.getPlayer().getPosition().getY(), ui.tileSize, ui.tileSize, null);
-        		}
-        		if(ui.spriteNumber == 2) {
-        			g2.drawImage(tileAnimate[1].playerUp2, board.getPlayer().getPosition().getX(), board.getPlayer().getPosition().getY(), ui.tileSize, ui.tileSize, null);
-        		}
-        		break;
-        	case DOWN:
-        		if(ui.spriteNumber == 1) {
-        			g2.drawImage(tileAnimate[2].playerDown1, board.getPlayer().getPosition().getX(), board.getPlayer().getPosition().getY(), ui.tileSize, ui.tileSize, null);
-        		}
-        		if(ui.spriteNumber == 2) {
-        			g2.drawImage(tileAnimate[3].playerDown2, board.getPlayer().getPosition().getX(), board.getPlayer().getPosition().getY(), ui.tileSize, ui.tileSize, null);
-        		}
-        		break;
-        	case LEFT:
-        		if(ui.spriteNumber == 1) {
-        			g2.drawImage(tileAnimate[4].playerLeft1, board.getPlayer().getPosition().getX(), board.getPlayer().getPosition().getY(), ui.tileSize, ui.tileSize, null);
-        		}
-        		if(ui.spriteNumber == 2) {
-        			g2.drawImage(tileAnimate[5].playerLeft2, board.getPlayer().getPosition().getX(), board.getPlayer().getPosition().getY(), ui.tileSize, ui.tileSize, null);
-        		}
-        		break;
-        	case RIGHT:
-        		if(ui.spriteNumber == 1) {
-        			g2.drawImage(tileAnimate[6].playerRight1, board.getPlayer().getPosition().getX(), board.getPlayer().getPosition().getY(), ui.tileSize, ui.tileSize, null);
-        		}
-        		if(ui.spriteNumber == 2) {
-        			g2.drawImage(tileAnimate[7].playerRight2, board.getPlayer().getPosition().getX(), board.getPlayer().getPosition().getY(), ui.tileSize, ui.tileSize, null);
-        		}
-        		break;
-        	}
-    	}
-    	
-    }
-    
-    public void drawBonusReward(Graphics2D g2) {
-    	for(var BonusReward : board.getBonus()) {
-    		if(board.isCollectedBonus() == true) {
-    			g2.drawImage(tileAnimate[7].playerRight2, BonusReward.getPosition().getX(), BonusReward.getPosition().getY(), ui.tileSize, ui.tileSize, null);
-    		} 
-    	}
-    }
-    
-    public void drawObjective(Graphics2D g2) {
-    	for(var RegularReward : board.getObjectives()) {
-    		if(board.isCollectedObjective() == true) {
-    			g2.drawImage(tileAnimate[7].playerRight2, RegularReward.getPosition().getX(), RegularReward.getPosition().getY(), ui.tileSize, ui.tileSize, null);
-    		} 
-    	}
-    }
-    
-    public void drawGate(Graphics2D g2) {
-    		if(board.getObjectives().isEmpty()) {
-    			g2.drawImage(tileAnimate[7].playerRight2, board.getEndSpace().getX(), board.getEndSpace().getY(), ui.tileSize, ui.tileSize, null);
-        	} else {
-        		g2.drawImage(tileAnimate[7].playerRight2, board.getEndSpace().getX(), board.getEndSpace().getY(), ui.tileSize, ui.tileSize, null);
-        	}
-    }
+   
 }

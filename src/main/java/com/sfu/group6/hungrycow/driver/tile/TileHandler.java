@@ -13,7 +13,7 @@ public class TileHandler {
 
     public TileHandler(BoardUI ui) throws IOException {
         this.ui = ui;
-        tiles = new Tile[30];
+        tiles = new Tile[50];
         getTileImage();
     }
 
@@ -25,10 +25,10 @@ public class TileHandler {
 
 
             tiles[1] = new Tile();
-            tiles[1].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/cow1.png")));
+            tiles[1].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/animate/cow1.png")));
 
             tiles[2] = new Tile();
-            tiles[2].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/enemy_left_1.png")));
+            tiles[2].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/animate/enemy_left_1.png")));
 
             tiles[3] = new Tile();
             tiles[3].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/tall_tree.png")));
@@ -94,16 +94,16 @@ public class TileHandler {
             tiles[23].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/heavy_grass.png")));
 
             tiles[24] = new Tile();
-            tiles[24].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/mama_sheep.png")));
+            tiles[24].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/animate/mama_sheep.png")));
 
             tiles[25] = new Tile();
-            tiles[25].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/baby_sheep.png")));
+            tiles[25].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/animate/baby_sheep.png")));
 
             tiles[26] = new Tile();
-            tiles[26].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/mama_chicken.png")));
+            tiles[26].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/animate/mama_chicken.png")));
 
             tiles[27] = new Tile();
-            tiles[27].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/baby_chicken.png")));
+            tiles[27].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/animate/baby_chicken.png")));
 
         } catch (IOException e) {
             throw new RuntimeException(e);

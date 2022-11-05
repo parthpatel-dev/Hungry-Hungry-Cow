@@ -3,6 +3,7 @@ package com.sfu.group6.hungrycow.driver;
 import com.sfu.group6.hungrycow.control.Position;
 import com.sfu.group6.hungrycow.model.animate.Enemy;
 import com.sfu.group6.hungrycow.model.animate.HungryCowAnimateFactory;
+import com.sfu.group6.hungrycow.model.inanimate.HungryCowInanimateFactory;
 import com.sfu.group6.hungrycow.model.animate.Player;
 import com.sfu.group6.hungrycow.model.inanimate.BonusReward;
 import com.sfu.group6.hungrycow.model.inanimate.Punishment;
@@ -35,7 +36,7 @@ public class BoardFactory {
 
     public Board createBoard(int[][] boardData,
                                     HungryCowAnimateFactory animateFactory,
-                                    HungryCowAnimateFactory inanimateFactory) {
+                                    HungryCowInanimateFactory inanimateFactory) {
 
         Position startSpace = null;
         Position endSpace = null;

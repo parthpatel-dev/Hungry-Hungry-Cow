@@ -23,8 +23,8 @@ public class MapLoader {
                 int tileData = Integer.parseInt(rowData[col]);
                 boardData[col][row] = tileData;
             }
-            bufferReader.close();
         }
+        bufferReader.close();
         return boardData;
     }
 }

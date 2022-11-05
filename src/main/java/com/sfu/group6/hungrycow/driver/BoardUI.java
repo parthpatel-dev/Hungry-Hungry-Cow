@@ -1,19 +1,19 @@
 package com.sfu.group6.hungrycow.driver;
 
-<<<<<<< HEAD
 import com.sfu.group6.hungrycow.driver.tile.TileHandler;
 import com.sfu.group6.hungrycow.driver.tile.AnimateHandler;
+import com.sfu.group6.hungrycow.model.animate.HungryCowAnimateFactory;
+import com.sfu.group6.hungrycow.model.inanimate.HungryCowInanimateFactory;
 
 import com.sfu.group6.hungrycow.driver.Board; 
 import com.sfu.group6.hungrycow.control.*;
 
-=======
->>>>>>> 0e441a4e71cbb122166465031d0ff9927789fca6
+
 import javax.swing.*;
 
 import java.awt.*;
 import java.awt.event.*;
-
+import java.io.IOException;
 
 
 import java.io.IOException;
@@ -21,10 +21,16 @@ import java.io.IOException;
 
 public class BoardUI extends JPanel implements Runnable {
 
+	MapLoader mapLoader;
+    BoardFactory boardFactory;
+    HungryCowAnimateFactory animateFactory;
+    HungryCowInanimateFactory inanimateFactory;
+    DrawBoard drawBoard;
 	Board board;
+	public boolean update = false;
     final int defaultTileSize = 16;
-
-    final int FPS =60;
+    private final int FPS =60;
+    private double time = 0;
     public int spriteCounter = 0;
     public int spriteNumber = 1;
     public boolean startButtonPress = true;
@@ -34,22 +40,20 @@ public class BoardUI extends JPanel implements Runnable {
     public final int numOfTilesVertical = 15;
     public final int screenWidth = numOfTilesHorizontal * tileSize;
     public final int screenHeight = numOfTilesVertical * tileSize;
-    
-
-    MapLoader mapLoader = new MapLoader();
-    DrawBoard drawBoard = new DrawBoard(this);
-    int[][] boardData = mapLoader.loadBoard(drawBoard.getRandomMapFilePath(), numOfTilesHorizontal, numOfTilesVertical);
-    BoardFactory boardFactory = new BoardFactory();
+   
 
 
     public BoardUI() throws IOException {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.black);
-        board = Board.builder().build();
-        //createBoard
+        mapLoader = new MapLoader();
+        int[][] boardData = mapLoader.loadBoard(getRandomMapFilePath(), this.numOfTilesHorizontal, this.numOfTilesVertical);
+        boardFactory = new BoardFactory();
+        animateFactory = new HungryCowAnimateFactory();
+        inanimateFactory = new HungryCowInanimateFactory();
+        board = boardFactory.createBoard(boardData, animateFactory, inanimateFactory);
+        drawBoard = new DrawBoard(this, board, getRandomMapFilePath());
         this.addKeyListener(key);
-        //Board = boardFactory.createBoard();
-        //isObjective.isEmpty
     }
 
     KeyHandler key = new KeyHandler();
@@ -58,46 +62,50 @@ public class BoardUI extends JPanel implements Runnable {
         gameThread = new Thread(this);
         gameThread.start();
     }
-
-
-    BoardDataLoader tileHandler = new BoardDataLoader(this);
-
-    AnimateHandler animateHandler = new AnimateHandler(this);
     
-
     @Override
     public void run() {
-    	double drawInterval = 1000000000/FPS;
-    	double nextDrawTime = System.nanoTime() + drawInterval;
+    	double interval = 1000000000/FPS;
+    	time = interval +  System.nanoTime();
         while(gameThread != null) {
-        	
+   
             update();
-            repaint();
-            try {
-            double remainingTime = nextDrawTime - System.nanoTime();
-            remainingTime = remainingTime/ 1000000;
-            if(remainingTime < 0) {
-            	remainingTime = 0;
+            if(update == true) {
+            	repaint();
+                sleepForTimeAfterAnimation();
+                update = false;
+                time = time + interval;
+        	}
+        }
+    }
+    
+    public void sleepForTimeAfterAnimation() {
+    	try {
+            double timeLeft = time - System.nanoTime();
+            timeLeft = timeLeft/ 1000000;
+            if(timeLeft < 0) {
+            	timeLeft = 0;
             }
-            
-				Thread.sleep((long) remainingTime);
+				Thread.sleep((long) timeLeft);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-            nextDrawTime += drawInterval;
-        }
     }
     
     public void update() {
     	if(key.upPressed == true) {
     		 board.tickBoardState(Direction.UP);
+    		 update = true;
     	} else if(key.downPressed == true) {
     		board.tickBoardState(Direction.DOWN);
+    		update = true;
     	} else if(key.leftPressed == true) {
     		board.tickBoardState(Direction.LEFT);
+    		update = true;
     	} else if(key.rightPressed == true) {
     		board.tickBoardState(Direction.RIGHT);
+    		update = true;
     	}
     	spriteCounter++;
     	if(spriteCounter > 10) {
@@ -108,59 +116,55 @@ public class BoardUI extends JPanel implements Runnable {
     		}
     		spriteCounter = 0;
     	}
+    	
     }
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g;
-
-
         
         g2.setColor(Color.white);
         g2.fillRect(100, 100, tileSize, tileSize);
 
         
-//        if (startButtonPress) {
+        if (startButtonPress) {
         	try {
-				tileHandler.drawTile(g2);
+				drawBoard.drawTile(g2);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-            //playGame(g2); //For drawing the entities
-//        } else {
+            playGame(g2); //For drawing the entities
+       } else {
 //            //showIntroScreen(g2); //set startButtonPress to true once user press gui button
-//        }
-
-
-        //tileHandler.drawTile(g2);
-
+       }
 
         g2.dispose();
-     //}
 }
 
 private void playGame(Graphics2D g2) {
-	 drawScore(g2);
+	 //drawScore(g2);
     if (board.isGameOver() == true) {
-        gameOverScreen(g2);
+        //gameOverScreen(g2);
     } else if(board.isPlayerWin() == true){
-    	victoryScreen(g2);
+    	//victoryScreen(g2);
     }else {
-        animateHandler.drawPlayer(g2);
-        animateHandler.drawEnemy(g2);
-        /*
-         * drawPunishment
-         * drawBonusReward
-         * drawReward
-         * 
-        */
-//        if(Board.reward() == true) {
-//        	drawOpenedExit(g2);
-//        } else {
-//        	drawClosedExit(g2);
-//        }
+    	drawBoard.drawPlayer(g2);
+    	drawBoard.drawEnemy(g2);
+    	drawBoard.drawBonusReward(g2);
+    	drawBoard.drawObjective(g2);
+    	drawBoard.drawGate(g2);
     }
 }
+
+public String getRandomMapFilePath() {
+    String filePath;
+//    int randNum = RandomUtils.nextInt(1, 6);
+    int randNum = 1;
+    return "/maps/map" +
+            randNum +
+            ".txt";
+}
+
 
 }
