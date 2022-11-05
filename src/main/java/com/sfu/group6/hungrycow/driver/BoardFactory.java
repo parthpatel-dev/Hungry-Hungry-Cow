@@ -27,9 +27,9 @@ public class BoardFactory {
     private static final int BARRIER_I = 11; // fence_up_left_corner
     private static final int BARRIER_J = 12; // fence_up_right_corner
 
-    private static final int OBJECTIVES = 13; // mama_sheep
-    private static final int BONUS_REWARD = 14; // baby_sheep
-    private static final int PUNISHMENT = 15; // mama_chicken
+    private static final int OBJECTIVES = 13; //
+    private static final int BONUS_REWARD = 14; //
+    private static final int PUNISHMENT = 15; //
     private static final int START_SPACE = 16;
     private static final int END_SPACE = 17;
 
