@@ -29,6 +29,7 @@ public class HungryCowInanimateFactory {
 
         return BonusReward.builder()
                           .value(BONUS_REWARD_VALUE)
+                          .position(position)
                           .build();
     }
 
@@ -41,6 +42,7 @@ public class HungryCowInanimateFactory {
 
         return Punishment.builder()
                          .value(PUNISHMENT_VALUE)
+                         .position(position)
                          .build();
     }
 }
