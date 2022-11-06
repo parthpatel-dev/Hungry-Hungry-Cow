@@ -37,6 +37,7 @@ public class BoardUI extends JPanel implements Runnable {
     public BoardUI() throws IOException {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.black);
+        this.setDoubleBuffered(true);
         mapLoader = new MapLoader();
         int[][] boardData = mapLoader.loadBoard(getRandomMapFilePath(), this.numOfTilesHorizontal, this.numOfTilesVertical);
         boardFactory = new BoardFactory();
@@ -46,6 +47,7 @@ public class BoardUI extends JPanel implements Runnable {
         drawBoard = new DrawBoard(this, board, boardData);
         key = new KeyHandler();
         this.addKeyListener(key);
+        startGameThread();
     }
     
     public void startGameThread() {
