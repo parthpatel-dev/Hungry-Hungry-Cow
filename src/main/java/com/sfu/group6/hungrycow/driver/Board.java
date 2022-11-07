@@ -14,10 +14,16 @@ import org.apache.commons.lang3.RandomUtils;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * The Board class encapsulates the game logic of the game board.
+ * The builder takes in the components of the game and creates an instance of class board.
+ * Builder defaults should be used and not instantiated with another value.
+ */
 @Builder
 @Getter
 public class Board {
@@ -26,11 +32,12 @@ public class Board {
     @Builder.Default
     private boolean playerWin = false;
     @Builder.Default
-    private boolean collectedObjective = false;
-    @Builder.Default
-    private boolean collectedBonus = false;
+    private int tickCounter = 0;
 
-    private final int dimension;
+    private static final int BONUS_REWARD_RANDOM_PERIOD = 10;
+
+    private final int width;
+    private final int height;
     private final Position startSpace;
     private final Position endSpace;
     private final Set<Position> barriers;
@@ -40,21 +47,55 @@ public class Board {
     private final List<Punishment> punishments;
     private final List<BonusReward> bonus;
 
+    /**
+     * Perform a tick in the board state.
+     * In a tick, the board moves the player, move the enemies, collects objectives, collects punishments,
+     * collects bonus rewards, and checks if the game is over.
+     *
+     * The game is over when one of the following happens:
+     * 1. The player encounters an enemy
+     * 2. The player's score is negative
+     * 3. The player has won, i.e. the player collects all objectives and reaches the end position.
+     *
+     * @param input a Direction {@link Direction}
+     */
     public void tickBoardState(Direction input) {
+        incrementTickCounter();
         movePlayer(input);
-        moveEnemies();
-        if (isTheGameOver()) {
+
+        if (checkIfPlayerEncounterEnemy()) {
             this.gameOver = true;
             return;
         }
-        if (checkIfPlayerWon()) {
-            this.playerWin = this.gameOver = true;
+
+        moveEnemies();
+
+        if (checkIfPlayerEncounterEnemy()) {
+            this.gameOver = true;
             return;
         }
+
         collectObjectives();
         collectBonusRewards();
         collectPunishments();
+
+        if (playerScoreIsNegative()) {
+            this.gameOver = true;
+            return;
+        }
+
         randomizeBonusRewards();
+
+        if (checkIfPlayerWon()) {
+            this.playerWin = this.gameOver = true;
+        }
+    }
+
+    private void incrementTickCounter() {
+        if (this.tickCounter == Integer.MAX_VALUE) {
+            this.tickCounter = 0;
+        }
+        this.tickCounter++;
     }
 
     private void movePlayer(Direction input) {
@@ -140,7 +181,7 @@ public class Board {
                                                                                  enemyPosition.getY());
     }
 
-    private boolean isTheGameOver() {
+    private boolean checkIfPlayerEncounterEnemy() {
         for (var enemy : this.enemies) {
             if (enemy.getPosition()
                      .equals(this.player.getPosition())) {
@@ -155,30 +196,30 @@ public class Board {
                                                        .equals(this.endSpace);
     }
 
+    private boolean playerScoreIsNegative() {
+        return this.player.getScore() < 0;
+    }
+
     private void collectObjectives() {
-        for (var reward : this.objectives) {
+        for (Iterator<RegularReward> iterator = this.objectives.iterator(); iterator.hasNext(); ) {
+            RegularReward reward = iterator.next();
             if (reward.getPosition()
                       .equals(this.player.getPosition())) {
                 this.player.rewardPlayer(reward);
-                this.objectives.remove(reward);
-                this.collectedObjective = true;
-                return;
+                iterator.remove();
             }
         }
-        this.collectedObjective = false;
     }
 
     private void collectBonusRewards() {
-        for (var bonus : this.bonus) {
+        for (Iterator<BonusReward> iterator = this.bonus.iterator(); iterator.hasNext(); ) {
+            BonusReward bonus = iterator.next();
             if (bonus.getPosition()
                      .equals(this.player.getPosition())) {
                 this.player.rewardPlayer(bonus);
-                this.bonus.remove(bonus);
-                this.collectedBonus = true;
-                return;
+                iterator.remove();
             }
         }
-        this.collectedBonus = false;
     }
 
     private void collectPunishments() {
@@ -191,28 +232,30 @@ public class Board {
     }
 
     private void randomizeBonusRewards() {
-        for (var bonus : this.bonus) {
-            Position newPosition = generateNewBonusRewardPosition();
-            bonus.getPosition()
-                 .setX(newPosition.getX());
-            bonus.getPosition()
-                 .setY(newPosition.getY());
+        if (tickCounter % BONUS_REWARD_RANDOM_PERIOD == 0) {
+            for (var bonus : this.bonus) {
+                Position newPosition = generateNewBonusRewardPosition();
+                bonus.getPosition()
+                     .setX(newPosition.getX());
+                bonus.getPosition()
+                     .setY(newPosition.getY());
+            }
         }
     }
 
     private Position generateNewBonusRewardPosition() {
         Position newPosition = Position.builder()
                                        .x(RandomUtils.nextInt(0,
-                                                              dimension + 1))
+                                                              width))
                                        .y(RandomUtils.nextInt(0,
-                                                              dimension + 1))
+                                                              height))
                                        .build();
 
         while (this.barriers.contains(newPosition)) {
             newPosition.setX(RandomUtils.nextInt(0,
-                                                 dimension + 1));
+                                                 width));
             newPosition.setY(RandomUtils.nextInt(0,
-                                                 dimension + 1));
+                                                 height));
         }
         return newPosition;
     }
@@ -234,7 +277,7 @@ public class Board {
             }
             case DOWN -> {
                 movePosition.setY(movePosition.getY() + 1);
-                if (movePosition.getY() > this.dimension || barriers.contains(movePosition)) {
+                if (movePosition.getY() > this.height || barriers.contains(movePosition)) {
                     return false;
                 }
             }
@@ -246,7 +289,7 @@ public class Board {
             }
             case RIGHT -> {
                 movePosition.setX(movePosition.getX() + 1);
-                if (movePosition.getX() > this.dimension || barriers.contains(movePosition)) {
+                if (movePosition.getX() > this.width || barriers.contains(movePosition)) {
                     return false;
                 }
             }
