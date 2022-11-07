@@ -1,12 +1,17 @@
 package com.sfu.group6.hungrycow.model.animate;
 
 import com.sfu.group6.hungrycow.control.Direction;
+import com.sfu.group6.hungrycow.driver.Board;
 import com.sfu.group6.hungrycow.model.AbstractEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
+/**
+ * An AbstractAnimate represents an entity in a Board {@link Board}
+ * which can move.
+ */
 @SuperBuilder
 @Data
 @EqualsAndHashCode(callSuper = true)
