@@ -2,7 +2,6 @@ package com.sfu.group6.hungrycow.factory;
 
 import com.sfu.group6.hungrycow.control.Position;
 import com.sfu.group6.hungrycow.model.inanimate.BonusReward;
-import com.sfu.group6.hungrycow.model.inanimate.RegularReward;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
