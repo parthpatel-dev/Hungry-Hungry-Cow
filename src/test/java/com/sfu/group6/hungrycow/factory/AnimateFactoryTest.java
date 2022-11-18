@@ -1,7 +1,13 @@
 package com.sfu.group6.hungrycow.factory;
 
+import com.sfu.group6.hungrycow.control.Direction;
+import com.sfu.group6.hungrycow.model.animate.Player;
+import com.sfu.group6.hungrycow.model.animate.Enemy;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class AnimateFactoryTest {
 
@@ -9,22 +15,28 @@ public class AnimateFactoryTest {
     @BeforeEach
     void setup()
     {
-
+        fixture = new HungryCowAnimateFactory();
     }
 
     @Test
     void shouldMakePlayerFromFactory()
     {
 
-        fixture.makePlayer(0,0);
-        // Assert player pos, direction, score
+        Player factoryPlayer = fixture.makePlayer(0,0);
+        assertThat(factoryPlayer.getScore()).isEqualTo(0);
+        assertThat(factoryPlayer.getPosition().getX()).isEqualTo(0);
+        assertThat(factoryPlayer.getPosition().getY()).isEqualTo(0);
+        assertThat(factoryPlayer.getFacingDirection()).isEqualTo(Direction.RIGHT);
 
     }
 
     @Test
     void shouldMakeEnemyFromFactory()
     {
-        fixture.makeEnemy(0,0);
+        Enemy factoryEnemy = fixture.makeEnemy(0,0);
         // Assert same thing as player
+        assertThat(factoryEnemy.getPosition().getX()).isEqualTo(0);
+        assertThat(factoryEnemy.getPosition().getY()).isEqualTo(0);
+        assertThat(factoryEnemy.getFacingDirection()).isEqualTo(Direction.RIGHT);
     }
 }
