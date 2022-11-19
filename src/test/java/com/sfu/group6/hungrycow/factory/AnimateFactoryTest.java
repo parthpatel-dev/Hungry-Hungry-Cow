@@ -23,7 +23,7 @@ public class AnimateFactoryTest {
     {
 
         Player factoryPlayer = fixture.makePlayer(0,0);
-        assertThat(factoryPlayer.getScore()).isEqualTo(0);
+        assertThat(factoryPlayer.getScore()).isEqualTo(HungryCowAnimateFactory.INITIAL_PLAYER_SCORE);
         assertThat(factoryPlayer.getPosition().getX()).isEqualTo(0);
         assertThat(factoryPlayer.getPosition().getY()).isEqualTo(0);
         assertThat(factoryPlayer.getFacingDirection()).isEqualTo(Direction.RIGHT);

@@ -1,6 +1,8 @@
 package com.sfu.group6.hungrycow.factory;
 
 import com.sfu.group6.hungrycow.model.inanimate.BonusReward;
+import com.sfu.group6.hungrycow.model.inanimate.Punishment;
+import com.sfu.group6.hungrycow.model.inanimate.RegularReward;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -20,8 +22,10 @@ public class InanimateFactoryTest {
     @Test
     void shouldMakeRegularRewardFromFactory()
     {
-        fixture.makeRegularReward(0,0);
-        // assert stuff, copy paste from what i've done
+        RegularReward factoryRegularReward = fixture.makeRegularReward(0,0);
+        assertThat(factoryRegularReward.getPosition().getX()).isEqualTo(0);
+        assertThat(factoryRegularReward.getPosition().getY()).isEqualTo(0);
+        assertThat(factoryRegularReward.getValue()).isEqualTo(HungryCowInanimateFactory.REGULAR_REWARD_VALUE);
     }
 
     @Test
@@ -31,12 +35,15 @@ public class InanimateFactoryTest {
 
         assertThat(factoryBonusReward.getPosition().getX()).isEqualTo(0);
         assertThat(factoryBonusReward.getPosition().getY()).isEqualTo(0);
-        assertThat(factoryBonusReward.getValue()).isEqualTo(10); //change this to defined number like in InanimateFactory
+        assertThat(factoryBonusReward.getValue()).isEqualTo(HungryCowInanimateFactory.BONUS_REWARD_VALUE); //change this to defined number like in InanimateFactory
     }
 
     @Test
     void shouldMakePunishmentFromFactory()
     {
-        fixture.makePunishment(0,0);
+        Punishment factoryPunishment = fixture.makePunishment(0,0);
+        assertThat(factoryPunishment.getPosition().getX()).isEqualTo(0);
+        assertThat(factoryPunishment.getPosition().getY()).isEqualTo(0);
+        assertThat(factoryPunishment.getValue()).isEqualTo(HungryCowInanimateFactory.PUNISHMENT_VALUE);
     }
 }
