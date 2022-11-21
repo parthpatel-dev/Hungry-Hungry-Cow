@@ -1,5 +1,6 @@
 package com.sfu.group6.hungrycow.driver;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.sfu.group6.hungrycow.control.Direction;
 import com.sfu.group6.hungrycow.control.Position;
 import com.sfu.group6.hungrycow.model.animate.AbstractAnimate;
@@ -98,14 +99,16 @@ public class Board {
         this.tickCounter++;
     }
 
-    private void movePlayer(Direction input) {
+    @VisibleForTesting
+    void movePlayer(Direction input) {
         if (validMove(this.player,
                       input)) {
             this.player.move(input);
         }
     }
-
-    private void moveEnemies() {
+    
+    @VisibleForTesting
+    void moveEnemies() {
         for (var enemy : enemies) {
             Map<Integer, Direction> distances = generateManhattanDistances(enemy);
             if (!distances.isEmpty()) {
@@ -114,7 +117,8 @@ public class Board {
         }
     }
 
-    private Map<Integer, Direction> generateManhattanDistances(Enemy enemy) {
+    @VisibleForTesting
+    Map<Integer, Direction> generateManhattanDistances(Enemy enemy) {
         Map<Integer, Direction> distances = new HashMap<>();
 
         if (validMove(enemy,
@@ -175,13 +179,15 @@ public class Board {
         return distances;
     }
 
-    private int calculateManhattanDistance(Position playerPosition,
+    @VisibleForTesting
+    int calculateManhattanDistance(Position playerPosition,
                                            Position enemyPosition) {
         return Math.abs(playerPosition.getX() - enemyPosition.getX()) + Math.abs(playerPosition.getY() -
                                                                                  enemyPosition.getY());
     }
 
-    private boolean checkIfPlayerEncounterEnemy() {
+    @VisibleForTesting
+    boolean checkIfPlayerEncounterEnemy() {
         for (var enemy : this.enemies) {
             if (enemy.getPosition()
                      .equals(this.player.getPosition())) {
@@ -191,16 +197,19 @@ public class Board {
         return false;
     }
 
-    private boolean checkIfPlayerWon() {
+    @VisibleForTesting
+    boolean checkIfPlayerWon() {
         return this.objectives.isEmpty() && this.player.getPosition()
                                                        .equals(this.endSpace);
     }
 
-    private boolean playerScoreIsNegative() {
+    @VisibleForTesting
+    boolean playerScoreIsNegative() {
         return this.player.getScore() < 0;
     }
-
-    private void collectObjectives() {
+    
+    @VisibleForTesting
+    void collectObjectives() {
         for (Iterator<RegularReward> iterator = this.objectives.iterator(); iterator.hasNext(); ) {
             RegularReward reward = iterator.next();
             if (reward.getPosition()
@@ -211,7 +220,8 @@ public class Board {
         }
     }
 
-    private void collectBonusRewards() {
+    @VisibleForTesting
+    void collectBonusRewards() {
         for (Iterator<BonusReward> iterator = this.bonus.iterator(); iterator.hasNext(); ) {
             BonusReward bonus = iterator.next();
             if (bonus.getPosition()
@@ -222,7 +232,8 @@ public class Board {
         }
     }
 
-    private void collectPunishments() {
+    @VisibleForTesting
+    void collectPunishments() {
         for (var punishment : this.punishments) {
             if (punishment.getPosition()
                           .equals(this.player.getPosition())) {
@@ -231,7 +242,8 @@ public class Board {
         }
     }
 
-    private void randomizeBonusRewards() {
+    @VisibleForTesting
+    void randomizeBonusRewards() {
         if (tickCounter % BONUS_REWARD_RANDOM_PERIOD == 0) {
             for (var bonus : this.bonus) {
                 Position newPosition = generateNewBonusRewardPosition();
@@ -243,7 +255,8 @@ public class Board {
         }
     }
 
-    private Position generateNewBonusRewardPosition() {
+    @VisibleForTesting
+    Position generateNewBonusRewardPosition() {
         Position newPosition = Position.builder()
                                        .x(RandomUtils.nextInt(0,
                                                               width))
@@ -260,7 +273,8 @@ public class Board {
         return newPosition;
     }
 
-    private boolean validMove(AbstractAnimate animate,
+    @VisibleForTesting
+    boolean validMove(AbstractAnimate animate,
                               Direction input) {
         Position movePosition = Position.builder()
                                         .x(animate.getPosition()
