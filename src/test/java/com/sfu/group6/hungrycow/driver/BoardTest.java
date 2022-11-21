@@ -89,28 +89,15 @@ public class BoardTest {
         assertThat(fixture.getTickCounter()).isEqualTo(1);
     }
     
+    
+    //Using Player to test Abstract animate for validMove
     @ParameterizedTest
     @EnumSource(Direction.class)
-	void shouldCheckForValidMovePlayer(Direction direction) {
+	void shouldCheckForValidMoveAbstractAnimate(Direction direction) {
     	
     	//Test barriers
 		fixture = createTestBoard(10,10,barriersTest,Collections.emptyList(),Collections.emptyList(),Collections.emptyList(),Collections.emptyList(),1,1);
 		assertThat(fixture.validMove(fixture.getPlayer(), direction)).isFalse();
-		
-		//Test if returns true
-		newFixture = createTestBoard(10,10,Collections.emptySet(),Collections.emptyList(),Collections.emptyList(),Collections.emptyList(),Collections.emptyList(),1,1);
-		assertThat(newFixture.validMove(newFixture.getPlayer(), direction)).isTrue();
-		
-		//Test if edge of map is reached
-		validEdgeFixture = createTestBoard(0,0,Collections.emptySet(),Collections.emptyList(),Collections.emptyList(),Collections.emptyList(),Collections.emptyList(),0,0);
-		assertThat(validEdgeFixture.validMove(validEdgeFixture.getPlayer(), direction)).isFalse();
-    }
-    
-    void shouldCheckForValidMoveEnemy(Direction direction) {
-    	//Test barriers
-		fixture = createTestBoard(10,10,barriersTest,Collections.emptyList(),Collections.emptyList(),Collections.emptyList(),Collections.emptyList(),1,1);
-    	List<Enemy> enemyListTest = fixture.getEnemies();
-		assertThat(fixture.validMove(enemyListTest.get(0), direction)).isFalse();
 		
 		//Test if returns true
 		newFixture = createTestBoard(10,10,Collections.emptySet(),Collections.emptyList(),Collections.emptyList(),Collections.emptyList(),Collections.emptyList(),1,1);
@@ -157,12 +144,6 @@ public class BoardTest {
     	assertThat(enemyListTest.get(1).getPosition().getX()).isEqualTo(9);
     	assertThat(enemyListTest.get(1).getPosition().getY()).isEqualTo(8);
     	
-    	//No enemy (Note doesn't really work since we can't get anything since no enemy exist)
-	//    	fixture = createTestBoard(10,10,Collections.emptySet(),Collections.emptyList(),Collections.emptyList(),Collections.emptyList(),Collections.emptyList(),0,0);
-	//    	fixture.moveEnemies();
-	//    	List<Enemy> enemyListTest1 = fixture.getEnemies();
-	//    	assertThat(enemyListTest1.get(0).getPosition().getX()).isEqualTo(null);
-	//    	assertThat(enemyListTest1.get(0).getPosition().getY()).isEqualTo(null);
     }
     
     private Board createTestBoard() {
