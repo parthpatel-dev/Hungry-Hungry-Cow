@@ -179,8 +179,7 @@ public class Board {
         return distances;
     }
 
-    @VisibleForTesting
-    int calculateManhattanDistance(Position playerPosition,
+    private int calculateManhattanDistance(Position playerPosition,
                                            Position enemyPosition) {
         return Math.abs(playerPosition.getX() - enemyPosition.getX()) + Math.abs(playerPosition.getY() -
                                                                                  enemyPosition.getY());

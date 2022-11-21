@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -33,42 +34,35 @@ public class BoardTest {
 
     private Board fixture, newFixture, validEdgeFixture;
     private Set<Position> barriersTest;
-    private List<Enemy> oneEnemyTest, manyEnemiesTest;
+    private List<Enemy> oneEnemyTest, manyEnemiesTest, oneEnemyTestForMovingRight;
     
     @BeforeEach
     void setup() {
-    	barriersTest = new HashSet<>();
-        oneEnemyTest = new ArrayList<>();
-        manyEnemiesTest = new ArrayList<>();
+    	barriersTest = Set.of(Position.builder()
+                .x(0)
+                .y(1)
+                .build(),
+                Position.builder()
+                .x(2)
+                .y(1)
+                .build(),
+                Position.builder()
+                .x(1)
+                .y(0)
+                .build(),
+                Position.builder()
+                .x(1)
+                .y(2)
+                .build());
+        oneEnemyTest = List.of(animateFactory.makeEnemy(10,
+                10));
+        manyEnemiesTest = List.of(animateFactory.makeEnemy(10,
+                10), animateFactory.makeEnemy(9,
+                        9));
+        oneEnemyTestForMovingRight = new ArrayList<>();
         List<RegularReward> objectives = new ArrayList<>();
         List<BonusReward> bonusRewards = new ArrayList<>();
         List<Punishment> punishments = new ArrayList<>();
-    	barriersTest.add(Position.builder()
-                 .x(0)
-                 .y(1)
-                 .build());
-    	barriersTest.add(Position.builder()
-                 .x(2)
-                 .y(1)
-                 .build());
-    	barriersTest.add(Position.builder()
-                 .x(1)
-                 .y(0)
-                 .build());
-    	barriersTest.add(Position.builder()
-                 .x(1)
-                 .y(2)
-                 .build());
-    	oneEnemyTest.add(
-                animateFactory.makeEnemy(10,
-                                         10));
-    	manyEnemiesTest.add(
-                animateFactory.makeEnemy(10,
-                        10));
-    	manyEnemiesTest.add(
-                animateFactory.makeEnemy(9,
-                        9));
-    	
     }
 
     @Test
@@ -130,19 +124,87 @@ public class BoardTest {
     	//One enemy 
     	fixture = createTestBoard(10,10,Collections.emptySet(),oneEnemyTest,Collections.emptyList(),Collections.emptyList(),Collections.emptyList(),0,0);
     	fixture.moveEnemies();
-    	for (var enemy : fixture.getEnemies()) {
-    		assertThat(enemy.getPosition().getX()).isEqualTo(10);
-    		assertThat(enemy.getPosition().getY()).isEqualTo(9);
-    	};
+    	List<Enemy> enemyListTest1 = fixture.getEnemies();
+    	assertThat(enemyListTest1.get(0).getPosition().getX()).isEqualTo(10);
+    	assertThat(enemyListTest1.get(0).getPosition().getY()).isEqualTo(9);
     	
     	//Many enemy
     	fixture = createTestBoard(10,10,Collections.emptySet(),manyEnemiesTest,Collections.emptyList(),Collections.emptyList(),Collections.emptyList(),0,0);
     	fixture.moveEnemies();
-    	List<Enemy> enemyListTest = fixture.getEnemies();
-    	assertThat(enemyListTest.get(0).getPosition().getX()).isEqualTo(10);
-    	assertThat(enemyListTest.get(0).getPosition().getY()).isEqualTo(9);
-    	assertThat(enemyListTest.get(1).getPosition().getX()).isEqualTo(9);
-    	assertThat(enemyListTest.get(1).getPosition().getY()).isEqualTo(8);
+    	List<Enemy> enemyListTest2 = fixture.getEnemies();
+    	assertThat(enemyListTest2.get(0).getPosition().getX()).isEqualTo(10);
+    	assertThat(enemyListTest2.get(0).getPosition().getY()).isEqualTo(9);
+    	assertThat(enemyListTest2.get(1).getPosition().getX()).isEqualTo(9);
+    	assertThat(enemyListTest2.get(1).getPosition().getY()).isEqualTo(8);
+    	
+    }
+    
+    @Test
+    void shouldGenerateManhattanDistancesForUpAndDown() {
+    	Enemy oneEnemy = animateFactory.makeEnemy(5, 5);
+    	
+    	Map<Integer, Direction> expected = Map.of(9, Direction.UP, 11, Direction.DOWN);
+    	
+    	fixture = createTestBoard(10,10,Collections.emptySet(),Collections.emptyList(),Collections.emptyList(),Collections.emptyList(),Collections.emptyList(),0,0);
+    	
+    	Map<Integer, Direction> actual = fixture.generateManhattanDistances(oneEnemy);
+    	
+    	assertThat(actual).isEqualTo(expected);
+    	
+    }
+    
+    @Test
+    void shouldGenerateManhattanDistancesForRightAndLeft() {
+    	Enemy oneEnemy = animateFactory.makeEnemy(5, 5);
+    	barriersTest = Set.of(Position.builder()
+                .x(5)
+                .y(6)
+                .build(),
+                Position.builder()
+                .x(5)
+                .y(4)
+                .build());
+    	
+    	Map<Integer, Direction> expected = Map.of(9, Direction.LEFT, 11, Direction.RIGHT);
+    	
+    	fixture = createTestBoard(10,10,barriersTest,Collections.emptyList(),Collections.emptyList(),Collections.emptyList(),Collections.emptyList(),0,0);
+    	
+    	Map<Integer, Direction> actual = fixture.generateManhattanDistances(oneEnemy);
+    	
+    	assertThat(actual).isEqualTo(expected);
+    }
+    
+    @Test
+    void shouldGenerateManhattanDistancesNoDirection() {
+    	Enemy oneEnemy = animateFactory.makeEnemy(5, 5);
+    	barriersTest = Set.of(Position.builder()
+                .x(5)
+                .y(6)
+                .build(),
+                Position.builder()
+                .x(5)
+                .y(4)
+                .build(),
+                Position.builder()
+                .x(4)
+                .y(5)
+                .build(),
+                Position.builder()
+                .x(6)
+                .y(5)
+                .build());
+    	
+    	Map<Integer, Direction> expected = Map.of();
+    	
+    	fixture = createTestBoard(10,10,barriersTest,Collections.emptyList(),Collections.emptyList(),Collections.emptyList(),Collections.emptyList(),0,0);
+    	
+    	Map<Integer, Direction> actual = fixture.generateManhattanDistances(oneEnemy);
+    	
+    	assertThat(actual).isEqualTo(expected);
+    }
+    
+    @Test
+    void checkIfPlayerWon() {
     	
     }
     
