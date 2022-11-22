@@ -34,7 +34,7 @@ public class BoardTest {
 
     private Board fixture, newFixture, validEdgeFixture;
     private Set<Position> barriersTest;
-    private List<Enemy> oneEnemyTest, manyEnemiesTest, oneEnemyTestForMovingRight;
+    private List<Enemy> oneEnemyTest, manyEnemiesTest;
     
     @BeforeEach
     void setup() {
@@ -59,8 +59,6 @@ public class BoardTest {
         manyEnemiesTest = List.of(animateFactory.makeEnemy(10,
                 10), animateFactory.makeEnemy(9,
                         9));
-        oneEnemyTestForMovingRight = new ArrayList<>();
-        List<RegularReward> objectives = new ArrayList<>();
         List<BonusReward> bonusRewards = new ArrayList<>();
         List<Punishment> punishments = new ArrayList<>();
     }
@@ -204,9 +202,33 @@ public class BoardTest {
     }
     
     @Test
-    void checkIfPlayerWon() {
+    void shouldCheckIfPlayerWon() {
+    	//On endSpace and empty objective list
+    	fixture = createTestBoard(0,0,Collections.emptySet(),Collections.emptyList(),Collections.emptyList(),Collections.emptyList(),Collections.emptyList(),0,0);
+    	assertThat(fixture.checkIfPlayerWon()).isTrue();
     	
+    	//Not on endSpace
+    	fixture = createTestBoard(10,10,Collections.emptySet(),Collections.emptyList(),Collections.emptyList(),Collections.emptyList(),Collections.emptyList(),0,0);
+    	assertThat(fixture.checkIfPlayerWon()).isFalse();
+    	
+    	//Not empty objective list
+    	List<RegularReward> objectives = List.of(inanimateFactory.makeRegularReward(1,
+                1));
+    	fixture = createTestBoard(10,10,Collections.emptySet(),Collections.emptyList(),objectives,Collections.emptyList(),Collections.emptyList(),0,0);
+    	assertThat(fixture.checkIfPlayerWon()).isFalse();
     }
+    
+    @Test
+    void shouldPlayerScoreIsNegative() {
+    	fixture = createTestBoard(0,0,Collections.emptySet(),Collections.emptyList(),Collections.emptyList(),Collections.emptyList(),Collections.emptyList(),0,0);
+    	
+    	fixture.getPlayer().setScore(-1);
+    	assertThat(fixture.playerScoreIsNegative()).isTrue();
+    	
+    	fixture.getPlayer().setScore(1);
+    	assertThat(fixture.playerScoreIsNegative()).isFalse();
+    }
+    	
     
     private Board createTestBoard() {
         return createTestBoard(10,10,Collections.emptySet()
