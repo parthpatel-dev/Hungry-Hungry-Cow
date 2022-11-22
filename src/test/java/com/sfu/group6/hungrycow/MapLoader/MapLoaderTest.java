@@ -9,7 +9,7 @@ import java.io.IOException;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class MapLoaderTest {
-// test
+
     private final MapLoader fixture = new MapLoader();
 
     private final int[][] expectedData = new int[4][4];
