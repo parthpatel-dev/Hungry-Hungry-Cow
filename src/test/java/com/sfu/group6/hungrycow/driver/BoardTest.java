@@ -33,34 +33,10 @@ public class BoardTest {
     private final HungryCowBoardFactory boardFactory = new HungryCowBoardFactory();
 
     private Board fixture, newFixture, validEdgeFixture;
-    private Set<Position> barriersTest;
-    private List<Enemy> oneEnemyTest, manyEnemiesTest;
     
     @BeforeEach
     void setup() {
-    	barriersTest = Set.of(Position.builder()
-                .x(0)
-                .y(1)
-                .build(),
-                Position.builder()
-                .x(2)
-                .y(1)
-                .build(),
-                Position.builder()
-                .x(1)
-                .y(0)
-                .build(),
-                Position.builder()
-                .x(1)
-                .y(2)
-                .build());
-        oneEnemyTest = List.of(animateFactory.makeEnemy(10,
-                10));
-        manyEnemiesTest = List.of(animateFactory.makeEnemy(10,
-                10), animateFactory.makeEnemy(9,
-                        9));
-        List<BonusReward> bonusRewards = new ArrayList<>();
-        List<Punishment> punishments = new ArrayList<>();
+    	
     }
 
     @Test
@@ -86,7 +62,22 @@ public class BoardTest {
     @ParameterizedTest
     @EnumSource(Direction.class)
 	void shouldCheckForValidMoveAbstractAnimate(Direction direction) {
-    	
+    	Set<Position> barriersTest = Set.of(Position.builder()
+                .x(0)
+                .y(1)
+                .build(),
+                Position.builder()
+                .x(2)
+                .y(1)
+                .build(),
+                Position.builder()
+                .x(1)
+                .y(0)
+                .build(),
+                Position.builder()
+                .x(1)
+                .y(2)
+                .build());
     	//Test barriers
 		fixture = createTestBoard(10,10,barriersTest,Collections.emptyList(),Collections.emptyList(),Collections.emptyList(),Collections.emptyList(),1,1);
 		assertThat(fixture.validMove(fixture.getPlayer(), direction)).isFalse();
@@ -119,6 +110,11 @@ public class BoardTest {
     
     @Test
     void shouldMoveEnemies() {
+    	List<Enemy> oneEnemyTest = List.of(animateFactory.makeEnemy(10,
+                10));
+    	List<Enemy> manyEnemiesTest = List.of(animateFactory.makeEnemy(10,
+                10), animateFactory.makeEnemy(9,
+                        9));
     	//One enemy 
     	fixture = createTestBoard(10,10,Collections.emptySet(),oneEnemyTest,Collections.emptyList(),Collections.emptyList(),Collections.emptyList(),0,0);
     	fixture.moveEnemies();
@@ -154,7 +150,7 @@ public class BoardTest {
     @Test
     void shouldGenerateManhattanDistancesForRightAndLeft() {
     	Enemy oneEnemy = animateFactory.makeEnemy(5, 5);
-    	barriersTest = Set.of(Position.builder()
+    	Set<Position> barriersTest = Set.of(Position.builder()
                 .x(5)
                 .y(6)
                 .build(),
@@ -175,7 +171,7 @@ public class BoardTest {
     @Test
     void shouldGenerateManhattanDistancesNoDirection() {
     	Enemy oneEnemy = animateFactory.makeEnemy(5, 5);
-    	barriersTest = Set.of(Position.builder()
+    	Set<Position> barriersTest = Set.of(Position.builder()
                 .x(5)
                 .y(6)
                 .build(),
