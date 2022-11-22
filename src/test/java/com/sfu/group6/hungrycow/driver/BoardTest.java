@@ -266,10 +266,10 @@ public class BoardTest {
 
 
 		List<RegularReward> multipleObjectivesTest = new ArrayList<>();
-		fixture = createTestBoard(10, 10, Collections.emptySet(), Collections.emptyList(), multipleObjectivesTest, Collections.emptyList(),Collections.emptyList(), 0, 0);
 		multipleObjectivesTest.add(inanimateFactory.makeRegularReward(0, 1));
 		multipleObjectivesTest.add(inanimateFactory.makeRegularReward(1, 1));
 		multipleObjectivesTest.add(inanimateFactory.makeRegularReward(1, 0));
+		fixture = createTestBoard(10, 10, Collections.emptySet(), Collections.emptyList(), multipleObjectivesTest, Collections.emptyList(),Collections.emptyList(), 0, 0);
 		fixture.movePlayer(Direction.DOWN);
 		fixture.collectObjectives();
 		fixture.movePlayer(Direction.RIGHT);
@@ -295,10 +295,10 @@ public class BoardTest {
 		assertThat(fixture.getBonus()).isEmpty();
 
 		List<BonusReward> multipleBonusReward = new ArrayList<>();
-		fixture = createTestBoard(10, 10, Collections.emptySet(), Collections.emptyList(), Collections.emptyList(),  Collections.emptyList(), multipleBonusReward, 0, 0);
 		multipleBonusReward.add(inanimateFactory.makeBonusReward(0, 1));
 		multipleBonusReward.add(inanimateFactory.makeBonusReward(1, 1));
 		multipleBonusReward.add(inanimateFactory.makeBonusReward(1, 0));
+		fixture = createTestBoard(10, 10, Collections.emptySet(), Collections.emptyList(), Collections.emptyList(),  Collections.emptyList(), multipleBonusReward, 0, 0);
 		fixture.movePlayer(Direction.DOWN);
 		fixture.collectBonusRewards();
 		fixture.movePlayer(Direction.RIGHT);
@@ -317,17 +317,17 @@ public class BoardTest {
 		assertThat(fixture.getPunishments()).isEmpty();
 
 		List<Punishment> singlePunishmentTest = new ArrayList<>();
-		fixture = createTestBoard(10, 10, Collections.emptySet(), Collections.emptyList(), Collections.emptyList(), singlePunishmentTest, Collections.emptyList(), 0, 0);
 		singlePunishmentTest.add(inanimateFactory.makePunishment(0, 1));
+		fixture = createTestBoard(10, 10, Collections.emptySet(), Collections.emptyList(), Collections.emptyList(), singlePunishmentTest, Collections.emptyList(), 0, 0);
 		fixture.movePlayer(Direction.DOWN);
 		fixture.collectPunishments();
 		assertThat(fixture.getPunishments()).isEmpty();
 
 		List<Punishment> multiplePunishmentTest = new ArrayList<>();
-		fixture = createTestBoard(10, 10, Collections.emptySet(), Collections.emptyList(), Collections.emptyList(), multiplePunishmentTest, Collections.emptyList(), 0, 0);
 		multiplePunishmentTest.add(inanimateFactory.makePunishment(0, 1));
 		multiplePunishmentTest.add(inanimateFactory.makePunishment(1, 1));
 		multiplePunishmentTest.add(inanimateFactory.makePunishment(1, 0));
+		fixture = createTestBoard(10, 10, Collections.emptySet(), Collections.emptyList(), Collections.emptyList(), multiplePunishmentTest, Collections.emptyList(), 0, 0);
 		fixture.movePlayer(Direction.DOWN);
 		fixture.collectPunishments();
 		fixture.movePlayer(Direction.RIGHT);
@@ -335,6 +335,10 @@ public class BoardTest {
 		fixture.movePlayer(Direction.UP);
 		fixture.collectPunishments();
 		assertThat(fixture.getPunishments()).isEmpty();
+	}
+
+	@Test
+	void shouldRandomizeBonusRewards() {
 	}
 
     private Board createTestBoard() {
