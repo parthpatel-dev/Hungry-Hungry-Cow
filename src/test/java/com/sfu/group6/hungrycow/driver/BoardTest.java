@@ -39,6 +39,7 @@ public class BoardTest {
         assertThat(fixture.isGameOver()).isFalse();
         assertThat(fixture.isPlayerWin()).isFalse();
         assertThat(fixture.getTickCounter()).isZero();
+        assertThat(fixture.getRandom()).isInstanceOf(Random.class);
     }
 
     @ParameterizedTest
