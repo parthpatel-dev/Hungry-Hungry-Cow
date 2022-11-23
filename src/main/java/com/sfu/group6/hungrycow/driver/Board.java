@@ -1,5 +1,6 @@
 package com.sfu.group6.hungrycow.driver;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.sfu.group6.hungrycow.control.Direction;
 import com.sfu.group6.hungrycow.control.Position;
 import com.sfu.group6.hungrycow.model.animate.AbstractAnimate;
@@ -10,13 +11,13 @@ import com.sfu.group6.hungrycow.model.inanimate.Punishment;
 import com.sfu.group6.hungrycow.model.inanimate.RegularReward;
 import lombok.Builder;
 import lombok.Getter;
-import org.apache.commons.lang3.RandomUtils;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 /**
@@ -33,8 +34,11 @@ public class Board {
     private boolean playerWin = false;
     @Builder.Default
     private int tickCounter = 0;
+    @Builder.Default
+    private Random random = new Random();
 
-    private static final int BONUS_REWARD_RANDOM_PERIOD = 10;
+    @VisibleForTesting
+    static final int BONUS_REWARD_RANDOM_PERIOD = 10;
 
     private final int width;
     private final int height;
@@ -51,7 +55,7 @@ public class Board {
      * Perform a tick in the board state.
      * In a tick, the board moves the player, move the enemies, collects objectives, collects punishments,
      * collects bonus rewards, and checks if the game is over.
-     *
+     * <p>
      * The game is over when one of the following happens:
      * 1. The player encounters an enemy
      * 2. The player's score is negative
@@ -98,14 +102,16 @@ public class Board {
         this.tickCounter++;
     }
 
-    private void movePlayer(Direction input) {
+    @VisibleForTesting
+    void movePlayer(Direction input) {
         if (validMove(this.player,
                       input)) {
             this.player.move(input);
         }
     }
 
-    private void moveEnemies() {
+    @VisibleForTesting
+    void moveEnemies() {
         for (var enemy : enemies) {
             Map<Integer, Direction> distances = generateManhattanDistances(enemy);
             if (!distances.isEmpty()) {
@@ -114,7 +120,8 @@ public class Board {
         }
     }
 
-    private Map<Integer, Direction> generateManhattanDistances(Enemy enemy) {
+    @VisibleForTesting
+    Map<Integer, Direction> generateManhattanDistances(Enemy enemy) {
         Map<Integer, Direction> distances = new HashMap<>();
 
         if (validMove(enemy,
@@ -181,7 +188,8 @@ public class Board {
                                                                                  enemyPosition.getY());
     }
 
-    private boolean checkIfPlayerEncounterEnemy() {
+    @VisibleForTesting
+    boolean checkIfPlayerEncounterEnemy() {
         for (var enemy : this.enemies) {
             if (enemy.getPosition()
                      .equals(this.player.getPosition())) {
@@ -191,16 +199,19 @@ public class Board {
         return false;
     }
 
-    private boolean checkIfPlayerWon() {
+    @VisibleForTesting
+    boolean checkIfPlayerWon() {
         return this.objectives.isEmpty() && this.player.getPosition()
                                                        .equals(this.endSpace);
     }
 
-    private boolean playerScoreIsNegative() {
+    @VisibleForTesting
+    boolean playerScoreIsNegative() {
         return this.player.getScore() < 0;
     }
 
-    private void collectObjectives() {
+    @VisibleForTesting
+    void collectObjectives() {
         for (Iterator<RegularReward> iterator = this.objectives.iterator(); iterator.hasNext(); ) {
             RegularReward reward = iterator.next();
             if (reward.getPosition()
@@ -211,7 +222,8 @@ public class Board {
         }
     }
 
-    private void collectBonusRewards() {
+    @VisibleForTesting
+    void collectBonusRewards() {
         for (Iterator<BonusReward> iterator = this.bonus.iterator(); iterator.hasNext(); ) {
             BonusReward bonus = iterator.next();
             if (bonus.getPosition()
@@ -222,7 +234,8 @@ public class Board {
         }
     }
 
-    private void collectPunishments() {
+    @VisibleForTesting
+    void collectPunishments() {
         for (var punishment : this.punishments) {
             if (punishment.getPosition()
                           .equals(this.player.getPosition())) {
@@ -231,7 +244,8 @@ public class Board {
         }
     }
 
-    private void randomizeBonusRewards() {
+    @VisibleForTesting
+    void randomizeBonusRewards() {
         if (tickCounter % BONUS_REWARD_RANDOM_PERIOD == 0) {
             for (var bonus : this.bonus) {
                 Position newPosition = generateNewBonusRewardPosition();
@@ -245,23 +259,20 @@ public class Board {
 
     private Position generateNewBonusRewardPosition() {
         Position newPosition = Position.builder()
-                                       .x(RandomUtils.nextInt(0,
-                                                              width))
-                                       .y(RandomUtils.nextInt(0,
-                                                              height))
+                                       .x(random.nextInt(width))
+                                       .y(random.nextInt(height))
                                        .build();
 
         while (this.barriers.contains(newPosition)) {
-            newPosition.setX(RandomUtils.nextInt(0,
-                                                 width));
-            newPosition.setY(RandomUtils.nextInt(0,
-                                                 height));
+            newPosition.setX(random.nextInt(width));
+            newPosition.setY(random.nextInt(height));
         }
         return newPosition;
     }
 
-    private boolean validMove(AbstractAnimate animate,
-                              Direction input) {
+    @VisibleForTesting
+    boolean validMove(AbstractAnimate animate,
+                      Direction input) {
         Position movePosition = Position.builder()
                                         .x(animate.getPosition()
                                                   .getX())
@@ -295,5 +306,15 @@ public class Board {
             }
         }
         return true;
+    }
+
+    /**
+     * Sets a mock random for testing purposes.
+     *
+     * @param random a random object of class Random
+     */
+    @VisibleForTesting
+    void setMockRandom(Random random) {
+        this.random = random;
     }
 }
