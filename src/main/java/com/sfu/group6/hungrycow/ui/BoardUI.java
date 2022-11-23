@@ -6,6 +6,7 @@ import com.sfu.group6.hungrycow.driver.Board;
 import com.sfu.group6.hungrycow.factory.HungryCowAnimateFactory;
 import com.sfu.group6.hungrycow.factory.HungryCowBoardFactory;
 import com.sfu.group6.hungrycow.factory.HungryCowInanimateFactory;
+import com.sfu.group6.hungrycow.maploader.MapLoader;
 import org.apache.commons.lang3.RandomUtils;
 
 import javax.swing.JPanel;

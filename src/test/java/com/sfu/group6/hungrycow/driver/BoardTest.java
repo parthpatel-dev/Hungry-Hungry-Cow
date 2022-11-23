@@ -5,7 +5,7 @@ import com.sfu.group6.hungrycow.control.Position;
 import com.sfu.group6.hungrycow.factory.HungryCowAnimateFactory;
 import com.sfu.group6.hungrycow.factory.HungryCowBoardFactory;
 import com.sfu.group6.hungrycow.factory.HungryCowInanimateFactory;
-import com.sfu.group6.hungrycow.ui.MapLoader;
+import com.sfu.group6.hungrycow.maploader.MapLoader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

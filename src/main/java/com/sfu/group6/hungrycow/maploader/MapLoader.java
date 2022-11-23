@@ -1,4 +1,4 @@
-package com.sfu.group6.hungrycow.ui;
+package com.sfu.group6.hungrycow.maploader;
 
 import java.io.BufferedReader;
 import java.io.IOException;
