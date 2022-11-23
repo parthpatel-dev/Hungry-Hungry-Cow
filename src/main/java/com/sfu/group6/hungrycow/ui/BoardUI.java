@@ -6,6 +6,7 @@ import com.sfu.group6.hungrycow.driver.Board;
 import com.sfu.group6.hungrycow.factory.HungryCowAnimateFactory;
 import com.sfu.group6.hungrycow.factory.HungryCowBoardFactory;
 import com.sfu.group6.hungrycow.factory.HungryCowInanimateFactory;
+import com.sfu.group6.hungrycow.maploader.MapLoader;
 import org.apache.commons.lang3.RandomUtils;
 
 import javax.swing.JPanel;
@@ -36,13 +37,13 @@ public class BoardUI extends JPanel implements Runnable {
     public boolean startButtonPress = true;
     public int spriteNumber = 1;
 
-    final int defaultTileSize = 16;
-    final int scale = 2;
-    public final int tileSize = defaultTileSize * scale;
-    public final int numOfTilesHorizontal = 48;
-    public final int numOfTilesVertical = 24;
-    public final int screenWidth = numOfTilesHorizontal * tileSize;
-    public final int screenHeight = numOfTilesVertical * tileSize;
+    public static final int defaultTileSize = 16;
+    public static final int scale = 2;
+    public static final int tileSize = defaultTileSize * scale;
+    public static final int numOfTilesHorizontal = 48;
+    public static final int numOfTilesVertical = 24;
+    public static final int screenWidth = numOfTilesHorizontal * tileSize;
+    public static final int screenHeight = numOfTilesVertical * tileSize;
 
     private final Board board;
     private final DrawBoard drawBoard;
@@ -51,14 +52,14 @@ public class BoardUI extends JPanel implements Runnable {
     private Screen state;
 
     public BoardUI() throws IOException {
-        this.setPreferredSize(new Dimension(this.screenWidth,
-                                            this.screenHeight));
+        this.setPreferredSize(new Dimension(screenWidth,
+                                            screenHeight));
         this.setBackground(Color.black);
         this.setDoubleBuffered(true);
         MapLoader mapLoader = new MapLoader();
         int[][] boardData = mapLoader.loadBoard(getRandomMapFilePath(),
-                                                this.numOfTilesHorizontal,
-                                                this.numOfTilesVertical);
+                                                numOfTilesHorizontal,
+                                                numOfTilesVertical);
         HungryCowBoardFactory boardFactory = new HungryCowBoardFactory();
         HungryCowAnimateFactory animateFactory = new HungryCowAnimateFactory();
         HungryCowInanimateFactory inanimateFactory = new HungryCowInanimateFactory();
