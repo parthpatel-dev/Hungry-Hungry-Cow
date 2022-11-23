@@ -3,25 +3,28 @@ package com.sfu.group6.hungrycow.driver;
 import com.sfu.group6.hungrycow.control.Direction;
 import com.sfu.group6.hungrycow.control.Position;
 import com.sfu.group6.hungrycow.factory.HungryCowAnimateFactory;
-import com.sfu.group6.hungrycow.factory.HungryCowBoardFactory;
 import com.sfu.group6.hungrycow.factory.HungryCowInanimateFactory;
 import com.sfu.group6.hungrycow.model.animate.Enemy;
 import com.sfu.group6.hungrycow.model.inanimate.BonusReward;
 import com.sfu.group6.hungrycow.model.inanimate.Punishment;
 import com.sfu.group6.hungrycow.model.inanimate.RegularReward;
-import com.sfu.group6.hungrycow.ui.MapLoader;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
+import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.withSettings;
 
 public class BoardTest {
     private final HungryCowAnimateFactory animateFactory = new HungryCowAnimateFactory();
@@ -571,7 +574,110 @@ public class BoardTest {
     }
 
     @Test
-    void shouldRandomizeBonusRewards() {
+    void shouldRandomizeAllBonusRewardsAfterBonusRewardRandomPeriod() {
+        // A known issue for Mockito requires instantiating the mock without annotations for JDK 17+
+        // https://github.com/mockito/mockito/issues/2560
+        Random random = Mockito.mock(Random.class,
+                                     withSettings().withoutAnnotations());
+
+        List<BonusReward> testBonusRewards = List.of(inanimateFactory.makeBonusReward(2,
+                                                                                      2),
+                                                     inanimateFactory.makeBonusReward(3,
+                                                                                      3));
+
+        fixture = createTestBoard(10,
+                                  10,
+                                  Collections.emptySet(),
+                                  Collections.emptyList(),
+                                  Collections.emptyList(),
+                                  Collections.emptyList(),
+                                  testBonusRewards,
+                                  0,
+                                  0);
+
+        fixture.setMockRandom(random);
+
+        // Tick the board state right before new positions are generated
+        for (int i = 0; i < Board.BONUS_REWARD_RANDOM_PERIOD - 1; i++) {
+            // Alternate between RIGHT and LEFT move for the player to wait for new position
+            Direction direction = (i % 2 == 0) ? Direction.RIGHT : Direction.LEFT;
+            fixture.tickBoardState(direction);
+        }
+
+        Position bonusReward1NewPosition = Position.builder()
+                                                   .x(4)
+                                                   .y(5)
+                                                   .build();
+        Position bonusReward2NewPosition = Position.builder()
+                                                   .x(8)
+                                                   .y(8)
+                                                   .build();
+        given(random.nextInt(fixture.getWidth())).willReturn(bonusReward1NewPosition.getX(),
+                                                             bonusReward1NewPosition.getY(),
+                                                             bonusReward2NewPosition.getX(),
+                                                             bonusReward2NewPosition.getY());
+
+        fixture.tickBoardState(Direction.LEFT);
+
+        assertThat(fixture.getBonus()
+                          .get(0)
+                          .getPosition()).isEqualTo(bonusReward1NewPosition);
+        assertThat(fixture.getBonus()
+                          .get(1)
+                          .getPosition()).isEqualTo(bonusReward2NewPosition);
+    }
+
+    @Test
+    void shouldRandomizeBonusRewardUntilNotRandomizedOntoABarrier() {
+        // A known issue for Mockito requires instantiating the mock without annotations for JDK 17+
+        // https://github.com/mockito/mockito/issues/2560
+        Random random = Mockito.mock(Random.class,
+                                     withSettings().withoutAnnotations());
+
+        List<BonusReward> testBonusRewards = List.of(inanimateFactory.makeBonusReward(3,
+                                                                                      3));
+
+        Position barrierPosition = Position.builder()
+                                           .x(4)
+                                           .y(5)
+                                           .build();
+
+        fixture = createTestBoard(10,
+                                  10,
+                                  Set.of(barrierPosition),
+                                  Collections.emptyList(),
+                                  Collections.emptyList(),
+                                  Collections.emptyList(),
+                                  testBonusRewards,
+                                  0,
+                                  0);
+
+        fixture.setMockRandom(random);
+
+        // Tick the board state right before new positions are generated
+        for (int i = 0; i < Board.BONUS_REWARD_RANDOM_PERIOD - 1; i++) {
+            // Alternate between RIGHT and LEFT move for the player to wait for new position
+            Direction direction = (i % 2 == 0) ? Direction.RIGHT : Direction.LEFT;
+            fixture.tickBoardState(direction);
+        }
+
+        Position expectedNewPosition = Position.builder()
+                                               .x(6)
+                                               .y(7)
+                                               .build();
+
+        given(random.nextInt(fixture.getWidth())).willReturn(barrierPosition.getX(),
+                                                             barrierPosition.getY(),
+                                                             expectedNewPosition.getX(),
+                                                             expectedNewPosition.getY());
+
+        fixture.tickBoardState(Direction.LEFT);
+
+        then(random).should(times(4)).nextInt(fixture.getWidth());
+        assertThat(fixture.getBonus()
+                          .get(0)
+                          .getPosition()).isEqualTo(expectedNewPosition);
+
     }
 
     private Board createTestBoard() {

@@ -11,13 +11,13 @@ import com.sfu.group6.hungrycow.model.inanimate.Punishment;
 import com.sfu.group6.hungrycow.model.inanimate.RegularReward;
 import lombok.Builder;
 import lombok.Getter;
-import org.apache.commons.lang3.RandomUtils;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 /**
@@ -34,8 +34,11 @@ public class Board {
     private boolean playerWin = false;
     @Builder.Default
     private int tickCounter = 0;
+    @Builder.Default
+    private Random random = new Random();
 
-    private static final int BONUS_REWARD_RANDOM_PERIOD = 10;
+    @VisibleForTesting
+    static final int BONUS_REWARD_RANDOM_PERIOD = 10;
 
     private final int width;
     private final int height;
@@ -52,7 +55,7 @@ public class Board {
      * Perform a tick in the board state.
      * In a tick, the board moves the player, move the enemies, collects objectives, collects punishments,
      * collects bonus rewards, and checks if the game is over.
-     *
+     * <p>
      * The game is over when one of the following happens:
      * 1. The player encounters an enemy
      * 2. The player's score is negative
@@ -106,7 +109,7 @@ public class Board {
             this.player.move(input);
         }
     }
-    
+
     @VisibleForTesting
     void moveEnemies() {
         for (var enemy : enemies) {
@@ -206,7 +209,7 @@ public class Board {
     boolean playerScoreIsNegative() {
         return this.player.getScore() < 0;
     }
-    
+
     @VisibleForTesting
     void collectObjectives() {
         for (Iterator<RegularReward> iterator = this.objectives.iterator(); iterator.hasNext(); ) {
@@ -254,27 +257,22 @@ public class Board {
         }
     }
 
-    @VisibleForTesting
-    Position generateNewBonusRewardPosition() {
+    private Position generateNewBonusRewardPosition() {
         Position newPosition = Position.builder()
-                                       .x(RandomUtils.nextInt(0,
-                                                              width))
-                                       .y(RandomUtils.nextInt(0,
-                                                              height))
+                                       .x(random.nextInt(width))
+                                       .y(random.nextInt(height))
                                        .build();
 
         while (this.barriers.contains(newPosition)) {
-            newPosition.setX(RandomUtils.nextInt(0,
-                                                 width));
-            newPosition.setY(RandomUtils.nextInt(0,
-                                                 height));
+            newPosition.setX(random.nextInt(width));
+            newPosition.setY(random.nextInt(height));
         }
         return newPosition;
     }
 
     @VisibleForTesting
     boolean validMove(AbstractAnimate animate,
-                              Direction input) {
+                      Direction input) {
         Position movePosition = Position.builder()
                                         .x(animate.getPosition()
                                                   .getX())
@@ -308,5 +306,15 @@ public class Board {
             }
         }
         return true;
+    }
+
+    /**
+     * Sets a mock random for testing purposes.
+     *
+     * @param random a random object of class Random
+     */
+    @VisibleForTesting
+    void setMockRandom(Random random) {
+        this.random = random;
     }
 }
