@@ -673,7 +673,8 @@ public class BoardTest {
 
         fixture.tickBoardState(Direction.LEFT);
 
-        then(random).should(times(4)).nextInt(fixture.getWidth());
+        then(random).should(times(4))
+                    .nextInt(fixture.getWidth());
         assertThat(fixture.getBonus()
                           .get(0)
                           .getPosition()).isEqualTo(expectedNewPosition);
