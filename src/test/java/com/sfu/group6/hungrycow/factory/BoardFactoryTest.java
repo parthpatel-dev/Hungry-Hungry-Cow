@@ -27,9 +27,9 @@ public class BoardFactoryTest {
             }
         }
         // Only sets the start and end space
-        array2D[0][0] = 17;
-        array2D[0][1] = 1;
-        array2D[10][10] = 18;
+        array2D[0][0] = HungryCowBoardFactory.START_SPACE;
+        array2D[0][1] = HungryCowBoardFactory.COW;
+        array2D[10][10] = HungryCowBoardFactory.END_SPACE;
         fixture = boardFactory.createBoard(array2D,
                                            animateFactory,
                                            inanimateFactory);
