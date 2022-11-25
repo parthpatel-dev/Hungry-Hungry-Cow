@@ -30,6 +30,6 @@ ryan_leung_6@sfu.ca
 ### Parth Patel
 parth_patel_2@sfu.ca
 ### Leon Zhu
-jcz3@sfu.ca
+jcz3@sfu.ca and leonzhu2011@gmail.com
 ### Lawrence Wong
 lwa117@sfu.ca
