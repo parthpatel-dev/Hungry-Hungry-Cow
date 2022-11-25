@@ -131,7 +131,45 @@ public class BoardTest {
         assertThat(fixture.getTickCounter()).isEqualTo(10);
 
     }
+    
+    @Test
+    void shouldTickBoardStateForEdgeCase1() {
+    	//Does the player collect the objective when a player touches an enemy (expected result is player does not collect objective)
+    	
+    }
+    
+    @Test
+    void shouldTickBoardStateForEdgeCase2() {
+    	//What happens when both a punishment and a objective is collected (expected result is score does not change 10 - 10 = 0)
+    
+    }
+    
+    @Test
+    void shouldTickBoardStateForEdgeCase3() {
+    	//What happens when both a punishment and a bonus is collected (expected result is score is 20 - 10 = 10)
+    	
+    }
+    
+    @Test
+    void shouldTickBoardStateForEdgeCase4() {
+    	//What happens when a player touches exitGate with an enemy (expected result player losses)
+    	
+    }
+    
+    @Test
+    void shouldTickBoardStateForEdgeCase5() {
+    	//What happens when both a enemy and a objective is collected (expected result is player losses)
+    	
+    }
+    
+    @Test
+    void shouldTickBoardStateForEdgeCase6() {
+    	//What happens when both a enemy and a bonus is collected (expected result is player losses)
+    	
+    }
 
+    
+    
     @Test
     void shouldUseDefaultsForNewBoardInstance() {
         fixture = createTestBoard();
