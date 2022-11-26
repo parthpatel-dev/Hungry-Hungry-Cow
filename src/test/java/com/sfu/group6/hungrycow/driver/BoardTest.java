@@ -112,6 +112,9 @@ public class BoardTest {
                     .getPosition()
                     .getY()).isEqualTo(0);
         assertThat(fixture.checkIfPlayerEncounterEnemy()).isFalse();
+        assertThat(fixture.isGameOver()).isFalse();
+        assertThat(fixture.checkIfPlayerWon()).isFalse();
+        assertThat(fixture.isPlayerWin()).isFalse();
         List<Enemy> enemyListTest1 = fixture.getEnemies();
         assertThat(enemyListTest1.get(0)
                                  .getPosition()
@@ -120,56 +123,175 @@ public class BoardTest {
                                  .getPosition()
                                  .getY()).isEqualTo(10);
         
-        fixture.collectObjectives();
         assertThat(fixture.getObjectives()).isNotEmpty();
-        fixture.collectBonusRewards();
         assertThat(fixture.getBonus()).isNotEmpty();
         int oldScore = fixture.getPlayer().getScore();
-        fixture.collectPunishments();
         assertThat(fixture.getPunishments()).isNotEmpty();
         assertThat(fixture.getPlayer().getScore()).isEqualTo(oldScore);
         assertThat(fixture.getTickCounter()).isEqualTo(10);
-
     }
     
     @Test
     void shouldTickBoardStateForEdgeCase1() {
     	//Does the player collect the objective when a player touches an enemy (expected result is player does not collect objective)
+
+    	List<Enemy> oneEnemyTest = List.of(animateFactory.makeEnemy(2,
+               0));
     	
+    	List<RegularReward> singleObjectivesTest = new ArrayList<>();
+        singleObjectivesTest.add(inanimateFactory.makeRegularReward(1,
+                                                                    0));
+        fixture = createTestBoard(10,
+                10,
+                Collections.emptySet(),
+                oneEnemyTest,
+                singleObjectivesTest,
+                Collections.emptyList(),
+                Collections.emptyList(),
+                0,
+                0);
+         
+        fixture.tickBoardState(Direction.LEFT);
+        fixture.tickBoardState(Direction.RIGHT);
+        assertThat(fixture.checkIfPlayerEncounterEnemy()).isTrue();
+        assertThat(fixture.isGameOver()).isTrue();
+        assertThat(fixture.checkIfPlayerWon()).isFalse();
+        assertThat(fixture.isPlayerWin()).isFalse();
+        assertThat(fixture.getObjectives()).isNotEmpty();
+        assertThat(fixture.getPunishments()).isEmpty();
+        assertThat(fixture.getPlayer().getScore()).isEqualTo(0);
+        assertThat(fixture.getTickCounter()).isEqualTo(2);
+        assertThat(fixture.getBonus()).isEmpty();
     }
     
     @Test
     void shouldTickBoardStateForEdgeCase2() {
-    	//What happens when both a punishment and a objective is collected (expected result is score does not change 10 - 10 = 0)
-    
+    	//What happens when both a punishment and a bonus is collected (expected result is score is 20 - 10 = 10)
+
+        List<Punishment> singlePunishmentTest = new ArrayList<>();
+        singlePunishmentTest.add(inanimateFactory.makePunishment(1,
+                                                                 0));
+        List<BonusReward> testBonusRewards = new ArrayList<>();
+        testBonusRewards.add(inanimateFactory.makeBonusReward(1,
+                0));
+        
+        fixture = createTestBoard(10,
+                10,
+                Collections.emptySet(),
+                Collections.emptyList(),
+                Collections.emptyList(),
+                singlePunishmentTest,
+                testBonusRewards,
+                0,
+                0);
+         
+        fixture.tickBoardState(Direction.RIGHT);
+        assertThat(fixture.checkIfPlayerEncounterEnemy()).isFalse();
+        assertThat(fixture.isGameOver()).isFalse();
+        assertThat(fixture.checkIfPlayerWon()).isFalse();
+        assertThat(fixture.isPlayerWin()).isFalse();
+        assertThat(fixture.getObjectives()).isEmpty();
+        assertThat(fixture.getPunishments()).isNotEmpty();
+        assertThat(fixture.getPlayer().getScore()).isEqualTo(10);
+        assertThat(fixture.getTickCounter()).isEqualTo(1);
+        assertThat(fixture.getBonus()).isEmpty();
     }
     
     @Test
     void shouldTickBoardStateForEdgeCase3() {
-    	//What happens when both a punishment and a bonus is collected (expected result is score is 20 - 10 = 10)
+    	//What happens when a player touches openedExitGate with an enemy (expected result player losses)
     	
+    	List<Enemy> oneEnemyTest = List.of(animateFactory.makeEnemy(10,
+                9));
+
+        fixture = createTestBoard(10,
+                10,
+                Collections.emptySet(),
+                oneEnemyTest,
+                Collections.emptyList(),
+                Collections.emptyList(),
+                Collections.emptyList(),
+                9,
+                10);
+         
+        fixture.tickBoardState(Direction.RIGHT);
+        assertThat(fixture.checkIfPlayerEncounterEnemy()).isTrue();
+        assertThat(fixture.isGameOver()).isTrue();
+        assertThat(fixture.isPlayerWin()).isFalse();
+        assertThat(fixture.getObjectives()).isEmpty();
+        assertThat(fixture.getPunishments()).isEmpty();
+        assertThat(fixture.getPlayer().getScore()).isEqualTo(0);
+        assertThat(fixture.getTickCounter()).isEqualTo(1);
+        assertThat(fixture.getBonus()).isEmpty();
     }
     
     @Test
     void shouldTickBoardStateForEdgeCase4() {
-    	//What happens when a player touches exitGate with an enemy (expected result player losses)
+    	//What happens when both a enemy and a bonus is collected (expected result is player losses)
+
+    	List<Enemy> oneEnemyTest = List.of(animateFactory.makeEnemy(2,
+               0));
     	
+    	List<BonusReward> testBonusRewards = new ArrayList<>();
+        testBonusRewards.add(inanimateFactory.makeBonusReward(1,
+                0));
+        
+        fixture = createTestBoard(10,
+                10,
+                Collections.emptySet(),
+                oneEnemyTest,
+                Collections.emptyList(),
+                Collections.emptyList(),
+                testBonusRewards,
+                0,
+                0);
+         
+        fixture.tickBoardState(Direction.LEFT);
+        fixture.tickBoardState(Direction.RIGHT);
+        assertThat(fixture.checkIfPlayerEncounterEnemy()).isTrue();
+        assertThat(fixture.isGameOver()).isTrue();
+        assertThat(fixture.checkIfPlayerWon()).isFalse();
+        assertThat(fixture.isPlayerWin()).isFalse();
+        assertThat(fixture.getObjectives()).isEmpty();
+        assertThat(fixture.getPunishments()).isEmpty();
+        assertThat(fixture.getPlayer().getScore()).isEqualTo(0);
+        assertThat(fixture.getTickCounter()).isEqualTo(2);
+        assertThat(fixture.getBonus()).isNotEmpty();
     }
     
     @Test
     void shouldTickBoardStateForEdgeCase5() {
-    	//What happens when both a enemy and a objective is collected (expected result is player losses)
+    	//What happens when closedExitGate is reached by player (expected result is player moves to position and nothing happens)
+
+    	List<Enemy> oneEnemyTest = List.of(animateFactory.makeEnemy(10,
+                9));
+
+    	List<RegularReward> singleObjectivesTest = new ArrayList<>();
+        singleObjectivesTest.add(inanimateFactory.makeRegularReward(1,
+                                                                    0));
     	
-    }
-    
-    @Test
-    void shouldTickBoardStateForEdgeCase6() {
-    	//What happens when both a enemy and a bonus is collected (expected result is player losses)
-    	
+        fixture = createTestBoard(10,
+                10,
+                Collections.emptySet(),
+                oneEnemyTest,
+                singleObjectivesTest,
+                Collections.emptyList(),
+                Collections.emptyList(),
+                9,
+                10);
+         
+        fixture.tickBoardState(Direction.RIGHT);
+        assertThat(fixture.checkIfPlayerEncounterEnemy()).isTrue();
+        assertThat(fixture.isGameOver()).isTrue();
+        assertThat(fixture.checkIfPlayerWon()).isFalse();
+        assertThat(fixture.isPlayerWin()).isFalse();
+        assertThat(fixture.getObjectives()).isNotEmpty();
+        assertThat(fixture.getPunishments()).isEmpty();
+        assertThat(fixture.getPlayer().getScore()).isEqualTo(0);
+        assertThat(fixture.getTickCounter()).isEqualTo(1);
+        assertThat(fixture.getBonus()).isEmpty();
     }
 
-    
-    
     @Test
     void shouldUseDefaultsForNewBoardInstance() {
         fixture = createTestBoard();
