@@ -19,19 +19,20 @@ public class AbstractInanimateTest {
 
     @BeforeEach
     void setup() {
-        fixture = createTestInanimate(0,0);
+        fixture = createTestInanimate(0,
+                                      0);
     }
 
     @Test
-    void shouldMakeInanimatePositionAtZero()
-    {
-        assertThat(fixture.getPosition().getX()).isEqualTo(0);
-        assertThat(fixture.getPosition().getY()).isEqualTo(0);
+    void shouldMakeInanimatePositionAtZero() {
+        assertThat(fixture.getPosition()
+                          .getX()).isEqualTo(0);
+        assertThat(fixture.getPosition()
+                          .getY()).isEqualTo(0);
     }
 
     @Test
-    void shouldMakeInanimateWithValueZero()
-    {
+    void shouldMakeInanimateWithValueZero() {
         assertThat(fixture.getValue()).isEqualTo(0);
     }
 
@@ -43,7 +44,7 @@ public class AbstractInanimateTest {
     }
 
     private static TestInanimate createTestInanimate(int x,
-                                                   int y) {
+                                                     int y) {
         Position initialPosition = Position.builder()
                                            .x(x)
                                            .y(y)
