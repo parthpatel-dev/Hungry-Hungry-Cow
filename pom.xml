@@ -56,7 +56,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>Main</mainClass>
+                            <mainClass>com.sfu.group6.hungrycow.Main</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
