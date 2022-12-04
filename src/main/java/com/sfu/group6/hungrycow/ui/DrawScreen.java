@@ -232,7 +232,6 @@ public class DrawScreen {
                      xNum,
                      yNum);
 
-
         g2d.setFont(bold_Font);
         g2d.setColor(Color.BLACK);
 
