@@ -12,20 +12,27 @@ import java.awt.Rectangle;
  */
 public class DrawScreen {
 
-    public void drawCenteredString(Graphics g,
+    /**
+     *
+     * @param g2d   a Graphics2D object
+     * @param text  text to be drawn on the scene
+     * @param rect  rectangle to help center the text
+     * @param font  font to use to draw the text
+     */
+    public void drawCenteredString(Graphics g2d,
                                    String text,
                                    Rectangle rect,
                                    Font font) {
         // Get the FontMetrics
-        FontMetrics metrics = g.getFontMetrics(font);
+        FontMetrics metrics = g2d.getFontMetrics(font);
         // Determine the X coordinate for the text
         int x = rect.x + (rect.width - metrics.stringWidth(text)) / 2;
         // Determine the Y coordinate for the text (note we add the ascent, as in java 2d 0 is top of the screen)
         int y = rect.y + ((rect.height - metrics.getHeight()) / 2) + metrics.getAscent();
         // Set the font
-        g.setFont(font);
+        g2d.setFont(font);
         // Draw the String
-        g.drawString(text,
+        g2d.drawString(text,
                      x,
                      y);
     }
@@ -45,8 +52,8 @@ public class DrawScreen {
      * Draws the start screen on a JPanel.
      *
      * @param g2d  a Graphics2D object
-     * @param xNum the x coordinate to draw in
-     * @param yNum the y coordinate to draw in
+     * @param xNum width of the screen
+     * @param yNum height of the screen
      */
     public void startScreen(Graphics2D g2d,
                             int xNum,
@@ -106,8 +113,8 @@ public class DrawScreen {
      * Draws the game over screen on a JPanel.
      *
      * @param g2d  a Graphics2D object
-     * @param xNum the x coordinate to draw in
-     * @param yNum the y coordinate to draw in
+     * @param xNum width of the screen
+     * @param yNum height of the screen
      */
     public void gameOverScreen(Graphics2D g2d,
                                int xNum,
@@ -173,8 +180,8 @@ public class DrawScreen {
      * Draws the victory screen on a JPanel.
      *
      * @param g2d  a Graphics2D object
-     * @param xNum the x coordinate to draw in
-     * @param yNum the y coordinate to draw in
+     * @param xNum width of the screen
+     * @param yNum height of the screen
      */
     public void victoryScreen(Graphics2D g2d,
                               int xNum,
@@ -218,9 +225,9 @@ public class DrawScreen {
     /**
      * Draws the pause screen on a JPanel.
      *
-     * @param g2d      a Graphics2D object
-     * @param xNum     the x coordinate to draw in
-     * @param yNum     the y coordinate to draw in
+     * @param g2d a Graphics2D object
+     * @param xNum width of the screen
+     * @param yNum height of the screen
      */
     public void pauseScreen(Graphics2D g2d,
                             int xNum,
@@ -232,7 +239,6 @@ public class DrawScreen {
                      xNum,
                      yNum);
 
-        g2d.setFont(bold_Font);
         g2d.setColor(Color.BLACK);
 
         Rectangle centerTextRect = new Rectangle(0, 0, xNum, yNum / 2);

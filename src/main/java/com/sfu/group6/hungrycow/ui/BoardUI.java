@@ -142,13 +142,7 @@ public class BoardUI extends JPanel implements Runnable {
         } else if (startButtonPress) {
             drawBoard.drawTile(g2);
             playGame(g2);
-        } //else {
-//            drawScreen.startScreen(g2,
-//                                   this.tileSize,
-//                                   this.numOfTilesHorizontal,
-//                                   this.numOfTilesVertical);
-//
-//        }
+        }
 
         g2.dispose();
     }
