@@ -121,7 +121,6 @@ public class DrawScreen {
                                int screenHeight,
                                int score) {
 
-
         g2d.setColor(Color.BLACK);
         g2d.fillRect(0,
                      0,
