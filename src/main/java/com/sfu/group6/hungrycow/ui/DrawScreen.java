@@ -52,56 +52,56 @@ public class DrawScreen {
      * Draws the start screen on a JPanel.
      *
      * @param g2d  a Graphics2D object
-     * @param xNum width of the screen
-     * @param yNum height of the screen
+     * @param screenWidth width of the screen
+     * @param screenHeight height of the screen
      */
     public void startScreen(Graphics2D g2d,
-                            int xNum,
-                            int yNum) {
+                            int screenWidth,
+                            int screenHeight) {
         g2d.setColor(Color.GRAY);
         g2d.fillRect(0,
                      0,
-                     xNum,
-                     yNum);
+                     screenWidth,
+                     screenHeight);
 
 
         g2d.setColor(Color.YELLOW);
-        g2d.drawRect(xNum - (xNum - BoardUI.tileSize),
-                     yNum - (yNum - BoardUI.tileSize),
-                     xNum - (2 * BoardUI.tileSize),
-                     yNum / 2);
+        g2d.drawRect(screenWidth - (screenWidth - BoardUI.tileSize),
+                     screenHeight - (screenHeight - BoardUI.tileSize),
+                     screenWidth - (2 * BoardUI.tileSize),
+                     screenHeight / 2);
 
         g2d.setColor(new Color(148,
                                69,
                                53));
-        g2d.fillRect(xNum - (xNum - BoardUI.tileSize),
-                     yNum - (yNum - BoardUI.tileSize),
-                     xNum - (2 * BoardUI.tileSize),
-                     yNum / 2);
+        g2d.fillRect(screenWidth - (screenWidth - BoardUI.tileSize),
+                     screenHeight - (screenHeight - BoardUI.tileSize),
+                     screenWidth - (2 * BoardUI.tileSize),
+                     screenHeight / 2);
 
         g2d.setColor(Color.ORANGE);
         g2d.setFont(bold_Font);
         g2d.drawString("Hungry Hungry Cow",
-                       xNum - (xNum - (2 * BoardUI.tileSize)),
-                       yNum / 4);
+                       screenWidth - (screenWidth - (2 * BoardUI.tileSize)),
+                       screenHeight / 4);
 
         g2d.drawString("The Hunger",
-                       xNum / 2,
-                       (yNum / 4) * 2);
+                       screenWidth / 2,
+                       (screenHeight / 4) * 2);
 
 
         g2d.setColor(Color.YELLOW);
 
         Rectangle centerTextRect = new Rectangle(0,
-                                                 yNum / 2,
-                                                 xNum,
-                                                 yNum / 4 + yNum / 8);
+                                                 screenHeight / 2,
+                                                 screenWidth,
+                                                 screenHeight / 4 + screenHeight / 8);
         drawCenteredString(g2d,
                            "Press Space To Play",
                            centerTextRect,
                            regular_Font);
 
-        centerTextRect.y += yNum / 8;
+        centerTextRect.y += screenHeight / 8;
         drawCenteredString(g2d,
                            "Press Esc to Exit",
                            centerTextRect,
@@ -113,27 +113,27 @@ public class DrawScreen {
      * Draws the game over screen on a JPanel.
      *
      * @param g2d  a Graphics2D object
-     * @param xNum width of the screen
-     * @param yNum height of the screen
+     * @param screenWidth width of the screen
+     * @param screenHeight height of the screen
      */
     public void gameOverScreen(Graphics2D g2d,
-                               int xNum,
-                               int yNum,
+                               int screenWidth,
+                               int screenHeight,
                                int score) {
 
         g2d.setColor(Color.BLACK);
         g2d.fillRect(0,
                      0,
-                     xNum,
-                     yNum);
+                     screenWidth,
+                     screenHeight);
 
 
         g2d.setColor(Color.RED);
 
         Rectangle centerTextRect = new Rectangle(0,
                                                  0,
-                                                 xNum,
-                                                 yNum / 2);
+                                                 screenWidth,
+                                                 screenHeight / 2);
         drawCenteredString(g2d,
                            "Game Over",
                            centerTextRect,
@@ -142,8 +142,8 @@ public class DrawScreen {
 
         g2d.setColor(Color.ORANGE);
 
-        centerTextRect.y = yNum / 4;
-        centerTextRect.height = yNum / 4;
+        centerTextRect.y = screenHeight / 4;
+        centerTextRect.height = screenHeight / 4;
 
         if (score < 0) {
 
@@ -160,15 +160,15 @@ public class DrawScreen {
         }
         // draw score
         String scoreStr = Integer.toString(score);
-        centerTextRect.y += yNum / 8;
+        centerTextRect.y += screenHeight / 8;
 
         drawCenteredString(g2d,
                            "Score: " + scoreStr,
                            centerTextRect,
                            regular_Font);
 
-        centerTextRect.y = yNum / 2;
-        centerTextRect.height = yNum / 2;
+        centerTextRect.y = screenHeight / 2;
+        centerTextRect.height = screenHeight / 2;
         g2d.setColor(Color.YELLOW);
         drawCenteredString(g2d,
                            "Press Space To Exit",
@@ -180,34 +180,34 @@ public class DrawScreen {
      * Draws the victory screen on a JPanel.
      *
      * @param g2d  a Graphics2D object
-     * @param xNum width of the screen
-     * @param yNum height of the screen
+     * @param screenWidth width of the screen
+     * @param screenHeight height of the screen
      */
     public void victoryScreen(Graphics2D g2d,
-                              int xNum,
-                              int yNum,
+                              int screenWidth,
+                              int screenHeight,
                               int score) {
 
         g2d.setColor(Color.GRAY);
         g2d.fillRect(0,
                      0,
-                     xNum,
-                     yNum);
+                     screenWidth,
+                     screenHeight);
 
 
         g2d.setColor(Color.GREEN);
 
         Rectangle centerTextRect = new Rectangle(0,
                                                  0,
-                                                 xNum,
-                                                 yNum / 2);
+                                                 screenWidth,
+                                                 screenHeight / 2);
         drawCenteredString(g2d,
                            "You Win!",
                            centerTextRect,
                            bold_Font);
 
         String scoreStr = Integer.toString(score);
-        centerTextRect.y += yNum / 8;
+        centerTextRect.y += screenHeight / 8;
         drawCenteredString(g2d,
                            "Score: " + scoreStr,
                            centerTextRect,
@@ -215,7 +215,7 @@ public class DrawScreen {
 
         g2d.setColor(Color.YELLOW);
 
-        centerTextRect.y = yNum / 2;
+        centerTextRect.y = screenHeight / 2;
         drawCenteredString(g2d,
                            "Press Space to Exit.",
                            centerTextRect,
@@ -226,30 +226,30 @@ public class DrawScreen {
      * Draws the pause screen on a JPanel.
      *
      * @param g2d a Graphics2D object
-     * @param xNum width of the screen
-     * @param yNum height of the screen
+     * @param screenWidth width of the screen
+     * @param screenHeight height of the screen
      */
     public void pauseScreen(Graphics2D g2d,
-                            int xNum,
-                            int yNum) {
+                            int screenWidth,
+                            int screenHeight) {
 
         g2d.setColor(Color.GRAY);
         g2d.fillRect(0,
                      0,
-                     xNum,
-                     yNum);
+                     screenWidth,
+                     screenHeight);
 
         g2d.setColor(Color.BLACK);
 
-        Rectangle centerTextRect = new Rectangle(0, 0, xNum, yNum / 2);
+        Rectangle centerTextRect = new Rectangle(0, 0, screenWidth, screenHeight / 2);
         drawCenteredString(g2d, "PAUSED", centerTextRect, bold_Font);
 
         g2d.setColor(Color.YELLOW);
 
-        centerTextRect.y = yNum/2;
+        centerTextRect.y = screenHeight/2;
         drawCenteredString(g2d, "Press Space to Resume.", centerTextRect, regular_Font);
 
-        centerTextRect.y += yNum/8;
+        centerTextRect.y += screenHeight/8;
         drawCenteredString(g2d, "Press Esc to Exit.", centerTextRect, regular_Font);
     }
 
