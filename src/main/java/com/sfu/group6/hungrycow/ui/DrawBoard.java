@@ -3,7 +3,7 @@ package com.sfu.group6.hungrycow.ui;
 import com.sfu.group6.hungrycow.driver.Board;
 import com.sfu.group6.hungrycow.factory.HungryCowBoardFactory;
 import com.sfu.group6.hungrycow.ui.tile.Tile;
-import com.sfu.group6.hungrycow.ui.tile.TileHandler;
+import com.sfu.group6.hungrycow.ui.tile.InanimateResourceLoaderUtil;
 
 import java.awt.Graphics2D;
 
@@ -13,7 +13,7 @@ public class DrawBoard {
     private final BoardUI ui;
     private final Board board;
 
-    private final TileHandler tileHandler;
+    private final Tile[] tileInanimates;
     private final Tile[] tileAnimates;
 
     public DrawBoard(BoardUI ui,
@@ -21,8 +21,8 @@ public class DrawBoard {
                      int[][] boardData) {
         this.ui = ui;
         this.boardData = boardData;
-        this.tileHandler = new TileHandler(this.ui);
-        this.tileAnimates = AnimateResourceLoaderUtil.getAnimateImage();
+        this.tileInanimates = InanimateResourceLoaderUtil.getTileImages();
+        this.tileAnimates = AnimateResourceLoaderUtil.getAnimateImages();
         this.board = boardCreated;
     }
 
@@ -45,7 +45,7 @@ public class DrawBoard {
                 int tilePositionY = row * BoardUI.tileSize;
                 if (tileData != HungryCowBoardFactory.COW && tileData != HungryCowBoardFactory.FARMER
                     && tileData != HungryCowBoardFactory.OBJECTIVES && tileData != HungryCowBoardFactory.BONUS_REWARD) {
-                    g.drawImage(tileHandler.tiles[tileData].image,
+                    g.drawImage(tileInanimates[tileData].image,
                                 tilePositionX,
                                 tilePositionY,
                                 tileSize,
@@ -66,7 +66,7 @@ public class DrawBoard {
             int grassPositionX = i * BoardUI.tileSize;
             for (int j = 0; j < BoardUI.numOfTilesVertical; j++) {
                 int grassPositionY = j * BoardUI.tileSize;
-                g.drawImage(tileHandler.tiles[0].image,
+                g.drawImage(tileInanimates[0].image,
                             grassPositionX,
                             grassPositionY,
                             BoardUI.tileSize,

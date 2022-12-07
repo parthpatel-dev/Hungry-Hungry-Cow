@@ -16,7 +16,7 @@ public class AnimateResourceLoaderUtil {
         /* Hide constructor as this is a utility class */
     }
 
-    public static Tile[] getAnimateImage() {
+    public static Tile[] getAnimateImages() {
         Tile[] tileAnimate = new Tile[NUM_RESOURCES];
         try {
             tileAnimate[0] = new Tile();
