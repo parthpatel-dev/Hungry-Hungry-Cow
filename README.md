@@ -23,6 +23,9 @@ Collect the milk bottles to receive a higher score when you win!
 ```$ mvn compile```
 ### Test
 ```$ mvn test```
+### Generate javadocs
+```$ mvn javadoc:javadoc``` for HTML <br>
+```$ mvn javadoc:jar``` for jar archive
 
 ## Members
 ### Ryan Leung

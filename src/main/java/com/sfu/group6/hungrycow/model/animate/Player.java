@@ -22,10 +22,21 @@ import lombok.experimental.SuperBuilder;
 public class Player extends AbstractAnimate {
     private int score;
 
+    /**
+     * Reduce the score of the player by the input Punishment's value.
+     *
+     * @param punishment a Punishment object
+     */
     public void punishPlayer(Punishment punishment) {
         setScore(getScore() - punishment.getValue());
     }
 
+    /**
+     * Increase the score of the player by the input Reward's value.
+     *
+     * @param reward a RegularReward{@link com.sfu.group6.hungrycow.model.inanimate.RegularReward}
+     *               or BonusReward {@link com.sfu.group6.hungrycow.model.inanimate.BonusReward}
+     */
     public void rewardPlayer(AbstractInanimate reward) {
         setScore(getScore() + reward.getValue());
     }

@@ -137,18 +137,11 @@ public class BoardUI extends JPanel implements Runnable {
 
         if (state == Screen.START) {
             drawScreen.startScreen(g2,
-                                   this.tileSize,
-                                   this.numOfTilesHorizontal,
-                                   this.numOfTilesVertical);
+                                   screenWidth,
+                                   screenHeight);
         } else if (startButtonPress) {
             drawBoard.drawTile(g2);
             playGame(g2);
-        } else {
-            drawScreen.startScreen(g2,
-                                   this.tileSize,
-                                   this.numOfTilesHorizontal,
-                                   this.numOfTilesVertical);
-
         }
 
         g2.dispose();
@@ -156,32 +149,29 @@ public class BoardUI extends JPanel implements Runnable {
 
     private void playGame(Graphics2D g2) {
         drawScreen.score(g2,
-                         this.tileSize,
+                         tileSize,
                          board.getPlayer()
                               .getScore());
 
 
         if (board.isPlayerWin()) {
             drawScreen.victoryScreen(g2,
-                                     this.tileSize,
-                                     this.numOfTilesHorizontal,
-                                     this.numOfTilesVertical,
+                                     screenWidth,
+                                     screenHeight,
                                      board.getPlayer()
                                           .getScore());
             state = Screen.GAME_WIN;
         } else if (board.isGameOver()) {
             drawScreen.gameOverScreen(g2,
-                                      this.tileSize,
-                                      this.numOfTilesHorizontal,
-                                      this.numOfTilesVertical,
+                                      screenWidth,
+                                      screenHeight,
                                       board.getPlayer()
                                            .getScore());
             state = Screen.GAME_OVER;
         } else if (state == Screen.PAUSE) {
             drawScreen.pauseScreen(g2,
-                                   this.tileSize,
-                                   this.numOfTilesHorizontal,
-                                   this.numOfTilesVertical);
+                                   screenWidth,
+                                   screenHeight);
         } else {
             drawBoard.drawPlayer(g2);
             drawBoard.drawEnemy(g2);
