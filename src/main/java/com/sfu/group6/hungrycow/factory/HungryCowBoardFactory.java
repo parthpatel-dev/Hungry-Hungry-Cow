@@ -2,12 +2,12 @@ package com.sfu.group6.hungrycow.factory;
 
 import com.sfu.group6.hungrycow.control.Position;
 import com.sfu.group6.hungrycow.driver.Board;
+import com.sfu.group6.hungrycow.maploader.MapLoader;
 import com.sfu.group6.hungrycow.model.animate.Enemy;
 import com.sfu.group6.hungrycow.model.animate.Player;
 import com.sfu.group6.hungrycow.model.inanimate.BonusReward;
 import com.sfu.group6.hungrycow.model.inanimate.Punishment;
 import com.sfu.group6.hungrycow.model.inanimate.RegularReward;
-import com.sfu.group6.hungrycow.maploader.MapLoader;
 
 import java.util.ArrayList;
 import java.util.HashSet;
