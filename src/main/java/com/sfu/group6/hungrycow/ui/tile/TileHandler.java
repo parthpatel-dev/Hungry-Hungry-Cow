@@ -7,12 +7,9 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class TileHandler {
-
-    public BoardUI ui;
     public Tile[] tiles;
 
     public TileHandler(BoardUI ui) {
-        this.ui = ui;
         tiles = new Tile[30];
         getTileImage();
     }
