@@ -20,7 +20,7 @@ public class DrawBoard {
                      int[][] boardData) {
         this.ui = ui;
         this.boardData = boardData;
-        this.tileHandler = new TileHandler(this.ui);
+        this.tileHandler = new TileHandler();
         this.animateHandler = new AnimateHandler(this.ui);
         this.board = boardCreated;
     }

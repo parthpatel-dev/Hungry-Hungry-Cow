@@ -9,7 +9,7 @@ import java.util.Objects;
 public class TileHandler {
     public Tile[] tiles;
 
-    public TileHandler(BoardUI ui) {
+    public TileHandler() {
         tiles = new Tile[30];
         getTileImage();
     }
