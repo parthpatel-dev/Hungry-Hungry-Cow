@@ -31,86 +31,87 @@ public class BoardTest {
     private final HungryCowInanimateFactory inanimateFactory = new HungryCowInanimateFactory();
     private Board fixture;
 
-    @ParameterizedTest
-    @EnumSource(Direction.class)
-    void shouldTickBoardStateForNormalSequence(Direction direction) {
-    	 
-    	Position barrierPosition = Position.builder()
-                .x(4)
-                .y(5)
-                .build();
-    	
-    	Position barriersTest1 = Position.builder()
-                .x(9)
-                .y(10)
-                .build();
-    	
-    	Position barriersTest2 = Position.builder()
-                .x(10)
-                .y(9)
-                .build();
-    	
-    	List<Enemy> oneEnemyTest = List.of(animateFactory.makeEnemy(10,
-                10));
-    	
-    	List<RegularReward> singleObjectivesTest = new ArrayList<>();
+    @Test
+    void shouldTickBoardStateForNormalSequence() {
+
+        Position barrierPosition = Position.builder()
+                                           .x(4)
+                                           .y(5)
+                                           .build();
+
+        Position barriersTest1 = Position.builder()
+                                         .x(9)
+                                         .y(10)
+                                         .build();
+
+        Position barriersTest2 = Position.builder()
+                                         .x(10)
+                                         .y(9)
+                                         .build();
+
+        List<Enemy> oneEnemyTest = List.of(animateFactory.makeEnemy(10,
+                                                                    10));
+
+        List<RegularReward> singleObjectivesTest = new ArrayList<>();
         singleObjectivesTest.add(inanimateFactory.makeRegularReward(0,
                                                                     8));
-    	
+
         List<Punishment> singlePunishmentTest = new ArrayList<>();
         singlePunishmentTest.add(inanimateFactory.makePunishment(0,
                                                                  7));
-    	
+
         List<BonusReward> testBonusRewards = List.of(inanimateFactory.makeBonusReward(3,
-                3));
-        
-         Random random = Mockito.mock(Random.class,
-                 withSettings().withoutAnnotations());
-         
-         fixture = createTestBoard(10,
-                 10,
-                 Set.of(barrierPosition, barriersTest1, barriersTest2),
-                 oneEnemyTest,
-                 singleObjectivesTest,
-                 singlePunishmentTest,
-                 testBonusRewards,
-                 0,
-                 0);
-         
-		
-		fixture.setMockRandom(random);
-		
-		// Tick the board state right before new positions are generated
-		for (int i = 0; i < Board.BONUS_REWARD_RANDOM_PERIOD - 1; i++) {
-		// Alternate between RIGHT and LEFT move for the player to wait for new position
-		Direction directions = (i % 2 == 0) ? Direction.RIGHT : Direction.LEFT;
-		fixture.tickBoardState(directions);
-		}
-		
-		Position expectedNewPosition = Position.builder()
-		                           .x(6)
-		                           .y(7)
-		                           .build();
-		
-		given(random.nextInt(fixture.getWidth())).willReturn(barrierPosition.getX(),
-		                                         barrierPosition.getY(),
-		                                         expectedNewPosition.getX(),
-		                                         expectedNewPosition.getY());
-		
-		fixture.tickBoardState(Direction.LEFT);
-		
-		then(random).should(times(4))
-		.nextInt(fixture.getWidth());
-		assertThat(fixture.getBonus()
-		      .get(0)
-		      .getPosition()).isEqualTo(expectedNewPosition);
-		
-       	assertThat(fixture.getPlayer()
-                    .getPosition()
-                    .getX()).isEqualTo(0);
+                                                                                      3));
+
+        Random random = Mockito.mock(Random.class,
+                                     withSettings().withoutAnnotations());
+
+        fixture = createTestBoard(10,
+                                  10,
+                                  Set.of(barrierPosition,
+                                         barriersTest1,
+                                         barriersTest2),
+                                  oneEnemyTest,
+                                  singleObjectivesTest,
+                                  singlePunishmentTest,
+                                  testBonusRewards,
+                                  0,
+                                  0);
+
+
+        fixture.setMockRandom(random);
+
+        // Tick the board state right before new positions are generated
+        for (int i = 0; i < Board.BONUS_REWARD_RANDOM_PERIOD - 1; i++) {
+            // Alternate between RIGHT and LEFT move for the player to wait for new position
+            Direction directions = (i % 2 == 0) ? Direction.RIGHT : Direction.LEFT;
+            fixture.tickBoardState(directions);
+        }
+
+        Position expectedNewPosition = Position.builder()
+                                               .x(6)
+                                               .y(7)
+                                               .build();
+
+        given(random.nextInt(fixture.getWidth())).willReturn(barrierPosition.getX(),
+                                                             barrierPosition.getY(),
+                                                             expectedNewPosition.getX(),
+                                                             expectedNewPosition.getY());
+
+        fixture.tickBoardState(Direction.LEFT);
+
+        then(random).should(times(4))
+                    .nextInt(fixture.getWidth());
+        assertThat(fixture.getBonus()
+                          .get(0)
+                          .getPosition()).isEqualTo(expectedNewPosition);
+
         assertThat(fixture.getPlayer()
-                    .getPosition()
-                    .getY()).isEqualTo(0);
+                          .getPosition()
+                          .getX()).isEqualTo(0);
+        assertThat(fixture.getPlayer()
+                          .getPosition()
+                          .getY()).isEqualTo(0);
         assertThat(fixture.checkIfPlayerEncounterEnemy()).isFalse();
         assertThat(fixture.isGameOver()).isFalse();
         assertThat(fixture.checkIfPlayerWon()).isFalse();
@@ -122,35 +123,37 @@ public class BoardTest {
         assertThat(enemyListTest1.get(0)
                                  .getPosition()
                                  .getY()).isEqualTo(10);
-        
+
         assertThat(fixture.getObjectives()).isNotEmpty();
         assertThat(fixture.getBonus()).isNotEmpty();
-        int oldScore = fixture.getPlayer().getScore();
+        int oldScore = fixture.getPlayer()
+                              .getScore();
         assertThat(fixture.getPunishments()).isNotEmpty();
-        assertThat(fixture.getPlayer().getScore()).isEqualTo(oldScore);
+        assertThat(fixture.getPlayer()
+                          .getScore()).isEqualTo(oldScore);
         assertThat(fixture.getTickCounter()).isEqualTo(10);
     }
-    
+
     @Test
     void shouldTickBoardStateForWhenPlayerMoveTowardsAnEnemyAndObjective() {
-    	//Does the player collect the objective when a player touches an enemy (expected result is player does not collect objective)
+        //Does the player collect the objective when a player touches an enemy (expected result is player does not collect objective)
 
-    	List<Enemy> oneEnemyTest = List.of(animateFactory.makeEnemy(2,
-               0));
-    	
-    	List<RegularReward> singleObjectivesTest = new ArrayList<>();
+        List<Enemy> oneEnemyTest = List.of(animateFactory.makeEnemy(2,
+                                                                    0));
+
+        List<RegularReward> singleObjectivesTest = new ArrayList<>();
         singleObjectivesTest.add(inanimateFactory.makeRegularReward(1,
                                                                     0));
         fixture = createTestBoard(10,
-                10,
-                Collections.emptySet(),
-                oneEnemyTest,
-                singleObjectivesTest,
-                Collections.emptyList(),
-                Collections.emptyList(),
-                0,
-                0);
-         
+                                  10,
+                                  Collections.emptySet(),
+                                  oneEnemyTest,
+                                  singleObjectivesTest,
+                                  Collections.emptyList(),
+                                  Collections.emptyList(),
+                                  0,
+                                  0);
+
         fixture.tickBoardState(Direction.LEFT);
         fixture.tickBoardState(Direction.RIGHT);
         assertThat(fixture.checkIfPlayerEncounterEnemy()).isTrue();
@@ -159,32 +162,33 @@ public class BoardTest {
         assertThat(fixture.isPlayerWin()).isFalse();
         assertThat(fixture.getObjectives()).isNotEmpty();
         assertThat(fixture.getPunishments()).isEmpty();
-        assertThat(fixture.getPlayer().getScore()).isEqualTo(0);
+        assertThat(fixture.getPlayer()
+                          .getScore()).isEqualTo(0);
         assertThat(fixture.getTickCounter()).isEqualTo(2);
         assertThat(fixture.getBonus()).isEmpty();
     }
-    
+
     @Test
     void shouldTickBoardStateForWhenBothPunishmentAndBonusIsCollected() {
-    	//What happens when both a punishment and a bonus is collected (expected result is score is 20 - 10 = 10)
+        //What happens when both a punishment and a bonus is collected (expected result is score is 20 - 10 = 10)
 
         List<Punishment> singlePunishmentTest = new ArrayList<>();
         singlePunishmentTest.add(inanimateFactory.makePunishment(1,
                                                                  0));
         List<BonusReward> testBonusRewards = new ArrayList<>();
         testBonusRewards.add(inanimateFactory.makeBonusReward(1,
-                0));
-        
+                                                              0));
+
         fixture = createTestBoard(10,
-                10,
-                Collections.emptySet(),
-                Collections.emptyList(),
-                Collections.emptyList(),
-                singlePunishmentTest,
-                testBonusRewards,
-                0,
-                0);
-         
+                                  10,
+                                  Collections.emptySet(),
+                                  Collections.emptyList(),
+                                  Collections.emptyList(),
+                                  singlePunishmentTest,
+                                  testBonusRewards,
+                                  0,
+                                  0);
+
         fixture.tickBoardState(Direction.RIGHT);
         assertThat(fixture.checkIfPlayerEncounterEnemy()).isFalse();
         assertThat(fixture.isGameOver()).isFalse();
@@ -192,60 +196,62 @@ public class BoardTest {
         assertThat(fixture.isPlayerWin()).isFalse();
         assertThat(fixture.getObjectives()).isEmpty();
         assertThat(fixture.getPunishments()).isNotEmpty();
-        assertThat(fixture.getPlayer().getScore()).isEqualTo(10);
+        assertThat(fixture.getPlayer()
+                          .getScore()).isEqualTo(10);
         assertThat(fixture.getTickCounter()).isEqualTo(1);
         assertThat(fixture.getBonus()).isEmpty();
     }
-    
+
     @Test
     void shouldTickBoardStateForWhenPlayerInteractsWithEnemyAndOpenedExitGate() {
-    	//What happens when a player touches openedExitGate with an enemy (expected result player losses)
-    	
-    	List<Enemy> oneEnemyTest = List.of(animateFactory.makeEnemy(10,
-                9));
+        //What happens when a player touches openedExitGate with an enemy (expected result player losses)
+
+        List<Enemy> oneEnemyTest = List.of(animateFactory.makeEnemy(10,
+                                                                    9));
 
         fixture = createTestBoard(10,
-                10,
-                Collections.emptySet(),
-                oneEnemyTest,
-                Collections.emptyList(),
-                Collections.emptyList(),
-                Collections.emptyList(),
-                9,
-                10);
-         
+                                  10,
+                                  Collections.emptySet(),
+                                  oneEnemyTest,
+                                  Collections.emptyList(),
+                                  Collections.emptyList(),
+                                  Collections.emptyList(),
+                                  9,
+                                  10);
+
         fixture.tickBoardState(Direction.RIGHT);
         assertThat(fixture.checkIfPlayerEncounterEnemy()).isTrue();
         assertThat(fixture.isGameOver()).isTrue();
         assertThat(fixture.isPlayerWin()).isFalse();
         assertThat(fixture.getObjectives()).isEmpty();
         assertThat(fixture.getPunishments()).isEmpty();
-        assertThat(fixture.getPlayer().getScore()).isEqualTo(0);
+        assertThat(fixture.getPlayer()
+                          .getScore()).isEqualTo(0);
         assertThat(fixture.getTickCounter()).isEqualTo(1);
         assertThat(fixture.getBonus()).isEmpty();
     }
-    
+
     @Test
     void shouldTickBoardStateForWhenEnemyAndBonusIsCollected() {
-    	//What happens when both a enemy and a bonus is collected (expected result is player losses)
+        //What happens when both a enemy and a bonus is collected (expected result is player losses)
 
-    	List<Enemy> oneEnemyTest = List.of(animateFactory.makeEnemy(2,
-               0));
-    	
-    	List<BonusReward> testBonusRewards = new ArrayList<>();
+        List<Enemy> oneEnemyTest = List.of(animateFactory.makeEnemy(2,
+                                                                    0));
+
+        List<BonusReward> testBonusRewards = new ArrayList<>();
         testBonusRewards.add(inanimateFactory.makeBonusReward(1,
-                0));
-        
+                                                              0));
+
         fixture = createTestBoard(10,
-                10,
-                Collections.emptySet(),
-                oneEnemyTest,
-                Collections.emptyList(),
-                Collections.emptyList(),
-                testBonusRewards,
-                0,
-                0);
-         
+                                  10,
+                                  Collections.emptySet(),
+                                  oneEnemyTest,
+                                  Collections.emptyList(),
+                                  Collections.emptyList(),
+                                  testBonusRewards,
+                                  0,
+                                  0);
+
         fixture.tickBoardState(Direction.LEFT);
         fixture.tickBoardState(Direction.RIGHT);
         assertThat(fixture.checkIfPlayerEncounterEnemy()).isTrue();
@@ -254,32 +260,33 @@ public class BoardTest {
         assertThat(fixture.isPlayerWin()).isFalse();
         assertThat(fixture.getObjectives()).isEmpty();
         assertThat(fixture.getPunishments()).isEmpty();
-        assertThat(fixture.getPlayer().getScore()).isEqualTo(0);
+        assertThat(fixture.getPlayer()
+                          .getScore()).isEqualTo(0);
         assertThat(fixture.getTickCounter()).isEqualTo(2);
         assertThat(fixture.getBonus()).isNotEmpty();
     }
-    
+
     @Test
     void shouldTickBoardStateForPlayerReachingClosedExitGate() {
-    	//What happens when closedExitGate is reached by player (expected result is player moves to position and nothing happens)
+        //What happens when closedExitGate is reached by player (expected result is player moves to position and nothing happens)
 
-    	List<Enemy> oneEnemyTest = List.of(animateFactory.makeEnemy(10,
-                9));
+        List<Enemy> oneEnemyTest = List.of(animateFactory.makeEnemy(10,
+                                                                    9));
 
-    	List<RegularReward> singleObjectivesTest = new ArrayList<>();
+        List<RegularReward> singleObjectivesTest = new ArrayList<>();
         singleObjectivesTest.add(inanimateFactory.makeRegularReward(1,
                                                                     0));
-    	
+
         fixture = createTestBoard(10,
-                10,
-                Collections.emptySet(),
-                oneEnemyTest,
-                singleObjectivesTest,
-                Collections.emptyList(),
-                Collections.emptyList(),
-                9,
-                10);
-         
+                                  10,
+                                  Collections.emptySet(),
+                                  oneEnemyTest,
+                                  singleObjectivesTest,
+                                  Collections.emptyList(),
+                                  Collections.emptyList(),
+                                  9,
+                                  10);
+
         fixture.tickBoardState(Direction.RIGHT);
         assertThat(fixture.checkIfPlayerEncounterEnemy()).isTrue();
         assertThat(fixture.isGameOver()).isTrue();
@@ -287,7 +294,8 @@ public class BoardTest {
         assertThat(fixture.isPlayerWin()).isFalse();
         assertThat(fixture.getObjectives()).isNotEmpty();
         assertThat(fixture.getPunishments()).isEmpty();
-        assertThat(fixture.getPlayer().getScore()).isEqualTo(0);
+        assertThat(fixture.getPlayer()
+                          .getScore()).isEqualTo(0);
         assertThat(fixture.getTickCounter()).isEqualTo(1);
         assertThat(fixture.getBonus()).isEmpty();
     }
@@ -385,8 +393,8 @@ public class BoardTest {
                                   1);
         fixture.movePlayer(Direction.LEFT);
         assertThat(fixture.getPlayer()
-                          .getPositin()
-                          .getX()).isEqualTo(1);
+                          .getPosition()
+                          .getX()).isEqualTo(0);
         assertThat(fixture.getPlayer()
                           .getPosition()
                           .getY()).isEqualTo(1);
@@ -394,7 +402,7 @@ public class BoardTest {
 
     @Test
     void shouldMoveRightPlayer() {
-	fixture = createTestBoard(10,
+        fixture = createTestBoard(10,
                                   10,
                                   Collections.emptySet(),
                                   Collections.emptyList(),
@@ -403,14 +411,14 @@ public class BoardTest {
                                   Collections.emptyList(),
                                   1,
                                   1);
-	 fixture.movePlayer(Direction.RIGHT);
+        fixture.movePlayer(Direction.RIGHT);
         assertThat(fixture.getPlayer()
                           .getPosition()
                           .getX()).isEqualTo(2);
         assertThat(fixture.getPlayer()
                           .getPosition()
                           .getY()).isEqualTo(1);
-	}
+    }
 
     @Test
     void shouldMoveUpPlayer() {
@@ -449,7 +457,7 @@ public class BoardTest {
                           .getX()).isEqualTo(1);
         assertThat(fixture.getPlayer()
                           .getPosition()
-                          .getY()).isEqualTo(1);
+                          .getY()).isEqualTo(2);
     }
 
     @Test
@@ -475,7 +483,7 @@ public class BoardTest {
                                  .getPosition()
                                  .getY()).isEqualTo(9);
     }
-    
+
     @Test
     void shouldMoveManyEnemies() {
         List<Enemy> manyEnemiesTest = List.of(animateFactory.makeEnemy(10,
@@ -821,68 +829,74 @@ public class BoardTest {
 
     @Test
     void shouldCollectPunishments() {
-    	  List<Punishment> noPunishmentTest = new ArrayList<>();
-          fixture = createTestBoard(10,
-                                    10,
-                                    Collections.emptySet(),
-                                    Collections.emptyList(),
-                                    Collections.emptyList(),
-                                    noPunishmentTest,
-                                    Collections.emptyList(),
-                                    0,
-                                    0);
+        List<Punishment> noPunishmentTest = new ArrayList<>();
+        fixture = createTestBoard(10,
+                                  10,
+                                  Collections.emptySet(),
+                                  Collections.emptyList(),
+                                  Collections.emptyList(),
+                                  noPunishmentTest,
+                                  Collections.emptyList(),
+                                  0,
+                                  0);
 
-          int currentPlayerScoreForNoPunishmentTest = fixture.getPlayer().getScore();
-          fixture.movePlayer(Direction.DOWN);
-          fixture.collectPunishments();
-          int newPlayerScoreForNoPunishmentTest = fixture.getPlayer().getScore();
-          assertThat(newPlayerScoreForNoPunishmentTest).isEqualTo(currentPlayerScoreForNoPunishmentTest);
+        int currentPlayerScoreForNoPunishmentTest = fixture.getPlayer()
+                                                           .getScore();
+        fixture.movePlayer(Direction.DOWN);
+        fixture.collectPunishments();
+        int newPlayerScoreForNoPunishmentTest = fixture.getPlayer()
+                                                       .getScore();
+        assertThat(newPlayerScoreForNoPunishmentTest).isEqualTo(currentPlayerScoreForNoPunishmentTest);
 
-          List<Punishment> singlePunishmentTest = new ArrayList<>();
-          singlePunishmentTest.add(inanimateFactory.makePunishment(0,
+        List<Punishment> singlePunishmentTest = new ArrayList<>();
+        singlePunishmentTest.add(inanimateFactory.makePunishment(0,
+                                                                 1));
+        fixture = createTestBoard(10,
+                                  10,
+                                  Collections.emptySet(),
+                                  Collections.emptyList(),
+                                  Collections.emptyList(),
+                                  singlePunishmentTest,
+                                  Collections.emptyList(),
+                                  0,
+                                  0);
+
+        int currentPlayerScoreForSinglePunishmentTest = fixture.getPlayer()
+                                                               .getScore();
+        fixture.movePlayer(Direction.DOWN);
+        fixture.collectPunishments();
+        int newPlayerScoreForSinglePunishmentTest = fixture.getPlayer()
+                                                           .getScore();
+        assertThat(newPlayerScoreForSinglePunishmentTest).isEqualTo(currentPlayerScoreForSinglePunishmentTest - 10);
+
+        List<Punishment> multiplePunishmentTest = new ArrayList<>();
+        multiplePunishmentTest.add(inanimateFactory.makePunishment(0,
                                                                    1));
-          fixture = createTestBoard(10,
-                                    10,
-                                    Collections.emptySet(),
-                                    Collections.emptyList(),
-                                    Collections.emptyList(),
-                                    singlePunishmentTest,
-                                    Collections.emptyList(),
-                                    0,
-                                    0);
+        multiplePunishmentTest.add(inanimateFactory.makePunishment(1,
+                                                                   1));
+        multiplePunishmentTest.add(inanimateFactory.makePunishment(1,
+                                                                   0));
+        fixture = createTestBoard(10,
+                                  10,
+                                  Collections.emptySet(),
+                                  Collections.emptyList(),
+                                  Collections.emptyList(),
+                                  multiplePunishmentTest,
+                                  Collections.emptyList(),
+                                  0,
+                                  0);
 
-          int currentPlayerScoreForSinglePunishmentTest = fixture.getPlayer().getScore();
-          fixture.movePlayer(Direction.DOWN);
-          fixture.collectPunishments();
-          int newPlayerScoreForSinglePunishmentTest = fixture.getPlayer().getScore();
-          assertThat(newPlayerScoreForSinglePunishmentTest).isEqualTo(currentPlayerScoreForSinglePunishmentTest - 10);
-
-          List<Punishment> multiplePunishmentTest = new ArrayList<>();
-          multiplePunishmentTest.add(inanimateFactory.makePunishment(0,
-                                                                     1));
-          multiplePunishmentTest.add(inanimateFactory.makePunishment(1,
-                                                                     1));
-          multiplePunishmentTest.add(inanimateFactory.makePunishment(1,
-                                                                     0));
-          fixture = createTestBoard(10,
-                                    10,
-                                    Collections.emptySet(),
-                                    Collections.emptyList(),
-                                    Collections.emptyList(),
-                                    multiplePunishmentTest,
-                                    Collections.emptyList(),
-                                    0,
-                                    0);
-
-          int currentPlayerScoreForMultiplePunishmentTest = fixture.getPlayer().getScore();
-          fixture.movePlayer(Direction.DOWN);
-          fixture.collectPunishments();
-          fixture.movePlayer(Direction.RIGHT);
-          fixture.collectPunishments();
-          fixture.movePlayer(Direction.UP);
-          fixture.collectPunishments();
-          int newPlayerScoreForMultiplePunishmentTest = fixture.getPlayer().getScore();
-          assertThat(newPlayerScoreForMultiplePunishmentTest).isEqualTo(currentPlayerScoreForMultiplePunishmentTest - 30);
+        int currentPlayerScoreForMultiplePunishmentTest = fixture.getPlayer()
+                                                                 .getScore();
+        fixture.movePlayer(Direction.DOWN);
+        fixture.collectPunishments();
+        fixture.movePlayer(Direction.RIGHT);
+        fixture.collectPunishments();
+        fixture.movePlayer(Direction.UP);
+        fixture.collectPunishments();
+        int newPlayerScoreForMultiplePunishmentTest = fixture.getPlayer()
+                                                             .getScore();
+        assertThat(newPlayerScoreForMultiplePunishmentTest).isEqualTo(currentPlayerScoreForMultiplePunishmentTest - 30);
     }
 
     @Test
