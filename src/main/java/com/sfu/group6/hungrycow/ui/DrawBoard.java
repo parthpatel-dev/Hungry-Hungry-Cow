@@ -34,20 +34,20 @@ public class DrawBoard {
     public void drawTile(Graphics2D g) {
         drawGrass(g);
 
-        for (int row = 0; row < ui.numOfTilesVertical; row++) {
+        for (int row = 0; row < BoardUI.numOfTilesVertical; row++) {
 
-            for (int col = 0; col < ui.numOfTilesHorizontal; col++) {
+            for (int col = 0; col < BoardUI.numOfTilesHorizontal; col++) {
 
                 int tileData = boardData[row][col];
-                int tilePositionX = col * ui.tileSize;
-                int tilePositionY = row * ui.tileSize;
+                int tilePositionX = col * BoardUI.tileSize;
+                int tilePositionY = row * BoardUI.tileSize;
                 if (tileData != HungryCowBoardFactory.COW && tileData != HungryCowBoardFactory.FARMER
                     && tileData != HungryCowBoardFactory.OBJECTIVES && tileData != HungryCowBoardFactory.BONUS_REWARD) {
                     g.drawImage(tileHandler.tiles[tileData].image,
                                 tilePositionX,
                                 tilePositionY,
-                                ui.tileSize,
-                                ui.tileSize,
+                                BoardUI.tileSize,
+                                BoardUI.tileSize,
                                 null);
                 }
             }
@@ -59,15 +59,15 @@ public class DrawBoard {
      * @param g a Graphics2D object
      */
     private void drawGrass(Graphics2D g) {
-        for (int i = 0; i < ui.numOfTilesHorizontal; i++) {
-            int grassPositionX = i * ui.tileSize;
-            for (int j = 0; j < ui.numOfTilesVertical; j++) {
-                int grassPositionY = j * ui.tileSize;
+        for (int i = 0; i < BoardUI.numOfTilesHorizontal; i++) {
+            int grassPositionX = i * BoardUI.tileSize;
+            for (int j = 0; j < BoardUI.numOfTilesVertical; j++) {
+                int grassPositionY = j * BoardUI.tileSize;
                 g.drawImage(tileHandler.tiles[0].image,
                             grassPositionX,
                             grassPositionY,
-                            ui.tileSize,
-                            ui.tileSize,
+                            BoardUI.tileSize,
+                            BoardUI.tileSize,
                             null);
             }
         }
