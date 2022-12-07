@@ -132,7 +132,7 @@ public class BoardTest {
     }
     
     @Test
-    void shouldTickBoardStateForEdgeCase1() {
+    void shouldTickBoardStateForWhenPlayerMoveTowardsAnEnemyAndObjective() {
     	//Does the player collect the objective when a player touches an enemy (expected result is player does not collect objective)
 
     	List<Enemy> oneEnemyTest = List.of(animateFactory.makeEnemy(2,
@@ -165,7 +165,7 @@ public class BoardTest {
     }
     
     @Test
-    void shouldTickBoardStateForEdgeCase2() {
+    void shouldTickBoardStateForWhenBothPunishmentAndBonusIsCollected() {
     	//What happens when both a punishment and a bonus is collected (expected result is score is 20 - 10 = 10)
 
         List<Punishment> singlePunishmentTest = new ArrayList<>();
@@ -198,7 +198,7 @@ public class BoardTest {
     }
     
     @Test
-    void shouldTickBoardStateForEdgeCase3() {
+    void shouldTickBoardStateForWhenPlayerInteractsWithEnemyAndOpenedExitGate() {
     	//What happens when a player touches openedExitGate with an enemy (expected result player losses)
     	
     	List<Enemy> oneEnemyTest = List.of(animateFactory.makeEnemy(10,
@@ -226,7 +226,7 @@ public class BoardTest {
     }
     
     @Test
-    void shouldTickBoardStateForEdgeCase4() {
+    void shouldTickBoardStateForWhenEnemyAndBonusIsCollected() {
     	//What happens when both a enemy and a bonus is collected (expected result is player losses)
 
     	List<Enemy> oneEnemyTest = List.of(animateFactory.makeEnemy(2,
@@ -260,7 +260,7 @@ public class BoardTest {
     }
     
     @Test
-    void shouldTickBoardStateForEdgeCase5() {
+    void shouldTickBoardStateForPlayerReachingClosedExitGate() {
     	//What happens when closedExitGate is reached by player (expected result is player moves to position and nothing happens)
 
     	List<Enemy> oneEnemyTest = List.of(animateFactory.makeEnemy(10,
@@ -373,7 +373,7 @@ public class BoardTest {
     }
 
     @Test
-    void shouldMovePlayer() {
+    void shouldMoveLeftPlayer() {
         fixture = createTestBoard(10,
                                   10,
                                   Collections.emptySet(),
@@ -383,20 +383,46 @@ public class BoardTest {
                                   Collections.emptyList(),
                                   1,
                                   1);
-        fixture.movePlayer(Direction.RIGHT);
+        fixture.movePlayer(Direction.LEFT);
+        assertThat(fixture.getPlayer()
+                          .getPositin()
+                          .getX()).isEqualTo(1);
+        assertThat(fixture.getPlayer()
+                          .getPosition()
+                          .getY()).isEqualTo(1);
+    }
+
+    @Test
+    void shouldMoveRightPlayer() {
+	fixture = createTestBoard(10,
+                                  10,
+                                  Collections.emptySet(),
+                                  Collections.emptyList(),
+                                  Collections.emptyList(),
+                                  Collections.emptyList(),
+                                  Collections.emptyList(),
+                                  1,
+                                  1);
+	 fixture.movePlayer(Direction.RIGHT);
         assertThat(fixture.getPlayer()
                           .getPosition()
                           .getX()).isEqualTo(2);
         assertThat(fixture.getPlayer()
                           .getPosition()
                           .getY()).isEqualTo(1);
-        fixture.movePlayer(Direction.LEFT);
-        assertThat(fixture.getPlayer()
-                          .getPosition()
-                          .getX()).isEqualTo(1);
-        assertThat(fixture.getPlayer()
-                          .getPosition()
-                          .getY()).isEqualTo(1);
+	}
+
+    @Test
+    void shouldMoveUpPlayer() {
+        fixture = createTestBoard(10,
+                                  10,
+                                  Collections.emptySet(),
+                                  Collections.emptyList(),
+                                  Collections.emptyList(),
+                                  Collections.emptyList(),
+                                  Collections.emptyList(),
+                                  1,
+                                  1);
         fixture.movePlayer(Direction.UP);
         assertThat(fixture.getPlayer()
                           .getPosition()
@@ -404,6 +430,19 @@ public class BoardTest {
         assertThat(fixture.getPlayer()
                           .getPosition()
                           .getY()).isEqualTo(0);
+    }
+
+    @Test
+    void shouldMoveDownPlayer() {
+        fixture = createTestBoard(10,
+                                  10,
+                                  Collections.emptySet(),
+                                  Collections.emptyList(),
+                                  Collections.emptyList(),
+                                  Collections.emptyList(),
+                                  Collections.emptyList(),
+                                  1,
+                                  1);
         fixture.movePlayer(Direction.DOWN);
         assertThat(fixture.getPlayer()
                           .getPosition()
@@ -414,13 +453,9 @@ public class BoardTest {
     }
 
     @Test
-    void shouldMoveEnemies() {
+    void shouldMoveOneEnemy() {
         List<Enemy> oneEnemyTest = List.of(animateFactory.makeEnemy(10,
                                                                     10));
-        List<Enemy> manyEnemiesTest = List.of(animateFactory.makeEnemy(10,
-                                                                       10),
-                                              animateFactory.makeEnemy(9,
-                                                                       9));
         // One enemy
         fixture = createTestBoard(10,
                                   10,
@@ -439,7 +474,14 @@ public class BoardTest {
         assertThat(enemyListTest1.get(0)
                                  .getPosition()
                                  .getY()).isEqualTo(9);
-
+    }
+    
+    @Test
+    void shouldMoveManyEnemies() {
+        List<Enemy> manyEnemiesTest = List.of(animateFactory.makeEnemy(10,
+                                                                       10),
+                                              animateFactory.makeEnemy(9,
+                                                                       9));
         // Many enemy
         fixture = createTestBoard(10,
                                   10,
