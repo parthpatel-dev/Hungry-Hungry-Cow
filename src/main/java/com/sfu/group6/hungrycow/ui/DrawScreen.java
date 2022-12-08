@@ -37,13 +37,13 @@ public class DrawScreen {
                      y);
     }
 
-    Font bold_Font = new Font("Bold",
+    private static Font bold_Font = new Font("Bold",
                               Font.BOLD,
                               BoardUI.tileSize * 3);
-    Font regular_Font = new Font("Regular",
+    private static Font regular_Font = new Font("Regular",
                                  Font.PLAIN,
                                  BoardUI.tileSize);
-    Font score_Font = new Font("Score",
+    private static Font score_Font = new Font("Score",
                                Font.BOLD,
                                BoardUI.tileSize * 2);
 
