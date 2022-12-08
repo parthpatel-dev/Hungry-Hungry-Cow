@@ -40,7 +40,6 @@ public class DrawBoard {
             for (int col = 0; col < BoardUI.numOfTilesHorizontal; col++) {
 
                 int tileData = boardData[row][col];
-                int tileSize = BoardUI.tileSize;
                 int tilePositionX = col * BoardUI.tileSize;
                 int tilePositionY = row * BoardUI.tileSize;
                 if (tileData != HungryCowBoardFactory.COW && tileData != HungryCowBoardFactory.FARMER
@@ -48,8 +47,8 @@ public class DrawBoard {
                     g.drawImage(tileInanimates[tileData].image,
                                 tilePositionX,
                                 tilePositionY,
-                                tileSize,
-                                tileSize,
+                                BoardUI.tileSize,
+                                BoardUI.tileSize,
                                 null);
                 }
             }
