@@ -2,229 +2,263 @@ package com.sfu.group6.hungrycow.ui;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 
 /**
  * DrawScreen is a utility function that encapsulates the draw screen logic for BoardUI.
  */
 public class DrawScreen {
+
+    /**
+     *
+     * @param g2d   a Graphics2D object
+     * @param text  text to be drawn on the scene
+     * @param rect  rectangle to help center the text
+     * @param font  font to use to draw the text
+     */
+    public void drawCenteredString(Graphics g2d,
+                                   String text,
+                                   Rectangle rect,
+                                   Font font) {
+        // Get the FontMetrics
+        FontMetrics metrics = g2d.getFontMetrics(font);
+        // Determine the X coordinate for the text
+        int x = rect.x + (rect.width - metrics.stringWidth(text)) / 2;
+        // Determine the Y coordinate for the text (note we add the ascent, as in java 2d 0 is top of the screen)
+        int y = rect.y + ((rect.height - metrics.getHeight()) / 2) + metrics.getAscent();
+        // Set the font
+        g2d.setFont(font);
+        // Draw the String
+        g2d.drawString(text,
+                     x,
+                     y);
+    }
+
+    private static final Font bold_Font = new Font("Bold",
+                                                   Font.BOLD,
+                              BoardUI.tileSize * 3);
+    private static final Font regular_Font = new Font("Regular",
+                                                      Font.PLAIN,
+                                                      BoardUI.tileSize);
+    private static final Font score_Font = new Font("Score",
+                                                    Font.BOLD,
+                               BoardUI.tileSize * 2);
+
+
     /**
      * Draws the start screen on a JPanel.
      *
-     * @param g2d a Graphics2D object
-     * @param tileSize an int representing the size of tile
-     * @param xNum the x coordinate to draw in
-     * @param yNum the y coordinate to draw in
+     * @param g2d  a Graphics2D object
+     * @param screenWidth width of the screen
+     * @param screenHeight height of the screen
      */
     public void startScreen(Graphics2D g2d,
-                            int tileSize,
-                            int xNum,
-                            int yNum) {
+                            int screenWidth,
+                            int screenHeight) {
         g2d.setColor(Color.GRAY);
         g2d.fillRect(0,
                      0,
-                     xNum * tileSize,
-                     yNum * tileSize);
+                     screenWidth,
+                     screenHeight);
 
-        Font bold_Font = new Font("Bold",
-                                  Font.BOLD,
-                                  tileSize * 3);
-        Font regular_Font = new Font("Regular",
-                                     Font.PLAIN,
-                                     tileSize);
 
         g2d.setColor(Color.YELLOW);
-        g2d.drawRect((xNum - (xNum - 1)) * tileSize,
-                     (yNum - (yNum - 2)) * tileSize,
-                     (xNum - 2) * tileSize,
-                     (yNum / 2) * tileSize);
+        g2d.drawRect(screenWidth - (screenWidth - BoardUI.tileSize),
+                     screenHeight - (screenHeight - BoardUI.tileSize),
+                     screenWidth - (2 * BoardUI.tileSize),
+                     screenHeight / 2);
 
         g2d.setColor(new Color(148,
                                69,
                                53));
-        g2d.fillRect((xNum - (xNum - 1)) * tileSize + 2,
-                     (yNum - (yNum - 2)) * tileSize + 2,
-                     (xNum - 2) * tileSize - 2,
-                     (yNum / 2) * tileSize - 2);
+        g2d.fillRect(screenWidth - (screenWidth - BoardUI.tileSize),
+                     screenHeight - (screenHeight - BoardUI.tileSize),
+                     screenWidth - (2 * BoardUI.tileSize),
+                     screenHeight / 2);
 
         g2d.setColor(Color.ORANGE);
         g2d.setFont(bold_Font);
         g2d.drawString("Hungry Hungry Cow",
-                       (xNum - (xNum - 2)) * tileSize,
-                       (yNum / 4) * tileSize);
+                       screenWidth - (screenWidth - (2 * BoardUI.tileSize)),
+                       screenHeight / 4);
+
         g2d.drawString("The Hunger",
-                       (xNum / 2) * tileSize,
-                       (yNum / 4 + 5) * tileSize);
+                       screenWidth / 2,
+                       (screenHeight / 4) * 2);
 
 
         g2d.setColor(Color.YELLOW);
-        g2d.setFont(regular_Font);
 
-        g2d.drawString("Press Space To Play",
-                       (xNum / 2 - 5) * tileSize,
-                       (yNum - 4) * tileSize);
-        g2d.drawString("Press Esc to Exit",
-                       (xNum / 2 - 5) * tileSize,
-                       (yNum - 2) * tileSize);
+        Rectangle centerTextRect = new Rectangle(0,
+                                                 screenHeight / 2,
+                                                 screenWidth,
+                                                 screenHeight / 4 + screenHeight / 8);
+        drawCenteredString(g2d,
+                           "Press Space To Play",
+                           centerTextRect,
+                           regular_Font);
+
+        centerTextRect.y += screenHeight / 8;
+        drawCenteredString(g2d,
+                           "Press Esc to Exit",
+                           centerTextRect,
+                           regular_Font);
 
     }
 
     /**
      * Draws the game over screen on a JPanel.
      *
-     * @param g2d a Graphics2D object
-     * @param tileSize an int representing the size of tile
-     * @param xNum the x coordinate to draw in
-     * @param yNum the y coordinate to draw in
+     * @param g2d  a Graphics2D object
+     * @param screenWidth width of the screen
+     * @param screenHeight height of the screen
      */
     public void gameOverScreen(Graphics2D g2d,
-                               int tileSize,
-                               int xNum,
-                               int yNum,
+                               int screenWidth,
+                               int screenHeight,
                                int score) {
 
         g2d.setColor(Color.BLACK);
         g2d.fillRect(0,
                      0,
-                     xNum * tileSize,
-                     yNum * tileSize);
+                     screenWidth,
+                     screenHeight);
 
-        Font bold_Font = new Font("Bold",
-                                  Font.BOLD,
-                                  tileSize * 3);
-        Font regular_Font = new Font("Regular",
-                                     Font.PLAIN,
-                                     tileSize);
 
-        g2d.setFont(bold_Font);
         g2d.setColor(Color.RED);
-        g2d.drawString("Game Over",
-                       (xNum / 2 - 8) * tileSize,
-                       (yNum / 4) * tileSize);
 
-        g2d.setFont(regular_Font);
+        Rectangle centerTextRect = new Rectangle(0,
+                                                 0,
+                                                 screenWidth,
+                                                 screenHeight / 2);
+        drawCenteredString(g2d,
+                           "Game Over",
+                           centerTextRect,
+                           bold_Font);
+
+
         g2d.setColor(Color.ORANGE);
 
+        centerTextRect.y = screenHeight / 4;
+        centerTextRect.height = screenHeight / 4;
+
         if (score < 0) {
-            g2d.drawString("You lost too many points",
-                           (xNum / 2 - 5) * tileSize,
-                           (yNum / 2) * tileSize);
+
+            drawCenteredString(g2d,
+                               "You lost too many points",
+                               centerTextRect,
+                               regular_Font);
+
         } else {
-            g2d.drawString("You got caught by a Farmer",
-                           (xNum / 2 - 6) * tileSize,
-                           (yNum / 2) * tileSize);
+            drawCenteredString(g2d,
+                               "You got caught by the Farmer",
+                               centerTextRect,
+                               regular_Font);
         }
         // draw score
         String scoreStr = Integer.toString(score);
-        g2d.drawString("Score: " + scoreStr,
-                       (xNum / 2 - 2) * tileSize,
-                       ((yNum / 4) + 3) * tileSize);
+        centerTextRect.y += screenHeight / 8;
 
+        drawCenteredString(g2d,
+                           "Score: " + scoreStr,
+                           centerTextRect,
+                           regular_Font);
+
+        centerTextRect.y = screenHeight / 2;
+        centerTextRect.height = screenHeight / 2;
         g2d.setColor(Color.YELLOW);
-        g2d.drawString("Press Space to Exit.",
-                       (xNum / 2 - 4) * tileSize,
-                       (yNum / 2 + 6) * tileSize);
+        drawCenteredString(g2d,
+                           "Press Space To Exit",
+                           centerTextRect,
+                           regular_Font);
     }
 
     /**
      * Draws the victory screen on a JPanel.
      *
-     * @param g2d a Graphics2D object
-     * @param tileSize an int representing the size of tile
-     * @param xNum the x coordinate to draw in
-     * @param yNum the y coordinate to draw in
+     * @param g2d  a Graphics2D object
+     * @param screenWidth width of the screen
+     * @param screenHeight height of the screen
      */
     public void victoryScreen(Graphics2D g2d,
-                              int tileSize,
-                              int xNum,
-                              int yNum,
+                              int screenWidth,
+                              int screenHeight,
                               int score) {
-
-        Font bold_Font = new Font("Bold",
-                                  Font.BOLD,
-                                  tileSize * 3);
-        Font score_Font = new Font("Score",
-                                   Font.BOLD,
-                                   tileSize * 2);
-        Font regular_Font = new Font("Regular",
-                                     Font.PLAIN,
-                                     tileSize);
 
         g2d.setColor(Color.GRAY);
         g2d.fillRect(0,
                      0,
-                     xNum * tileSize,
-                     yNum * tileSize);
+                     screenWidth,
+                     screenHeight);
 
-        g2d.setFont(bold_Font);
+
         g2d.setColor(Color.GREEN);
-        g2d.drawString("You Win!",
-                       (xNum / 2 - 6) * tileSize,
-                       (yNum / 4) * tileSize);
+
+        Rectangle centerTextRect = new Rectangle(0,
+                                                 0,
+                                                 screenWidth,
+                                                 screenHeight / 2);
+        drawCenteredString(g2d,
+                           "You Win!",
+                           centerTextRect,
+                           bold_Font);
 
         String scoreStr = Integer.toString(score);
-        g2d.setFont(score_Font);
-        g2d.drawString("Score: " + scoreStr,
-                       (xNum / 2 - 6) * tileSize,
-                       ((yNum / 4) + (yNum / 8)) * tileSize);
+        centerTextRect.y += screenHeight / 8;
+        drawCenteredString(g2d,
+                           "Score: " + scoreStr,
+                           centerTextRect,
+                           score_Font);
 
-        g2d.setFont(regular_Font);
         g2d.setColor(Color.YELLOW);
-        g2d.drawString("Press Space to Exit.",
-                       (xNum / 2 - 5) * tileSize,
-                       (yNum / 2 + yNum / 4) * tileSize);
+
+        centerTextRect.y = screenHeight / 2;
+        drawCenteredString(g2d,
+                           "Press Space to Exit.",
+                           centerTextRect,
+                           regular_Font);
     }
 
     /**
      * Draws the pause screen on a JPanel.
      *
      * @param g2d a Graphics2D object
-     * @param tileSize an int representing the size of tile
-     * @param xNum the x coordinate to draw in
-     * @param yNum the y coordinate to draw in
+     * @param screenWidth width of the screen
+     * @param screenHeight height of the screen
      */
     public void pauseScreen(Graphics2D g2d,
-                            int tileSize,
-                            int xNum,
-                            int yNum) {
+                            int screenWidth,
+                            int screenHeight) {
 
         g2d.setColor(Color.GRAY);
         g2d.fillRect(0,
                      0,
-                     xNum * tileSize,
-                     yNum * tileSize);
+                     screenWidth,
+                     screenHeight);
 
-        Font bold_Font = new Font("Bold",
-                                  Font.BOLD,
-                                  tileSize * 3);
-        Font regular_Font = new Font("Regular",
-                                     Font.PLAIN,
-                                     tileSize);
-
-        g2d.setFont(bold_Font);
         g2d.setColor(Color.BLACK);
-        g2d.drawString("PAUSED",
-                       (xNum / 2 - 6) * tileSize,
-                       (yNum / 4) * tileSize);
 
-        g2d.setFont(regular_Font);
+        Rectangle centerTextRect = new Rectangle(0, 0, screenWidth, screenHeight / 2);
+        drawCenteredString(g2d, "PAUSED", centerTextRect, bold_Font);
+
         g2d.setColor(Color.YELLOW);
-        g2d.drawString("Press Space to Resume.",
-                       (xNum / 2 - 5) * tileSize,
-                       (yNum / 2 + yNum / 4) * tileSize);
 
-        g2d.drawString("Press Esc to Exit.",
-                       (xNum / 2 - 4) * tileSize,
-                       (yNum / 2 + yNum / 4 + yNum / 8) * tileSize);
+        centerTextRect.y = screenHeight/2;
+        drawCenteredString(g2d, "Press Space to Resume.", centerTextRect, regular_Font);
+
+        centerTextRect.y += screenHeight/8;
+        drawCenteredString(g2d, "Press Esc to Exit.", centerTextRect, regular_Font);
     }
 
     /**
      * Draw score counter on a JPanel.
      *
-     * @param g2d a Graphics object
+     * @param g2d      a Graphics object
      * @param tileSize an int representing the size of tile
-     * @param score an int representing the score value
+     * @param score    an int representing the score value
      */
     public void score(Graphics g2d,
                       int tileSize,

@@ -2,7 +2,8 @@ package com.sfu.group6.hungrycow.ui;
 
 import com.sfu.group6.hungrycow.driver.Board;
 import com.sfu.group6.hungrycow.factory.HungryCowBoardFactory;
-import com.sfu.group6.hungrycow.ui.tile.TileHandler;
+import com.sfu.group6.hungrycow.ui.tile.Tile;
+import com.sfu.group6.hungrycow.ui.tile.InanimateResourceLoaderUtil;
 
 import java.awt.Graphics2D;
 
@@ -12,16 +13,16 @@ public class DrawBoard {
     private final BoardUI ui;
     private final Board board;
 
-    private final TileHandler tileHandler;
-    private final AnimateHandler animateHandler;
+    private final Tile[] tileInanimates;
+    private final Tile[] tileAnimates;
 
     public DrawBoard(BoardUI ui,
                      Board boardCreated,
                      int[][] boardData) {
         this.ui = ui;
         this.boardData = boardData;
-        this.tileHandler = new TileHandler(this.ui);
-        this.animateHandler = new AnimateHandler(this.ui);
+        this.tileInanimates = InanimateResourceLoaderUtil.getTileImages();
+        this.tileAnimates = AnimateResourceLoaderUtil.getAnimateImages();
         this.board = boardCreated;
     }
 
@@ -34,21 +35,20 @@ public class DrawBoard {
     public void drawTile(Graphics2D g) {
         drawGrass(g);
 
-        for (int row = 0; row < ui.numOfTilesVertical; row++) {
+        for (int row = 0; row < BoardUI.numOfTilesVertical; row++) {
 
-            for (int col = 0; col < ui.numOfTilesHorizontal; col++) {
+            for (int col = 0; col < BoardUI.numOfTilesHorizontal; col++) {
 
                 int tileData = boardData[row][col];
-                int tileSize = ui.tileSize;
-                int tilePositionX = col * ui.tileSize;
-                int tilePositionY = row * ui.tileSize;
+                int tilePositionX = col * BoardUI.tileSize;
+                int tilePositionY = row * BoardUI.tileSize;
                 if (tileData != HungryCowBoardFactory.COW && tileData != HungryCowBoardFactory.FARMER
                     && tileData != HungryCowBoardFactory.OBJECTIVES && tileData != HungryCowBoardFactory.BONUS_REWARD) {
-                    g.drawImage(tileHandler.tiles[tileData].image,
+                    g.drawImage(tileInanimates[tileData].image,
                                 tilePositionX,
                                 tilePositionY,
-                                tileSize,
-                                tileSize,
+                                BoardUI.tileSize,
+                                BoardUI.tileSize,
                                 null);
                 }
             }
@@ -57,18 +57,19 @@ public class DrawBoard {
 
     /**
      * Draws the grass background of each grid block on a Graphics2D object.
+     *
      * @param g a Graphics2D object
      */
     private void drawGrass(Graphics2D g) {
-        for (int i = 0; i < ui.numOfTilesHorizontal; i++) {
-            int grassPositionX = i * ui.tileSize;
-            for (int j = 0; j < ui.numOfTilesVertical; j++) {
-                int grassPositionY = j * ui.tileSize;
-                g.drawImage(tileHandler.tiles[0].image,
+        for (int i = 0; i < BoardUI.numOfTilesHorizontal; i++) {
+            int grassPositionX = i * BoardUI.tileSize;
+            for (int j = 0; j < BoardUI.numOfTilesVertical; j++) {
+                int grassPositionY = j * BoardUI.tileSize;
+                g.drawImage(tileInanimates[0].image,
                             grassPositionX,
                             grassPositionY,
-                            ui.tileSize,
-                            ui.tileSize,
+                            BoardUI.tileSize,
+                            BoardUI.tileSize,
                             null);
             }
         }
@@ -76,80 +77,81 @@ public class DrawBoard {
 
     /**
      * Draws the player on a Graphics2D object.
+     *
      * @param g2 a Graphics2D object
      */
     public void drawPlayer(Graphics2D g2) {
         switch (board.getPlayer()
                      .getFacingDirection()) {
-            case UP -> g2.drawImage(animateHandler.tileAnimate[0].image,
+            case UP -> g2.drawImage(tileAnimates[0].image,
                                     board.getPlayer()
                                          .getPosition()
-                                         .getX() * ui.tileSize,
+                                         .getX() * BoardUI.tileSize,
                                     board.getPlayer()
                                          .getPosition()
-                                         .getY() * ui.tileSize,
-                                    ui.tileSize,
-                                    ui.tileSize,
+                                         .getY() * BoardUI.tileSize,
+                                    BoardUI.tileSize,
+                                    BoardUI.tileSize,
                                     null);
-            case DOWN -> g2.drawImage(animateHandler.tileAnimate[1].image,
+            case DOWN -> g2.drawImage(tileAnimates[1].image,
                                       board.getPlayer()
                                            .getPosition()
-                                           .getX() * ui.tileSize,
+                                           .getX() * BoardUI.tileSize,
                                       board.getPlayer()
                                            .getPosition()
-                                           .getY() * ui.tileSize,
-                                      ui.tileSize,
-                                      ui.tileSize,
+                                           .getY() * BoardUI.tileSize,
+                                      BoardUI.tileSize,
+                                      BoardUI.tileSize,
                                       null);
             case LEFT -> {
                 if (ui.spriteNumber == 1) {
-                    g2.drawImage(animateHandler.tileAnimate[2].image,
+                    g2.drawImage(tileAnimates[2].image,
                                  board.getPlayer()
                                       .getPosition()
-                                      .getX() * ui.tileSize,
+                                      .getX() * BoardUI.tileSize,
                                  board.getPlayer()
                                       .getPosition()
-                                      .getY() * ui.tileSize,
-                                 ui.tileSize,
-                                 ui.tileSize,
+                                      .getY() * BoardUI.tileSize,
+                                 BoardUI.tileSize,
+                                 BoardUI.tileSize,
                                  null);
                 }
                 if (ui.spriteNumber == 2) {
-                    g2.drawImage(animateHandler.tileAnimate[3].image,
+                    g2.drawImage(tileAnimates[3].image,
                                  board.getPlayer()
                                       .getPosition()
-                                      .getX() * ui.tileSize,
+                                      .getX() * BoardUI.tileSize,
                                  board.getPlayer()
                                       .getPosition()
-                                      .getY() * ui.tileSize,
-                                 ui.tileSize,
-                                 ui.tileSize,
+                                      .getY() * BoardUI.tileSize,
+                                 BoardUI.tileSize,
+                                 BoardUI.tileSize,
                                  null);
                 }
             }
             case RIGHT -> {
                 if (ui.spriteNumber == 1) {
-                    g2.drawImage(animateHandler.tileAnimate[4].image,
+                    g2.drawImage(tileAnimates[4].image,
                                  board.getPlayer()
                                       .getPosition()
-                                      .getX() * ui.tileSize,
+                                      .getX() * BoardUI.tileSize,
                                  board.getPlayer()
                                       .getPosition()
-                                      .getY() * ui.tileSize,
-                                 ui.tileSize,
-                                 ui.tileSize,
+                                      .getY() * BoardUI.tileSize,
+                                 BoardUI.tileSize,
+                                 BoardUI.tileSize,
                                  null);
                 }
                 if (ui.spriteNumber == 2) {
-                    g2.drawImage(animateHandler.tileAnimate[5].image,
+                    g2.drawImage(tileAnimates[5].image,
                                  board.getPlayer()
                                       .getPosition()
-                                      .getX() * ui.tileSize,
+                                      .getX() * BoardUI.tileSize,
                                  board.getPlayer()
                                       .getPosition()
-                                      .getY() * ui.tileSize,
-                                 ui.tileSize,
-                                 ui.tileSize,
+                                      .getY() * BoardUI.tileSize,
+                                 BoardUI.tileSize,
+                                 BoardUI.tileSize,
                                  null);
                 }
             }
@@ -158,6 +160,7 @@ public class DrawBoard {
 
     /**
      * Draws the enemy on a Graphics2D object.
+     *
      * @param g2 a Graphics2D object
      */
     public void drawEnemy(Graphics2D g2) {
@@ -165,45 +168,45 @@ public class DrawBoard {
             switch (enemy.getFacingDirection()) {
                 case UP, LEFT -> {
                     if (ui.spriteNumber == 1) {
-                        g2.drawImage(animateHandler.tileAnimate[6].image,
+                        g2.drawImage(tileAnimates[6].image,
                                      enemy.getPosition()
-                                          .getX() * ui.tileSize,
+                                          .getX() * BoardUI.tileSize,
                                      enemy.getPosition()
-                                          .getY() * ui.tileSize,
-                                     ui.tileSize,
-                                     ui.tileSize,
+                                          .getY() * BoardUI.tileSize,
+                                     BoardUI.tileSize,
+                                     BoardUI.tileSize,
                                      null);
                     }
                     if (ui.spriteNumber == 2) {
-                        g2.drawImage(animateHandler.tileAnimate[7].image,
+                        g2.drawImage(tileAnimates[7].image,
                                      enemy.getPosition()
-                                          .getX() * ui.tileSize,
+                                          .getX() * BoardUI.tileSize,
                                      enemy.getPosition()
-                                          .getY() * ui.tileSize,
-                                     ui.tileSize,
-                                     ui.tileSize,
+                                          .getY() * BoardUI.tileSize,
+                                     BoardUI.tileSize,
+                                     BoardUI.tileSize,
                                      null);
                     }
                 }
                 case DOWN, RIGHT -> {
                     if (ui.spriteNumber == 1) {
-                        g2.drawImage(animateHandler.tileAnimate[8].image,
+                        g2.drawImage(tileAnimates[8].image,
                                      enemy.getPosition()
-                                          .getX() * ui.tileSize,
+                                          .getX() * BoardUI.tileSize,
                                      enemy.getPosition()
-                                          .getY() * ui.tileSize,
-                                     ui.tileSize,
-                                     ui.tileSize,
+                                          .getY() * BoardUI.tileSize,
+                                     BoardUI.tileSize,
+                                     BoardUI.tileSize,
                                      null);
                     }
                     if (ui.spriteNumber == 2) {
-                        g2.drawImage(animateHandler.tileAnimate[9].image,
+                        g2.drawImage(tileAnimates[9].image,
                                      enemy.getPosition()
-                                          .getX() * ui.tileSize,
+                                          .getX() * BoardUI.tileSize,
                                      enemy.getPosition()
-                                          .getY() * ui.tileSize,
-                                     ui.tileSize,
-                                     ui.tileSize,
+                                          .getY() * BoardUI.tileSize,
+                                     BoardUI.tileSize,
+                                     BoardUI.tileSize,
                                      null);
                     }
                 }
@@ -214,60 +217,64 @@ public class DrawBoard {
 
     /**
      * Draws the bonus rewards on a Graphics2D object.
+     *
      * @param g2 a Graphics2D object
      */
     public void drawBonusReward(Graphics2D g2) {
         for (var BonusReward : board.getBonus()) {
-            g2.drawImage(animateHandler.tileAnimate[12].image,
+            g2.drawImage(tileAnimates[12].image,
                          BonusReward.getPosition()
-                                    .getX() * ui.tileSize,
+                                    .getX() * BoardUI.tileSize,
                          BonusReward.getPosition()
-                                    .getY() * ui.tileSize,
-                         ui.tileSize,
-                         ui.tileSize,
+                                    .getY() * BoardUI.tileSize,
+                         BoardUI.tileSize,
+                         BoardUI.tileSize,
                          null);
         }
     }
 
     /**
      * Draws all objectives on a Graphics2D object.
+     *
      * @param g2 a Graphics2D object
      */
     public void drawObjective(Graphics2D g2) {
         for (var RegularReward : board.getObjectives()) {
-            g2.drawImage(animateHandler.tileAnimate[13].image,
+            g2.drawImage(tileAnimates[13].image,
                          RegularReward.getPosition()
-                                      .getX() * ui.tileSize,
+                                      .getX() * BoardUI.tileSize,
                          RegularReward.getPosition()
-                                      .getY() * ui.tileSize,
-                         ui.tileSize,
-                         ui.tileSize,
+                                      .getY() * BoardUI.tileSize,
+                         BoardUI.tileSize,
+                         BoardUI.tileSize,
                          null);
         }
     }
+
     /**
      * Draws the end space gate on a Graphics2D object.
+     *
      * @param g2 a Graphics2D object
      */
     public void drawGate(Graphics2D g2) {
         if (board.getObjectives()
                  .isEmpty()) {
-            g2.drawImage(animateHandler.tileAnimate[11].image,
+            g2.drawImage(tileAnimates[11].image,
                          board.getEndSpace()
-                              .getX() * ui.tileSize,
+                              .getX() * BoardUI.tileSize,
                          board.getEndSpace()
-                              .getY() * ui.tileSize,
-                         ui.tileSize,
-                         ui.tileSize,
+                              .getY() * BoardUI.tileSize,
+                         BoardUI.tileSize,
+                         BoardUI.tileSize,
                          null);
         } else {
-            g2.drawImage(animateHandler.tileAnimate[10].image,
+            g2.drawImage(tileAnimates[10].image,
                          board.getEndSpace()
-                              .getX() * ui.tileSize,
+                              .getX() * BoardUI.tileSize,
                          board.getEndSpace()
-                              .getY() * ui.tileSize,
-                         ui.tileSize,
-                         ui.tileSize,
+                              .getY() * BoardUI.tileSize,
+                         BoardUI.tileSize,
+                         BoardUI.tileSize,
                          null);
         }
     }

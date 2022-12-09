@@ -19,6 +19,11 @@ import lombok.experimental.SuperBuilder;
 public abstract class AbstractAnimate extends AbstractEntity {
     private Direction facingDirection;
 
+    /**
+     * Move the animate object based on input Direction {@link Direction}.
+     *
+     * @param direction a Direction
+     */
     public void move(Direction direction) {
         int x = getPosition().getX();
         int y = getPosition().getY();
